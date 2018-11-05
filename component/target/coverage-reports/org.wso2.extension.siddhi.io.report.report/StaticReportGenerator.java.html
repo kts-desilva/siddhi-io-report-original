@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StaticReportGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Siddhi io report extension</a> &gt; <a href="index.source.html" class="el_package">org.wso2.extension.siddhi.io.report.report</a> &gt; <span class="el_source">StaticReportGenerator.java</span></div><h1>StaticReportGenerator.java</h1><pre class="source lang-java linenums">
+/*
+ *  Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+package org.wso2.extension.siddhi.io.report.report;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.apache.log4j.Logger;
+import org.wso2.extension.siddhi.io.report.report.dynamic.DynamicDataProvider;
+import org.wso2.extension.siddhi.io.report.util.ReportConstants;
+import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * This class provides implementation for the report generation for a given JRXML template file.
+ */
+
+public class StaticReportGenerator {
+<span class="fc" id="L50">    private static final Logger LOGGER = Logger.getLogger(StaticReportGenerator.class);</span>
+    private DynamicDataProvider dataProvider;
+    private Map&lt;String, String&gt; reportProperties;
+    private Map&lt;String, Object&gt; parameters;
+
+<span class="fc" id="L55">    public StaticReportGenerator() {</span>
+<span class="fc" id="L56">        dataProvider = new DynamicDataProvider();</span>
+<span class="fc" id="L57">        reportProperties = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L58">        parameters = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L59">    }</span>
+
+    public void setReportProperties(Map&lt;String, String&gt; reportProperties) {
+<span class="fc" id="L62">        this.reportProperties = reportProperties;</span>
+<span class="fc" id="L63">        this.dataProvider.setReportProperties(reportProperties);</span>
+<span class="fc" id="L64">    }</span>
+
+    public void generateReport(Object payload) {
+        List&lt;Map&lt;String, Object&gt;&gt; data;
+        JasperDesign jasperDesign;
+        try {
+<span class="fc" id="L70">            jasperDesign = JRXmlLoader.load(reportProperties.get(ReportConstants.TEMPLATE));</span>
+<span class="nc" id="L71">        } catch (JRException e) {</span>
+<span class="nc" id="L72">            throw new SiddhiAppRuntimeException(&quot;Failed to load the report template. &quot;, e);</span>
+<span class="fc" id="L73">        }</span>
+
+        JasperReport jasperReport;
+        try {
+<span class="fc" id="L77">            jasperReport = JasperCompileManager.compileReport(jasperDesign);</span>
+<span class="nc" id="L78">        } catch (JRException e) {</span>
+<span class="nc" id="L79">            throw new SiddhiAppRuntimeException(&quot;Failed to compile the report. &quot;, e);</span>
+<span class="fc" id="L80">        }</span>
+
+<span class="fc" id="L82">        JRParameter[] reportParameters = jasperReport.getParameters();</span>
+<span class="fc" id="L83">        Object[] datasourceParameters = Arrays.stream(reportParameters).filter(parameter -&gt; (parameter</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                .getValueClass().equals(JRDataSource.class)) &amp;&amp; (!parameter.getName().equals</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                (&quot;REPORT_DATA_SOURCE&quot;))).toArray();</span>
+
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (datasourceParameters.length &gt; 1) {</span>
+<span class="fc" id="L88">            LOGGER.warn(&quot;Too many parameters for datasource.&quot;);</span>
+<span class="fc" id="L89">            Map&lt;String, List&lt;Map&lt;String, Object&gt;&gt;&gt; dataWithMultipleDatasources = dataProvider</span>
+<span class="fc" id="L90">                    .getDataWithMultipleDatasources(payload);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            for (Map.Entry&lt;String, List&lt;Map&lt;String, Object&gt;&gt;&gt; entry : dataWithMultipleDatasources.entrySet()) {</span>
+<span class="fc" id="L92">                data = entry.getValue();</span>
+<span class="fc" id="L93">                JRMapArrayDataSource mapArrayDataSource = new JRMapArrayDataSource(data.toArray());</span>
+<span class="fc" id="L94">                parameters.put(entry.getKey(), mapArrayDataSource);</span>
+<span class="fc" id="L95">            }</span>
+<span class="fc" id="L96">        } else {</span>
+<span class="fc" id="L97">            data = dataProvider.getData(payload);</span>
+<span class="fc" id="L98">            JRMapArrayDataSource mapArrayDataSource = new JRMapArrayDataSource(data.toArray());</span>
+<span class="fc" id="L99">            parameters.put(((JRParameter) datasourceParameters[0]).getName(), mapArrayDataSource);</span>
+        }
+
+        JasperPrint jasperPrint;
+        try {
+<span class="fc" id="L104">            jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());</span>
+<span class="nc" id="L105">        } catch (JRException e) {</span>
+<span class="nc" id="L106">            throw new SiddhiAppRuntimeException(&quot;Failed to fill data into report template. &quot;, e);</span>
+<span class="fc" id="L107">        }</span>
+        try {
+<span class="fc" id="L109">            JasperExportManager.exportReportToPdfFile(jasperPrint, reportProperties.get(ReportConstants.URI)</span>
+<span class="fc" id="L110">                    + reportProperties.get(ReportConstants.REPORT_NAME) + &quot;.pdf&quot;);</span>
+<span class="nc" id="L111">        } catch (JRException e) {</span>
+<span class="nc" id="L112">            throw new SiddhiAppRuntimeException(&quot;Failed to generate the PDF. &quot;, e);</span>
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">        File f = new File(reportProperties.get(ReportConstants.URI)</span>
+<span class="fc" id="L115">                + reportProperties.get(ReportConstants.REPORT_NAME) + &quot;.pdf&quot;);</span>
+<span class="fc" id="L116">        LOGGER.info(&quot;File exists : &quot; + f.exists());</span>
+<span class="fc" id="L117">        LOGGER.info(&quot;Generated report &quot; + reportProperties.get(ReportConstants.REPORT_NAME));</span>
+<span class="fc" id="L118">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

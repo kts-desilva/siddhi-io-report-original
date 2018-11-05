@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DynamicStyleProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Siddhi io report extension</a> &gt; <a href="index.source.html" class="el_package">org.wso2.extension.siddhi.io.report.report</a> &gt; <span class="el_source">DynamicStyleProvider.java</span></div><h1>DynamicStyleProvider.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+package org.wso2.extension.siddhi.io.report.report;
+
+import ar.com.fdvs.dj.domain.Style;
+import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
+import ar.com.fdvs.dj.domain.constants.Border;
+import ar.com.fdvs.dj.domain.constants.Font;
+import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
+import ar.com.fdvs.dj.domain.constants.VerticalAlign;
+
+import java.awt.Color;
+
+/**
+ * This class provides implementation of the table styles for the reports generated.
+ */
+
+<span class="nc" id="L34">public class DynamicStyleProvider {</span>
+    public static void addStyles(DynamicReportBuilder reportBuilder) {
+<span class="fc" id="L36">        Style st = new Style();</span>
+<span class="fc" id="L37">        st.setHorizontalAlign(HorizontalAlign.RIGHT);</span>
+<span class="fc" id="L38">        st.setVerticalAlign(VerticalAlign.TOP);</span>
+<span class="fc" id="L39">        st.setFont(Font.ARIAL_BIG_BOLD);</span>
+<span class="fc" id="L40">        Border border = new Border(2, Border.BORDER_STYLE_SOLID, new Color(196, 186, 186));</span>
+<span class="fc" id="L41">        st.setBorderBottom(border);</span>
+
+<span class="fc" id="L43">        Style tableHeaderStyle = new Style();</span>
+<span class="fc" id="L44">        tableHeaderStyle.setTransparent(false);</span>
+//        tableHeaderStyle.setBackgroundColor(new Color(97, 97, 96));
+<span class="fc" id="L46">        tableHeaderStyle.setBackgroundColor(Color.decode(&quot;#616161&quot;));</span>
+<span class="fc" id="L47">        tableHeaderStyle.setTextColor(new Color(255, 255, 255));</span>
+<span class="fc" id="L48">        tableHeaderStyle.setVerticalAlign(VerticalAlign.MIDDLE);</span>
+<span class="fc" id="L49">        tableHeaderStyle.setBorder(Border.THIN());</span>
+<span class="fc" id="L50">        tableHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);</span>
+<span class="fc" id="L51">        reportBuilder.setPrintBackgroundOnOddRows(true);</span>
+
+<span class="fc" id="L53">        Style tableStyle = new Style();</span>
+<span class="fc" id="L54">        tableStyle.setPaddingLeft(20);</span>
+<span class="fc" id="L55">        tableStyle.setPaddingRight(20);</span>
+<span class="fc" id="L56">        tableStyle.setPaddingTop(5);</span>
+<span class="fc" id="L57">        tableStyle.setPaddingBottom(5);</span>
+
+<span class="fc" id="L59">        Style oddRowStyle = new Style();</span>
+<span class="fc" id="L60">        oddRowStyle.setBackgroundColor(new Color(243, 242, 242));</span>
+<span class="fc" id="L61">        reportBuilder.setOddRowBackgroundStyle(oddRowStyle);</span>
+<span class="fc" id="L62">        reportBuilder.setDefaultStyles(null, null, null, tableStyle);</span>
+<span class="fc" id="L63">        reportBuilder.setUseFullPageWidth(true);</span>
+<span class="fc" id="L64">    }</span>
+
+    public static Style getColumnHeaderStyle(String className) {
+<span class="fc" id="L67">        Style columnHeaderStyle = new Style();</span>
+<span class="fc" id="L68">        columnHeaderStyle.setTransparent(false);</span>
+<span class="fc" id="L69">        columnHeaderStyle.setBackgroundColor(Color.decode(&quot;#616161&quot;));</span>
+<span class="fc" id="L70">        columnHeaderStyle.setTextColor(Color.white);</span>
+<span class="fc" id="L71">        columnHeaderStyle.setVerticalAlign(VerticalAlign.MIDDLE);</span>
+
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (className.equals(Integer.class.getName())) {</span>
+<span class="nc" id="L74">            columnHeaderStyle.setHorizontalAlign(HorizontalAlign.RIGHT);</span>
+<span class="nc" id="L75">            columnHeaderStyle.setPaddingRight(20);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        } else if (className.equals(String.class.getName())) {</span>
+<span class="fc" id="L77">            columnHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);</span>
+<span class="fc" id="L78">            columnHeaderStyle.setPaddingLeft(20);</span>
+<span class="fc" id="L79">            columnHeaderStyle.setPaddingRight(20);</span>
+<span class="pc bpc" id="L80" title="3 of 4 branches missed.">        } else if (className.equals(Double.class.getName()) || className.equals(Long.class.getName()) || className</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                .equals(Float.class.getName())) {</span>
+<span class="fc" id="L82">            columnHeaderStyle.setHorizontalAlign(HorizontalAlign.RIGHT);</span>
+<span class="fc" id="L83">            columnHeaderStyle.setPaddingRight(20);</span>
+        } else {
+<span class="nc" id="L85">            columnHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);</span>
+        }
+<span class="fc" id="L87">        return columnHeaderStyle;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
