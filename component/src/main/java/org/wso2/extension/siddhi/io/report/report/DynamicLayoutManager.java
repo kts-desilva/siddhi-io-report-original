@@ -28,14 +28,14 @@ import java.util.Vector;
 /**
  * This is a class to provide customized header and footer to the report.
  */
-public class CustomLayoutManager extends ClassicLayoutManager {
+public class DynamicLayoutManager extends ClassicLayoutManager {
     private String footerImagePath = "";
-    private static final Logger LOGGER = Logger.getLogger(CustomLayoutManager.class);
+    private static final Logger LOGGER = Logger.getLogger(DynamicLayoutManager.class);
 
-    CustomLayoutManager() {
+    DynamicLayoutManager() {
     }
 
-    CustomLayoutManager(String footerImagePath) {
+    DynamicLayoutManager(String footerImagePath) {
         this.footerImagePath = footerImagePath;
     }
 

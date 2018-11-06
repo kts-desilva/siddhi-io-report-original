@@ -33,14 +33,15 @@ public class ReportConstants {
     public static final String CHART = "chart";
     public static final String SERIES = "series";
     public static final String CATEGORY = "category";
-    public static final String DATASOURCE = "datasource";
+    public static final String DATASET = "dataset";
     public static final String TITLE = "title";
     public static final String CHART_TITLE = "chart.title";
     public static final String SUBTITLE = "subtitle";
     public static final String DESCRIPTION = "description";
-    public static final String URI = "report.uri";
+    public static final String OUTPUT_PATH = "outputpath";
     public static final String REPORT_NAME = "report.name";
-    public static final String REPORT_DYNAMIC_VALUE = "report.dynamic.value";
+    public static final String REPORT_DYNAMIC_NAME_VALUE = "report.dynamic.name.value";
+    public static final String REPORT_DYNAMIC_DATASET_VALUE = "report.dynamic.dataset.value";
 
     /* default values of configuration parameters*/
     public static final String DEFAULT_TEMPLATE = "dynamicTemplate.jrxml";

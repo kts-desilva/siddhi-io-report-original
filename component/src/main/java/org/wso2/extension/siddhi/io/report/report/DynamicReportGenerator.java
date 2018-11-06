@@ -44,47 +44,32 @@ import java.util.Map;
  */
 public class DynamicReportGenerator {
     private static final Logger LOGGER = Logger.getLogger(DynamicReportGenerator.class);
-    private DynamicDataProvider dataProvider;
-    private ChartGenerator chartGenerator;
-    private String categoryName;
-    private String seriesName;
-    private Map<String, Object> parameters;
     private DynamicReportBuilder reportBuilder;
-    private Map<String, String> reportProperties;
+    private LayoutManager layoutManager;
 
     public DynamicReportGenerator() {
-        dataProvider = new DynamicDataProvider();
-        chartGenerator = new ChartGenerator();
-        categoryName = "";
-        seriesName = "";
-        parameters = new HashMap<>();
-        reportProperties = new HashMap<>();
         reportBuilder = new DynamicReportBuilder();
+        layoutManager = new LayoutManager();
     }
 
-    public void generateReportFromData(Object payload) {
+    // TODO: 11/6/18 write unit test
+    public void generateReportFromData(Object payload, Map<String, String> reportProperties) {
+        DynamicDataProvider dataProvider = new DynamicDataProvider(reportProperties);
         List<Map<String, Object>> data = dataProvider.getData(payload, reportBuilder);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data);
+        Map<String, Object> parameters = setParameters(reportProperties);
+        DynamicLayoutManager reportLayout = layoutManager.getLayout(reportProperties);
 //        reportBuilder.setTemplateFile("//home/senuri/Projects/Jasper/JasperTestPOC/siddhi-io-report/component/src" +
 //                "/main/java/org/wso2/extension/siddhi/io/report/report/template/dynamicTemplate.jrxml");
         reportBuilder.setTemplateFile(reportProperties.get(ReportConstants.TEMPLATE));
-
         if (!reportProperties.get(ReportConstants.CHART).isEmpty()) {
-            addChart(reportProperties, reportBuilder);
+            addChartTo(reportProperties, reportBuilder, dataProvider, parameters);
         }
-
         DynamicReport report = reportBuilder.build();
-        parameters = setParameters(reportProperties, parameters);
-
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data);
         JasperPrint jasperPrint;
         try {
-            if (reportProperties.get(ReportConstants.FOOTER) != null) {
-                jasperPrint = DynamicJasperHelper.generateJasperPrint(report, new CustomLayoutManager
-                        (reportProperties.get(ReportConstants.FOOTER)), dataSource, parameters);
-            } else {
-                jasperPrint = DynamicJasperHelper.generateJasperPrint(report, new CustomLayoutManager(), dataSource,
-                        parameters);
-            }
+            jasperPrint = DynamicJasperHelper.generateJasperPrint(report, reportLayout, dataSource,
+                    parameters);
         } catch (JRException e) {
             throw new SiddhiAppRuntimeException("Failed to generate the JasperPrint ", e);
         } catch (ClassCastException e) {
@@ -92,22 +77,25 @@ public class DynamicReportGenerator {
         }
 
         try {
-            JasperExportManager.exportReportToPdfFile(jasperPrint, reportProperties.get(ReportConstants.URI) +
-                    reportProperties.get(ReportConstants.REPORT_NAME) + ".pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
         } catch (JRException e) {
             throw new SiddhiAppRuntimeException("Failed to generate the PDF ", e);
         }
 
         //LOGGER.info("replacing string : " + matcher.replaceAll(dataProvider.getDynamicReportNameValue()));
-        File f = new File(reportProperties.get(ReportConstants.URI) +
-                reportProperties.get(ReportConstants.REPORT_NAME) + ".pdf");
+        File f = new File(reportProperties.get(ReportConstants.OUTPUT_PATH));
         LOGGER.info("File exists : " + f.exists());
-        LOGGER.info("Generated report " + reportProperties.get(ReportConstants.REPORT_NAME));
+        LOGGER.info("Generated report " + reportProperties.get(ReportConstants.OUTPUT_PATH));
         LOGGER.info("File exists : " + f.exists());
     }
 
-    private void addChart(Map<String, String> reportProperties, DynamicReportBuilder reportBuilder) {
+    private void addChartTo(Map<String, String> reportProperties, DynamicReportBuilder reportBuilder,
+                            DynamicDataProvider dataProvider, Map<String, Object> parameters) {
         String chartTitle = reportProperties.get(ReportConstants.CHART_TITLE);
+        ChartGenerator chartGenerator = new ChartGenerator();
+        String categoryName = "";
+        String seriesName = "";
+
         if (reportProperties.get(ReportConstants.CATEGORY) != null) {
             categoryName = reportProperties.get(ReportConstants.CATEGORY);
         }
@@ -153,12 +141,8 @@ public class DynamicReportGenerator {
         }
     }
 
-    public void setReportProperties(Map<String, String> reportProperties) {
-        this.reportProperties = reportProperties;
-        this.dataProvider.setReportProperties(reportProperties);
-    }
-
-    private Map<String, Object> setParameters(Map<String, String> reportProperties, Map<String, Object> parameters) {
+    private Map<String, Object> setParameters(Map<String, String> reportProperties) {
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put(ReportConstants.TITLE, reportProperties.get(ReportConstants.TITLE));
         parameters.put(ReportConstants.SUBTITLE, reportProperties.get(ReportConstants.SUBTITLE));
         parameters.put(ReportConstants.DESCRIPTION, reportProperties.get(ReportConstants.DESCRIPTION));

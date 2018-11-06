@@ -47,8 +47,8 @@
 		<field name="price" class="java.lang.Double"/>
 		<field name="volume" class="java.lang.Double"/>
 	</subDataset>
-	<parameter name="TableDataSource" class="net.sf.jasperreports.engine.JRDataSource"></parameter>
-	<parameter name="OtherTableDataSource" class="net.sf.jasperreports.engine.JRDataSource"></parameter>
+	<parameter name="WSO2" class="net.sf.jasperreports.engine.JRDataSource"></parameter>
+	<parameter name="IBM" class="net.sf.jasperreports.engine.JRDataSource"></parameter>
 	<field name="symbol" class="java.lang.String"/>
 	<field name="price" class="java.lang.Double"/>
 	<field name="volume" class="java.lang.Double"/>
@@ -68,7 +68,7 @@
 				<reportElement key="table" style="table" x="42" y="0" width="476" height="140" />
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 1" >
-						<dataSourceExpression><![CDATA[$P{TableDataSource}]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[$P{WSO2}]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="166" >
 						<jr:tableHeader style="table_TH" height="50" rowSpan="1">
@@ -127,7 +127,7 @@
 				<reportElement key="table" style="table" positionType="Float" x="42" y="150" width="476" height="140"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 1" >
-						<dataSourceExpression><![CDATA[$P{OtherTableDataSource}]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[$P{IBM}]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="166" >
 						<jr:tableHeader style="table_TH" height="50" rowSpan="1">

@@ -28,11 +28,11 @@ import java.util.regex.Pattern;
  * This class provides implementation of the identifying ranges in data.
  */
 
-public class RangeStatusLightCondition extends ConditionStyleExpression {
+public class RangeConditionStyleExpression extends ConditionStyleExpression {
     private static final long serialVersionUID = 6106269076155338045L;
 
     @Override
-    public Object evaluate(Map map, Map map1, Map map2) {
+    public Object evaluate(Map fields, Map variables, Map parameters) {
         Object value = this.getCurrentValue();
         if (value == null) {
             return null;

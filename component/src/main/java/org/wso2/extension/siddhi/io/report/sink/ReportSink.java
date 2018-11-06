@@ -44,6 +44,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -148,14 +149,13 @@ import java.util.stream.Stream;
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
-                @Parameter(name = "report.name",
-                        description = "Name of the report generated",
-                        optional = true,
+                @Parameter(name = "outputpath",
+                        description = "The folder where report is saved",
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
-                @Parameter(name = "report.uri",
-                        description = "The folder where report is saved",
+                @Parameter(name = "dataset.name",
+                        description = "The name of the parameter of the dataset",
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
@@ -228,7 +228,7 @@ public class ReportSink extends Sink {
      */
     @Override
     public String[] getSupportedDynamicOptions() {
-        return new String[]{ReportConstants.REPORT_NAME};
+        return new String[]{};
     }
 
 
@@ -244,14 +244,23 @@ public class ReportSink extends Sink {
     public void publish(Object payload, DynamicOptions dynamicOptions) throws ConnectionUnavailableException {
         log.info("payload : " + payload);
         if (!reportProperties.get(ReportConstants.TEMPLATE).equals(ReportConstants.DEFAULT_TEMPLATE)) {
+            //if the dataset is  not defined, the first variable of the stream definition is used.
+            ignoreOtherParameters(reportProperties);
             StaticReportGenerator staticReportGenerator = new StaticReportGenerator();
-            staticReportGenerator.setReportProperties(reportProperties);
-            staticReportGenerator.generateReport(payload);
+            staticReportGenerator.generateReport(payload, reportProperties);
         } else {
             DynamicReportGenerator dynamicReportGenerator = new DynamicReportGenerator();
-            dynamicReportGenerator.setReportProperties(reportProperties);
-            dynamicReportGenerator.generateReportFromData(payload);
+            dynamicReportGenerator.generateReportFromData(payload, reportProperties);
         }
+    }
+
+    private void ignoreOtherParameters(Map<String, String> reportProperties) {
+        String[] ignoringParmeters = {ReportConstants.HEADER, ReportConstants.FOOTER, ReportConstants.SERIES,
+                ReportConstants.CATEGORY, ReportConstants.CHART, ReportConstants.DESCRIPTION, ReportConstants.SUBTITLE,
+                ReportConstants.TITLE, ReportConstants.CHART_TITLE};
+        Arrays.stream(ignoringParmeters).forEach(parameter -> {
+            log.debug("Ignoring " + reportProperties.get(parameter) + " for " + parameter + " as JRXML is provided.");
+        });
     }
 
     private void validateAndGetParameters() {
@@ -292,13 +301,16 @@ public class ReportSink extends Sink {
                 .EMPTY_STRING);
         validateStringParameters(ReportConstants.CHART_TITLE, chartTitle);
 
-        String outPath = optionHolder.validateAndGetStaticValue(ReportConstants.URI, ReportConstants
+        String outPath = optionHolder.validateAndGetStaticValue(ReportConstants.OUTPUT_PATH, ReportConstants
                 .EMPTY_STRING);
-        validatePath(outPath, ReportConstants.URI);
+        if (!outPath.isEmpty() && outPath.contains("/")) {
+            validatePath(outPath.substring(0, outPath.lastIndexOf("/")), ReportConstants.OUTPUT_PATH);
+        }
+        validateStringParameters(ReportConstants.OUTPUT_PATH, outPath);
 
-        String reportName = optionHolder.validateAndGetStaticValue(ReportConstants.REPORT_NAME, ReportConstants
-                .DEFAULT_REPORT_NAME);
-        validateStringParameters(ReportConstants.REPORT_NAME, reportName);
+        String datasetName = optionHolder.validateAndGetStaticValue(ReportConstants.DATASET, ReportConstants
+                .EMPTY_STRING);
+        validateStringParameters(ReportConstants.DATASET, datasetName);
         validateMapType();
     }
 
@@ -311,7 +323,7 @@ public class ReportSink extends Sink {
     }
 
     private void validateStringParameters(String property, String value) {
-        if (property.equals(ReportConstants.REPORT_NAME)) {
+        if (property.equals(ReportConstants.OUTPUT_PATH) || property.equals(ReportConstants.DATASET)) {
             String dynamicOptionPattern = "(\\{\\w*\\})";
             Pattern pattern = Pattern.compile(dynamicOptionPattern);
             Matcher matcher = pattern.matcher(value);
@@ -323,14 +335,24 @@ public class ReportSink extends Sink {
                         .findAny()
                         .orElse(null);
                 if (matchingAttribute != null) {
-                    reportProperties.put(ReportConstants.REPORT_DYNAMIC_VALUE, matcher.group());
+                    if (property.equals(ReportConstants.OUTPUT_PATH)) {
+                        reportProperties.put(ReportConstants.REPORT_DYNAMIC_NAME_VALUE, matcher.group());
+                    } else if (property.equals(ReportConstants.DATASET)) {
+                        reportProperties.put(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE, matcher.group());
+                    }
                 } else {
                     throw new SiddhiAppCreationException("Invalid Property '" + matchingPart + "'. No such " +
                             "parameter in the stream definition");
                 }
             }
+            if (property.equals(ReportConstants.OUTPUT_PATH)) {
+                if (!value.endsWith(".pdf")) {
+                    value += ".pdf";
+                }
+            }
         }
-        this.reportProperties.put(property, value);
+        //doesn't check for empty strings as they are ignored in report generation in default.
+        reportProperties.put(property, value);
     }
 
     private void validateVariable(String property, String chartVariable) {
@@ -381,6 +403,8 @@ public class ReportSink extends Sink {
             if (!path.equals(ReportConstants.DEFAULT_TEMPLATE)) {
                 throw new SiddhiAppCreationException(path + " does not exists. " + parameter + " should be a valid " +
                         "path");
+            } else if (!parameter.equals(ReportConstants.OUTPUT_PATH)) {
+                reportProperties.put(parameter, path);
             }
         }
 
@@ -406,10 +430,6 @@ public class ReportSink extends Sink {
                     reportProperties.put(parameter, path);
                 }
             }
-        }
-
-        if (parameter.equals(ReportConstants.URI)) {
-            reportProperties.put(parameter, path);
         }
     }
 

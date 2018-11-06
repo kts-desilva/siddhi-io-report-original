@@ -8,7 +8,7 @@
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-@sink(type="report", chart="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", category="<STRING>", series="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", chart.title="<STRING>", report.name="<STRING>", report.uri="<STRING>", @map(...)))
+@sink(type="report", chart="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", category="<STRING>", series="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", chart.title="<STRING>", outputpath="<STRING>", dataset.name="<STRING>", @map(...)))
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -102,16 +102,16 @@
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">report.name</td>
-        <td style="vertical-align: top; word-wrap: break-word">Name of the report generated</td>
+        <td style="vertical-align: top">outputpath</td>
+        <td style="vertical-align: top; word-wrap: break-word">The folder where report is saved</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">report.uri</td>
-        <td style="vertical-align: top; word-wrap: break-word">The folder where report is saved</td>
+        <td style="vertical-align: top">dataset.name</td>
+        <td style="vertical-align: top; word-wrap: break-word">The name of the parameter of the dataset</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -122,9 +122,9 @@
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
- 
+ @sink(type='report',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
 ```
-<p style="word-wrap: break-word"> </p>
+<p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.</p>
 
 ## Source
 

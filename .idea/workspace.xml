@@ -1,7 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f31bf9c7-9dbb-4cd5-ac34-4983bff7e180" name="Default" comment="" />
+    <list default="true" id="f31bf9c7-9dbb-4cd5-ac34-4983bff7e180" name="Default" comment="Remove report.name parameter and rename report.uri to outputpath.">
+      <change afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/LayoutManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/component/src/test/resources/fromResultsetDataMultipleDynamicValue.jrxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReport100.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReport55.6.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/component/TestReport55.6.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReportURI/TestChartSeriesCategoryReport.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/component/TestReportURI/TestChartSeriesCategoryReport.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReportURI/TestReport.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/component/TestReportURI/TestReport.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReportURI/TestSingleEventReport.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/component/TestReportURI/TestSingleEventReport.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReportWithMultipleDatasets.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/TestReport{volume.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/CustomLayoutManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicLayoutManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeStatusLightCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeConditionStyleExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java" beforeDir="false" afterPath="$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/checkstyle-cachefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/checkstyle-result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/checkstyle-result.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/CustomLayoutManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/RangeStatusLightCondition.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/sink/ReportSink$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/sink/ReportSink$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/sink/ReportSink.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/sink/ReportSink.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/util/ReportConstants$ChartTypes.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/util/ReportConstants$ChartTypes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/util/ReportConstants.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/classes/org/wso2/extension/siddhi/io/report/util/ReportConstants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/branchfc.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/branchnc.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/branchpc.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/bundle.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/class.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/down.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/greenbar.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/group.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/method.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/package.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/prettify.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/prettify.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/redbar.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/report.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/report.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/session.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/sort.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/sort.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/source.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-resources/up.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco-sessions.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco.exec" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/coverage-reports/jacoco.exec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/jacoco.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report.dynamic/DynamicDataProvider.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report.dynamic/DynamicDataProvider.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report.dynamic/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report.dynamic/index.source.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/ChartGenerator.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/ChartGenerator.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/CustomLayoutManager.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/CustomLayoutManager.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/DummyDataProvider.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/DummyDataProvider.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/DynamicReportGenerator.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/DynamicReportGenerator.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/DynamicStyleProvider.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/DynamicStyleProvider.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/RangeStatusLightCondition.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/RangeStatusLightCondition.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/StaticReportGenerator.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/StaticReportGenerator.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.report/index.source.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.sink/ReportSink$1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.sink/ReportSink.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.sink/ReportSink.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.sink/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.sink/index.source.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.source/ReportSource.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.source/ReportSource.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.source/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.source/index.source.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.util/ReportConstants$ChartTypes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.util/ReportConstants.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.util/ReportConstants.java.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.util/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/coverage-reports/org.wso2.extension.siddhi.io.report.util/index.source.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/findbugs/findbugsXml.xml" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/findbugs/findbugsXml.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/siddhi-io-report-1.0.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/Siddhi-Io-Report-Test-Suite/Siddhi-io-report-tests.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/Siddhi-Io-Report-Test-Suite/Siddhi-io-report-tests.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/TEST-TestSuite.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/TestSuite.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/bullet_point.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/collapseall.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/emailable-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/failed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/jquery-1.7.1.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/junitreports/TEST-org.wso2.extension.siddhi.io.report.sink.TestCaseOfReportSink.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/navigator-bullet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/Siddhi-io-report-tests.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/classes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/groups.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/main.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/methods-alphabetical.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/methods-not-run.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/methods.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/reporter-output.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/testng.xml.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/Siddhi-Io-Report-Test-Suite/toc.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/old/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/passed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/skipped.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/testng-reports.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/testng-reports.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/testng-results.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/surefire-reports/testng.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/component/target/test-classes/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.class" beforeDir="false" afterPath="$PROJECT_DIR$/component/target/test-classes/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/checkstyle-cachefile" beforeDir="false" afterPath="$PROJECT_DIR$/target/checkstyle-cachefile" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/component/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,22 +142,15 @@
       <file leaf-file-name="ReportSink.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="177" column="109" selection-start-line="177" selection-start-column="109" selection-end-line="177" selection-end-column="109" />
+            <state relative-caret-position="478">
+              <caret line="351" column="13" selection-start-line="351" selection-start-column="13" selection-end-line="351" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#22120#22121#0" expanded="true" />
-                <element signature="e#22147#22148#0" expanded="true" />
+                <element signature="e#10211#10212#0" expanded="true" />
+                <element signature="e#10246#10247#0" expanded="true" />
+                <element signature="e#22304#22305#0" expanded="true" />
+                <element signature="e#22331#22332#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mkdocs.yml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/mkdocs.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="16" column="17" lean-forward="true" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -39,8 +158,8 @@
       <file leaf-file-name="StaticReportGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-564">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="370">
+              <caret line="91" column="27" selection-start-line="91" selection-start-column="27" selection-end-line="91" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -51,8 +170,52 @@
       <file leaf-file-name="TestCaseOfReportSink.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10150">
-              <caret line="582" column="42" selection-start-line="582" selection-start-column="42" selection-end-line="582" selection-end-column="42" />
+            <state relative-caret-position="2754">
+              <caret line="273" selection-start-line="273" selection-end-line="273" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#931#932#0" expanded="true" />
+                <element signature="e#1004#1005#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LayoutManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/LayoutManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="175">
+              <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/component/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="31">
+              <caret line="87" column="32" selection-start-line="87" selection-start-column="32" selection-end-line="87" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DynamicStyleProvider.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicStyleProvider.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="29" selection-start-line="29" selection-end-line="31" selection-end-column="3" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -63,20 +226,8 @@
       <file leaf-file-name="DynamicReportGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="63" selection-start-line="63" selection-end-line="63" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DynamicDataProvider.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
-              <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
+            <state relative-caret-position="594">
+              <caret line="85" column="75" selection-start-line="85" selection-start-column="75" selection-end-line="85" selection-end-column="75" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -87,8 +238,31 @@
       <file leaf-file-name="ReportConstants.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="43" selection-start-line="43" selection-end-line="43" />
+            <state relative-caret-position="302">
+              <caret line="46" column="67" selection-start-line="46" selection-start-column="67" selection-end-line="46" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DynamicDataProvider.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="238" column="17" selection-start-line="238" selection-start-column="17" selection-end-line="238" selection-end-column="17" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#6347#6348#0" expanded="true" />
+                <element signature="e#6424#6425#0" expanded="true" />
+                <element signature="e#6479#6480#0" expanded="true" />
+                <element signature="e#6530#6531#0" expanded="true" />
+                <element signature="e#6591#6592#0" expanded="true" />
+                <element signature="e#6644#6645#0" expanded="true" />
+                <element signature="e#6761#6791#0" expanded="true" />
+                <element signature="e#8841#8842#0" expanded="true" />
+                <element signature="e#8873#8874#0" expanded="true" />
+                <element signature="e#10933#10934#0" expanded="true" />
+                <element signature="e#10971#10972#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -104,36 +278,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>dynamic</find>
-      <find>outpath</find>
-      <find>getAsJsonArray</find>
-      <find>name</find>
-      <find>name=</find>
-      <find>streamDefinition</find>
-      <find>datasource</find>
-      <find>not inclu</find>
-      <find>not incl</find>
-      <find>data</find>
-      <find>data :</find>
-      <find>DATASOURCE</find>
-      <find>fields</find>
-      <find>matc</find>
-      <find>timestam</find>
-      <find>{{</find>
-      <find>report.name</find>
+      <find>TableDataSource</find>
+      <find>dynamic report name</find>
+      <find>multipleDatasourcedata</find>
+      <find>jasper</find>
+      <find>chartGenerator</find>
       <find>reportProperties</find>
-      <find>stringMap</find>
-      <find>getColumnMetaData</find>
-      <find>log</find>
-      <find>timestamp</find>
-      <find>optionReportName</find>
-      <find>configReader</find>
-      <find>firstDyanmicEvent</find>
+      <find>columnCount</find>
+      <find>columnCou</find>
+      <find>osgi</find>
+      <find>its</find>
       <find>getData</find>
-      <find>getColumnHeaderStyle</find>
-      <find>dynamicReport</find>
+      <find>payloadParser</find>
+      <find>getEvents</find>
+      <find>dataset</find>
+      <find>addAbstractColumns</find>
+      <find>param</find>
+      <find>file ex</find>
+      <find>REPORT_NA</find>
+      <find>REPORT_</find>
+      <find>this.repo</find>
       <find>multiple</find>
-      <find>staticReport</find>
+      <find>report.name</find>
+      <find>dynamic</find>
+      <find>dynamic =</find>
+      <find>subs</find>
+      <find>categoryName</find>
+      <find>parameters</find>
+      <find>getFil</find>
+      <find>suref</find>
+      <find>sure</find>
     </findStrings>
     <replaceStrings>
       <replace>template</replace>
@@ -145,30 +319,38 @@
       <replace>chartTitle</replace>
     </replaceStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/DynamicTable.java" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DatabaseConnection.java" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DummyDataProvider.java" />
-        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeStatusLightCondition.java" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicTable.java" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/template/dynamicTemplate.jrxml" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/component/pom.xml" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/ChartGenerator.java" />
         <option value="$PROJECT_DIR$/component/src/test/resources/testng.xml" />
         <option value="$PROJECT_DIR$/component/src/test/resources/fromResultsetDataMultiple.jrxml" />
         <option value="$PROJECT_DIR$/component/src/test/resources/fromResultsetData.jrxml" />
-        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java" />
-        <option value="$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java" />
-        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicStyleProvider.java" />
         <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/CustomLayoutManager.java" />
-        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java" />
-        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java" />
-        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java" />
         <option value="$PROJECT_DIR$/mkdocs.yml" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeStatusLightCondition.java" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeConditionStyleExpression.java" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java" />
+        <option value="$PROJECT_DIR$/component/src/test/resources/fromResultsetDataMultipleDynamicValue.jrxml" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/ReportLayoutManager.java" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java" />
+        <option value="$PROJECT_DIR$/component/src/test/resources/dynamicTemplate.jrxml" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java" />
+        <option value="$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java" />
+        <option value="$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/LayoutManager.java" />
+        <option value="$PROJECT_DIR$/component/pom.xml" />
       </list>
     </option>
   </component>
@@ -186,11 +368,12 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="418" />
-    <option name="y" value="512" />
-    <option name="width" value="1500" />
-    <option name="height" value="982" />
+    <option name="x" value="1035" />
+    <option name="y" value="94" />
+    <option name="width" value="986" />
+    <option name="height" value="990" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -346,17 +529,6 @@
               <item name="component" type="462c0819:PsiDirectoryNode" />
               <item name="TestReportURI" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="siddhi-io-report-parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="siddhi-io-report" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="siddhi-io-report-parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="siddhi-io-report" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -368,7 +540,7 @@
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="mkdocs&#9;FILE&#9;file:///home/senuri/Projects/Jasper/JasperTestPOC/siddhi-io-report/mkdocs.yml&#10;index.md&#9;FILE&#9;file:///home/senuri/Projects/Jasper/JasperTestPOC/siddhi-io-report/docs/index.md&#10;apache commons lang&#9;PSI&#9;JAVA://org.eclipse.jdt.internal.compiler.lookup.TypeIds#T_OrgApacheCommonsLang3Validate&#10;manifes&#9;FILE&#9;jar:///usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar!/java/util/jar/Manifest.class" />
     <property name="last.edited.regexp" value="{volume}" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../DynamicJasper" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/chathuranga/siddhi-io-cdc" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -400,7 +572,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="TestNG.TestCaseOfReportSink.reportSinkTest12">
+  <component name="RunManager" selected="TestNG.TestCaseOfReportSink">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
@@ -460,7 +632,7 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration name="TestCaseOfReportSink.reportSinkTest11" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCaseOfReportSink.reportSinkTest1" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
       <module name="siddhi-io-report" />
       <extension name="coverage">
         <pattern>
@@ -473,7 +645,7 @@
       <option name="SUITE_NAME" />
       <option name="PACKAGE_NAME" value="org.wso2.extension.siddhi.io.report.sink" />
       <option name="MAIN_CLASS_NAME" value="org.wso2.extension.siddhi.io.report.sink.TestCaseOfReportSink" />
-      <option name="METHOD_NAME" value="reportSinkTest11" />
+      <option name="METHOD_NAME" value="reportSinkTest1" />
       <option name="GROUP_NAME" />
       <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -489,7 +661,7 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration name="TestCaseOfReportSink.reportSinkTest12" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCaseOfReportSink.reportSinkTest16" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
       <module name="siddhi-io-report" />
       <extension name="coverage">
         <pattern>
@@ -502,7 +674,7 @@
       <option name="SUITE_NAME" />
       <option name="PACKAGE_NAME" value="org.wso2.extension.siddhi.io.report.sink" />
       <option name="MAIN_CLASS_NAME" value="org.wso2.extension.siddhi.io.report.sink.TestCaseOfReportSink" />
-      <option name="METHOD_NAME" value="reportSinkTest12" />
+      <option name="METHOD_NAME" value="reportSinkTest16" />
       <option name="GROUP_NAME" />
       <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -518,7 +690,7 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration name="TestCaseOfReportSink.reportSinkTest15" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCaseOfReportSink.reportSinkTest17" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
       <module name="siddhi-io-report" />
       <extension name="coverage">
         <pattern>
@@ -531,7 +703,7 @@
       <option name="SUITE_NAME" />
       <option name="PACKAGE_NAME" value="org.wso2.extension.siddhi.io.report.sink" />
       <option name="MAIN_CLASS_NAME" value="org.wso2.extension.siddhi.io.report.sink.TestCaseOfReportSink" />
-      <option name="METHOD_NAME" value="reportSinkTest15" />
+      <option name="METHOD_NAME" value="reportSinkTest17" />
       <option name="GROUP_NAME" />
       <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -547,7 +719,7 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration name="TestCaseOfReportSink.reportSinkTest5" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCaseOfReportSink.reportSinkTest18" type="TestNG" factoryName="TestNG" temporary="true" nameIsGenerated="true">
       <module name="siddhi-io-report" />
       <extension name="coverage">
         <pattern>
@@ -560,7 +732,7 @@
       <option name="SUITE_NAME" />
       <option name="PACKAGE_NAME" value="org.wso2.extension.siddhi.io.report.sink" />
       <option name="MAIN_CLASS_NAME" value="org.wso2.extension.siddhi.io.report.sink.TestCaseOfReportSink" />
-      <option name="METHOD_NAME" value="reportSinkTest5" />
+      <option name="METHOD_NAME" value="reportSinkTest18" />
       <option name="GROUP_NAME" />
       <option name="TEST_OBJECT" value="METHOD" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -600,19 +772,19 @@
     </configuration>
     <list>
       <item itemvalue="Remote.TestD" />
+      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest16" />
+      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest17" />
+      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest18" />
+      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest1" />
       <item itemvalue="TestNG.TestCaseOfReportSink" />
-      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest12" />
-      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest5" />
-      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest15" />
-      <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest11" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest12" />
-        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest11" />
-        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest15" />
-        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest5" />
         <item itemvalue="TestNG.TestCaseOfReportSink" />
+        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest1" />
+        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest18" />
+        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest17" />
+        <item itemvalue="TestNG.TestCaseOfReportSink.reportSinkTest16" />
       </list>
     </recent_temporary>
   </component>
@@ -627,59 +799,75 @@
       <option name="presentableId" value="Default" />
       <updated>1538547678942</updated>
     </task>
+    <task id="LOCAL-00001" summary="Change site-url and repo-url in mkdocs.yml">
+      <created>1541399335493</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1541399335493</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 08h 09m 28s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest15 - 2018.11.06 at 15h 21m 07s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest15" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 08h 48m 53s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest15 - 2018.11.06 at 15h 24m 10s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest15" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 08h 49m 52s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest15 - 2018.11.06 at 15h 39m 05s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest15" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 08h 51m 06s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest16 - 2018.11.06 at 15h 39m 22s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest16" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 08h 51m 52s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest17 - 2018.11.06 at 15h 40m 04s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest17" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 08h 52m 29s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest17 - 2018.11.06 at 15h 41m 30s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest17" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest11 - 2018.11.05 at 09h 28m 01s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest11" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest18 - 2018.11.06 at 15h 42m 19s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest18" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest12 - 2018.11.05 at 09h 29m 05s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest12" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink_reportSinkTest1 - 2018.11.06 at 15h 47m 38s.xml">
+      <configuration name="TestCaseOfReportSink.reportSinkTest1" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest12 - 2018.11.05 at 09h 43m 39s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest12" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink - 2018.11.06 at 15h 48m 08s.xml">
+      <configuration name="TestCaseOfReportSink" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="TestCaseOfReportSink_reportSinkTest12 - 2018.11.05 at 09h 58m 13s.xml">
-      <configuration name="TestCaseOfReportSink.reportSinkTest12" configurationId="TestNG" />
+    <history-entry file="TestCaseOfReportSink - 2018.11.06 at 15h 54m 51s.xml">
+      <configuration name="TestCaseOfReportSink" configurationId="TestNG" />
     </history-entry>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="9" weight="0.3297414" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32937366" />
+      <window_info anchor="bottom" id="Messages" order="9" weight="0.32937366" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="6" weight="0.32946378" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.31034482" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.33512932" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3099352" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.33585313" />
       <window_info id="Capture Tool" order="7" />
       <window_info id="Designer" order="3" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16749585" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3286638" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
       <window_info id="Learn" order="5" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.2498618" />
@@ -697,9 +885,14 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Change site-url and repo-url in mkdocs.yml" />
+    <MESSAGE value="Remove report.name parameter and rename report.uri to outputpath." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove report.name parameter and rename report.uri to outputpath." />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="77" />
+      <option name="time" value="80" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -767,66 +960,8 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/net/sf/jasperreports/jasperreports/6.7.0/jasperreports-6.7.0.jar!/net/sf/jasperreports/engine/fill/JRVerticalFiller.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="157" selection-start-line="157" selection-end-line="157" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DatabaseConnection.java" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-query-api/4.1.0/siddhi-query-api-4.1.0.jar!/org/wso2/siddhi/query/api/definition/Attribute.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="74" column="23" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/template/dynamicTemplate.jrxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/resources/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/template/dynamicTemplate.jrxml" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/log4j/wso2/log4j/1.2.17.wso2v1/log4j-1.2.17.wso2v1.jar!/org/apache/log4j/Logger.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2466">
-          <caret line="137" column="32" selection-start-line="137" selection-start-column="32" selection-end-line="137" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/dynamicTemplate.jrxml" />
     <entry file="file://$PROJECT_DIR$/component/src/main/resources/dynamicTemplate.jrxml" />
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="162" column="19" selection-start-line="162" selection-start-column="19" selection-end-line="162" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/test/resources/testng.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="86" selection-start-line="7" selection-start-column="66" selection-end-line="7" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/testng/testng/6.11/testng-6.11.jar!/org/testng/AssertJUnit.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -869,24 +1004,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar!/com/google/gson/JsonArray.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-core/4.1.0/siddhi-core-4.1.0.jar!/org/wso2/siddhi/core/event/Event.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-core/4.1.0/siddhi-core-4.1.0.jar!/org/wso2/siddhi/core/util/transport/OptionHolder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -936,6 +1057,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="463">
           <caret line="236" column="16" selection-start-line="236" selection-start-column="16" selection-end-line="236" selection-end-column="16" />
+          <folding>
+            <element signature="e#7178#7179#0" expanded="true" />
+            <element signature="e#7225#7226#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -981,13 +1106,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/test/resources/fromResultsetDataMultiple.jrxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="178" column="71" selection-start-line="178" selection-start-column="71" selection-end-line="178" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/component/src/test/resources/fromResultsetData.jrxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="227">
@@ -1002,112 +1120,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DummyDataProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="33" column="1" lean-forward="true" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/CustomLayoutManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="64" column="5" lean-forward="true" selection-start-line="64" selection-start-column="5" selection-end-line="64" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicStyleProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="34" column="30" lean-forward="true" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeStatusLightCondition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="34" column="31" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/ChartGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="220" column="5" lean-forward="true" selection-start-line="220" selection-start-column="5" selection-end-line="220" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-564">
-          <caret line="64" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="43" selection-start-line="43" selection-end-line="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10150">
-          <caret line="582" column="42" selection-start-line="582" selection-start-column="42" selection-end-line="582" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="177" column="109" selection-start-line="177" selection-start-column="109" selection-end-line="177" selection-end-column="109" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#22120#22121#0" expanded="true" />
-            <element signature="e#22147#22148#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/javascripts/extra.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1118,8 +1130,223 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mkdocs.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="16" column="17" lean-forward="true" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
+        <state relative-caret-position="198">
+          <caret line="11" column="6" lean-forward="true" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/RangeConditionStyleExpression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="33" column="13" lean-forward="true" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/test/resources/fromResultsetDataMultiple.jrxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="177" column="44" lean-forward="true" selection-start-line="177" selection-start-column="44" selection-end-line="177" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/test/resources/fromResultsetDataMultipleDynamicValue.jrxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="129" column="61" selection-start-line="129" selection-start-column="61" selection-end-line="129" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-core/4.1.0/siddhi-core-4.1.0.jar!/org/wso2/siddhi/core/util/transport/OptionHolder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-164">
+          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicLayoutManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="34" column="27" selection-start-line="34" selection-start-column="27" selection-end-line="34" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/test/resources/testng.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="81" lean-forward="true" selection-start-line="8" selection-start-column="81" selection-end-line="8" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar!/com/google/gson/JsonArray.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-core/4.1.0/siddhi-core-4.1.0.jar!/org/wso2/siddhi/core/util/parser/helper/DefinitionParserHelper.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="433" selection-start-line="433" selection-end-line="433" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-core/4.1.0/siddhi-core-4.1.0.jar!/org/wso2/siddhi/core/util/SiddhiAppRuntimeBuilder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/wso2/siddhi/siddhi-core/4.1.0/siddhi-core-4.1.0.jar!/org/wso2/siddhi/core/util/ExceptionUtil.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar!/java/lang/String.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="712" selection-start-line="712" selection-end-line="712" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/ChartGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="204" column="63" lean-forward="true" selection-start-line="204" selection-start-column="63" selection-end-line="204" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicReportGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="85" column="75" selection-start-line="85" selection-start-column="75" selection-end-line="85" selection-end-column="75" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DummyDataProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/dynamic/DynamicDataProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="238" column="17" selection-start-line="238" selection-start-column="17" selection-end-line="238" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6347#6348#0" expanded="true" />
+            <element signature="e#6424#6425#0" expanded="true" />
+            <element signature="e#6479#6480#0" expanded="true" />
+            <element signature="e#6530#6531#0" expanded="true" />
+            <element signature="e#6591#6592#0" expanded="true" />
+            <element signature="e#6644#6645#0" expanded="true" />
+            <element signature="e#6761#6791#0" expanded="true" />
+            <element signature="e#8841#8842#0" expanded="true" />
+            <element signature="e#8873#8874#0" expanded="true" />
+            <element signature="e#10933#10934#0" expanded="true" />
+            <element signature="e#10971#10972#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/StaticReportGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="91" column="27" selection-start-line="91" selection-start-column="27" selection-end-line="91" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/sink/ReportSink.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="478">
+          <caret line="351" column="13" selection-start-line="351" selection-start-column="13" selection-end-line="351" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10211#10212#0" expanded="true" />
+            <element signature="e#10246#10247#0" expanded="true" />
+            <element signature="e#22304#22305#0" expanded="true" />
+            <element signature="e#22331#22332#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/test/resources/dynamicTemplate.jrxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="20" column="37" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/util/ReportConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="46" column="67" selection-start-line="46" selection-start-column="67" selection-end-line="46" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/test/java/org/wso2/extension/siddhi/io/report/sink/TestCaseOfReportSink.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2754">
+          <caret line="273" selection-start-line="273" selection-end-line="273" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#931#932#0" expanded="true" />
+            <element signature="e#1004#1005#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/DynamicStyleProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="29" selection-start-line="29" selection-end-line="31" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/src/main/java/org/wso2/extension/siddhi/io/report/report/LayoutManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/component/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="31">
+          <caret line="87" column="32" selection-start-line="87" selection-start-column="32" selection-end-line="87" selection-end-column="32" />
         </state>
       </provider>
     </entry>

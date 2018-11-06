@@ -3,6 +3,7 @@ package org.wso2.extension.siddhi.io.report.sink;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
@@ -16,7 +17,13 @@ import java.io.File;
 public class TestCaseOfReportSink {
     // If you will know about this related testcase,
     //refer https://github.com/wso2-extensions/siddhi-io-file/blob/master/component/src/test
-    public static final Logger LOGGER = Logger.getLogger(TestCaseOfReportSink.class);
+    private static final Logger LOGGER = Logger.getLogger(TestCaseOfReportSink.class);
+    private ClassLoader classLoader;
+
+    @BeforeClass
+    public void init() {
+        classLoader = TestCaseOfReportSink.class.getClassLoader();
+    }
 
     @Test
     public void reportSinkTest1() throws InterruptedException {
@@ -27,7 +34,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',@map(type='json')) " +
+                "@sink(type='report',outputpath='testOut',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
         String query = "" +
@@ -71,7 +78,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "{volume}',@map(type='json')) " +
+                "@sink(type='report',outputpath='" + testReportName + "{volume}',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
         String query = "" +
@@ -116,7 +123,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "',@map" +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "',@map" +
                 "(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -162,7 +169,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "',@map" +
+                "@sink(type='report', outputpath='" + testReportURI + testReportName + "',@map" +
                 "(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -196,9 +203,8 @@ public class TestCaseOfReportSink {
             AssertJUnit.assertTrue(sink.exists());
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), testReportURI + " does not exists. report.uri should be" +
-                    " a " +
-                    "valid path");
+            Assert.assertEquals(e.getMessageWithOutContext(), testReportURI.substring(0, testReportURI.lastIndexOf
+                    ("/")) + " does not exists. outputpath should be a valid path");
         }
     }
 
@@ -208,17 +214,15 @@ public class TestCaseOfReportSink {
         LOGGER.info("ReportSink TestCase 5 - Generate reports with template given.");
         LOGGER.info("-------------------------------------------------------------");
 
-        String testReportName = "TestTemplateReport";
+        String testReportName = "TestTemplateReportNow";
         String testReportURI = "TestReportURI/";
-        String testTemplatePath = TestCaseOfReportSink.class.getClassLoader().getResource("fromResultsetData.jrxml")
-                .getFile();
+        String testTemplatePath = classLoader.getResource("fromResultsetData.jrxml").getFile();
 
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "{symbol}', report.uri='" + testReportURI +
-                "'," +
-                "template='" + testTemplatePath + "',@map(type='json')) " +
+                "@sink(type='report', outputpath='" + testReportURI +
+                testReportName + "{symbol}', template='" + testTemplatePath + "',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
         String query = "" +
@@ -246,7 +250,7 @@ public class TestCaseOfReportSink {
 
         stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
 
-        File sink = new File(testReportURI + testReportName + ".pdf");
+        File sink = new File(testReportURI + testReportName + "WSO2.pdf");
         AssertJUnit.assertTrue(sink.exists());
         siddhiAppRuntime.shutdown();
     }
@@ -264,7 +268,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "'," +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
                 "template='" + invalidTemplatePath + "',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -316,7 +320,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "'," +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
                 "header='" + invalidHeaderPath + "',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -368,7 +372,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "'," +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
                 "chart='" + invalidChartType + "',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -421,7 +425,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "'," +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
                 "chart='" + testChartType + "',series='" + invalidSeries + "',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -475,7 +479,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "'," +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
                 "chart='" + testChartType + "',series='" + testSeries + "',category='" + testCategory + "',@map" +
                 "(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
@@ -527,7 +531,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', report.uri='" + testReportURI + "'," +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
                 "chart='" + testChartType + "',series='" + testSeries + "',category='" + testCategory + "',@map" +
                 "(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
@@ -566,7 +570,7 @@ public class TestCaseOfReportSink {
     @Test
     public void reportSinkTest12() throws InterruptedException {
         LOGGER.info("-------------------------------------------------------------------------------");
-        LOGGER.info("ReportSink TestCase 12 - Generate reports with dynamic variable in report.name");
+        LOGGER.info("ReportSink TestCase 12 - Generate reports with dynamic variable in outputpath");
         LOGGER.info("-------------------------------------------------------------------------------");
 
         String testReportName = "TestReport";
@@ -574,7 +578,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "{price}',@map(type='json')) " +
+                "@sink(type='report',outputpath='" + testReportName + "{price}',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
         String query = "" +
@@ -610,7 +614,7 @@ public class TestCaseOfReportSink {
     @Test
     public void reportSinkTest13() throws InterruptedException {
         LOGGER.info("--------------------------------------------------------------------------------------");
-        LOGGER.info("ReportSink TestCase 13 - Generate reports with invalid dynamic variable in report.name");
+        LOGGER.info("ReportSink TestCase 13 - Generate reports with invalid dynamic variable in outputpath");
         LOGGER.info("--------------------------------------------------------------------------------------");
 
         String testReportName = "TestReport";
@@ -619,7 +623,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "{" + testDynamicReportName + "}'," +
+                "@sink(type='report',outputpath='" + testReportName + "{" + testDynamicReportName + "'," +
                 "@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -657,7 +661,7 @@ public class TestCaseOfReportSink {
     @Test
     public void reportSinkTest14() throws InterruptedException {
         LOGGER.info("-----------------------------------------------------------------------------------------------");
-        LOGGER.info("ReportSink TestCase 14 - Generate reports with invalid syntax for dynamic values in report.name");
+        LOGGER.info("ReportSink TestCase 14 - Generate reports with invalid syntax for dynamic values in outputpath");
         LOGGER.info("-----------------------------------------------------------------------------------------------");
 
         String testReportName = "TestReport";
@@ -666,7 +670,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "{" + testDynamicReportName + "'," +
+                "@sink(type='report',outputpath='" + testReportName + "{" + testDynamicReportName + "}'," +
                 "@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
@@ -710,13 +714,58 @@ public class TestCaseOfReportSink {
         String testReportName = "TestReportWithMultipleDatasets";
         String datasourceName1 = "TableDataSource";
         String datasourceName2 = "OtherTableDataSource";
-        String testTemplate = TestCaseOfReportSink.class.getClassLoader().getResource("fromResultsetDataMultiple" +
-                ".jrxml").getFile();
+        String testTemplate = classLoader.getResource("fromResultsetDataMultiple.jrxml").getFile();
 
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',report.name='" + testReportName + "', template='" + testTemplate + "', " +
+                "@sink(type='report',outputpath='" + testReportName + "', template='" + testTemplate + "', " +
+                "@map(type='json')) " +
+                "define stream BarStream (datasource string,symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select ifThenElse(volume>200,'" + datasourceName1 + "','" + datasourceName2 + "') as datasource, " +
+                "symbol,price,volume " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 200L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 300L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 400L});
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void reportSinkTest16() throws InterruptedException {
+        LOGGER.info("--------------------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 16 - Generate reports with multiple dynamic datasets for given template.");
+        LOGGER.info("--------------------------------------------------------------------------------------------");
+
+        String testReportName = "TestReportWithMultipleDatasetsDynamic";
+        String datasourceName1 = "TableDataSource";
+        String datasourceName2 = "OtherTableDataSource";
+        String testTemplate = classLoader.getResource("fromResultsetDataMultiple.jrxml").getFile();
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportName + "', template='" + testTemplate + "', " +
+                "dataset='datasource'," +
                 "@map(type='json')) " +
                 "define stream BarStream (datasource string,symbol string,price float, volume long); ";
 
@@ -747,5 +796,104 @@ public class TestCaseOfReportSink {
         siddhiAppRuntime.shutdown();
 
     }
-}
 
+    @Test
+    public void reportSinkTest17() throws InterruptedException {
+        LOGGER.info("----------------------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 17 - Generate reports with multiple dynamic dataset values given template.");
+        LOGGER.info("----------------------------------------------------------------------------------------------");
+
+        String testReportName = "TestReportWithMultipleDatasetsDynamicValues";
+        String datasourceName1 = "datasource1";
+        String datasourceName2 = "datasource2";
+        String testTemplate = classLoader.getResource("fromResultsetDataMultipleDynamicValue.jrxml").getFile();
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportName + "', template='" + testTemplate + "', " +
+                "dataset = '{symbol}' ," +
+                "@map(type='json')) " +
+                "define stream BarStream (datasource string,symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select ifThenElse(volume>200,'" + datasourceName1 + "','" + datasourceName2 + "') as datasource, " +
+                "symbol,price,volume " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 200L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"WSO2", 50f, 300L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 400L});
+
+        Event testEvent5 = new Event();
+        testEvent5.setData(new Object[]{"IBM", 50f, 300L});
+
+        Event testEvent6 = new Event();
+        testEvent6.setData(new Object[]{"IBM", 55.6f, 400L});
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4, testEvent5, testEvent6});
+        siddhiAppRuntime.shutdown();
+
+    }
+
+    @Test
+    public void reportSinkTest18() throws InterruptedException {
+        LOGGER.info("-----------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 18 - Generate reports with dynamic variable in outputpath");
+        LOGGER.info("-----------------------------------------------------------------------------");
+
+        String testReportName = "TestReport";
+        String testReportDir = "TestReportURI/";
+        String testDynamicReportName = "symbol";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report'," +
+                "outputpath='" + testReportDir + testReportName + "{" + testDynamicReportName + "}.html'," +
+                "@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 200L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 300L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 400L});
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+        File sink = new File(testReportDir + testReportName + ".pdf");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
+
+    }
+}

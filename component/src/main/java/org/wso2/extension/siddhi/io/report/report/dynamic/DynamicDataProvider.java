@@ -34,7 +34,7 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.report.report.DynamicStyleProvider;
-import org.wso2.extension.siddhi.io.report.report.RangeStatusLightCondition;
+import org.wso2.extension.siddhi.io.report.report.RangeConditionStyleExpression;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
@@ -57,43 +57,66 @@ public class DynamicDataProvider {
     private List<AbstractColumn> abstractColumns;
     private Map<String, AbstractColumn> abstractColumnMap;
     private List<Map<String, Object>> data;
-    private Map<String, List<Map<String, Object>>> multipleDatasourcedata;
-    private int columnCount;
-
-    public void setReportProperties(Map<String, String> reportProperties) {
-        this.reportProperties = reportProperties;
-    }
-
     private Map<String, String> reportProperties;
+    private JsonParser payloadParser;
+    private Map<String, String> columnMetadata;
 
-    public DynamicDataProvider() {
+    public DynamicDataProvider(Map<String, String> reportProperties) {
         abstractColumns = new ArrayList<>();
         abstractColumnMap = new HashMap<>();
         data = new ArrayList<>();
-        multipleDatasourcedata = new HashMap<>();
-        columnCount = 0;
+        this.reportProperties = reportProperties;
+        payloadParser = new JsonParser();
+        columnMetadata = new HashMap<>();
     }
 
     public List<Map<String, Object>> getData(Object payload, DynamicReportBuilder reportBuilder) {
         try {
-            JsonParser payloadParser = new JsonParser();
-            JsonElement payloadJson = payloadParser.parse(payload.toString());
-            if (!payloadJson.isJsonArray()) {
-                payloadJson = payloadParser.parse("[" + payload.toString() + "]");
-            }
-            JsonArray events = payloadJson.getAsJsonArray();
-            Map<String, String> columnMetadata = getColumnMetaData(events.get(0).getAsJsonObject());
-            for (JsonElement eventElement : events) {
-                JsonObject event = eventElement.getAsJsonObject();
-                Map<String, Object> eventMap = getMapFromJsonObject(event);
-                this.data.add(eventMap);
-            }
-            addAbstractColumns(columnCount, columnMetadata, reportBuilder);
-            setDynamicReportName(events.get(0).getAsJsonObject());
+            addDataTo(payload.toString(), data, true);
+            addAbstractColumns(columnMetadata, reportBuilder);
             return this.data;
         } catch (JsonSyntaxException e) {
             throw new SiddhiAppCreationException("Invalid mapper type. Set the map to json");
         }
+    }
+
+    public List<Map<String, Object>> getData(Object payload) {
+        try {
+            addDataTo(payload.toString(), this.data, false);
+            return this.data;
+        } catch (JsonSyntaxException e) {
+            throw new SiddhiAppCreationException("Invalid mapper type. Set the map to json");
+        }
+    }
+
+    public void addDataTo(String payloadStirng, List<Map<String, Object>> dataList, boolean dynamic) {
+        JsonElement payloadJson = parsePayload(payloadStirng);
+        if (!payloadJson.isJsonArray()) {
+            payloadJson = payloadParser.parse("[" + payloadStirng + "]");
+        }
+        JsonArray events = getEvents(payloadJson);
+        for (JsonElement eventElement : events) {
+            JsonObject jsonObject = eventElement.getAsJsonObject();
+            Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
+            dataList.add(eventMap);
+        }
+        setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
+                ReportConstants.OUTPUT_PATH);
+        if (dynamic) {
+            generateMetaData(events.get(0));
+        }
+    }
+
+    public void generateMetaData(JsonElement element) {
+        columnMetadata = getColumnMetaData(element.getAsJsonObject());
+    }
+
+    public JsonElement parsePayload(String payload) {
+        return payloadParser.parse(payload);
+    }
+
+    public JsonArray getEvents(JsonElement parsedPayload) {
+        return parsedPayload.getAsJsonArray();
     }
 
     @SuppressWarnings("unchecked")
@@ -109,24 +132,24 @@ public class DynamicDataProvider {
         Map columnMetadata = eventMap.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getClass().getName(),
                         (oldValue, newValue) -> newValue, LinkedHashMap::new));
-        columnCount = eventMap.size();
-
         logger.info("new : " + columnMetadata);
         return columnMetadata;
     }
 
-    private void setDynamicReportName(JsonObject jsonObject) {
-        if (reportProperties.containsKey(ReportConstants.REPORT_DYNAMIC_VALUE)) {
-            String dynamicReportNameParameter = reportProperties.get(ReportConstants.REPORT_DYNAMIC_VALUE);
+    private void setDynamicReportValue(JsonObject jsonObject, String dynamicValueName, String propertyValueName) {
+        if (reportProperties.containsKey(dynamicValueName)) {
+            String dynamicReportNameParameter = reportProperties.get(dynamicValueName);
             JsonElement dynamicReportElement = jsonObject.get("event").getAsJsonObject().get
                     (dynamicReportNameParameter.substring(1, dynamicReportNameParameter.length() - 1));
             if (dynamicReportElement != null) {
                 String dynamicReportNameValue = dynamicReportElement.getAsString();
+                logger.info("dynamic report name value : " + dynamicReportNameValue);
                 String dynamicOptionPattern = "(\\{\\w*\\})";
                 Pattern pattern = Pattern.compile(dynamicOptionPattern);
-                Matcher matcher = pattern.matcher(reportProperties.get(ReportConstants.REPORT_NAME));
+                Matcher matcher = pattern.matcher(reportProperties.get(propertyValueName));
+                logger.info("matching value : " + reportProperties.get(propertyValueName));
                 String newReportName = matcher.replaceAll(dynamicReportNameValue);
-                reportProperties.put(ReportConstants.REPORT_NAME, newReportName);
+                reportProperties.put(propertyValueName, newReportName);
             }
         }
     }
@@ -135,9 +158,8 @@ public class DynamicDataProvider {
         return this.data;
     }
 
-    private void addAbstractColumns(int columnCount, Map<String, String> metaData, DynamicReportBuilder reportBuilder) {
-        int columnSize = ReportConstants.COLUMN_WIDTH / columnCount;
-
+    private void addAbstractColumns(Map<String, String> metaData, DynamicReportBuilder reportBuilder) {
+        int columnSize = ReportConstants.COLUMN_WIDTH / metaData.size();
         for (Map.Entry<String, String> entry : metaData.entrySet()) {
             ColumnBuilder columnBuilder = ColumnBuilder.getNew();
             if (entry.getValue().equals(Integer.class.getName()) || entry.getValue().equals(Float.class.getName()
@@ -168,8 +190,8 @@ public class DynamicDataProvider {
     private ConditionalStyle getStringConditionalStyle() {
         Style rangeStyle = new Style();
         rangeStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-        RangeStatusLightCondition rangeStatusLightCondition = new RangeStatusLightCondition();
-        return new ConditionalStyle(rangeStatusLightCondition, rangeStyle);
+        RangeConditionStyleExpression rangeConditionStyleExpression = new RangeConditionStyleExpression();
+        return new ConditionalStyle(rangeConditionStyleExpression, rangeStyle);
     }
 
     public List<AbstractColumn> getColumns() {
@@ -194,46 +216,32 @@ public class DynamicDataProvider {
         }
     }
 
-    public AbstractColumn getCategoryColumn() {
-        return abstractColumns.get(0);
-    }
-
-    public AbstractColumn getSeriesColumn() {
-        return abstractColumns.get(1);
-    }
-
-    public List<Map<String, Object>> getData(Object payload) {
+    public Map<String, List<Map<String, Object>>> getDataWithMultipleDatasets(Object payload) {
         try {
-            JsonParser payloadParser = new JsonParser();
-            JsonElement payloadJson = payloadParser.parse(payload.toString());
+            Map<String, List<Map<String, Object>>> multipleDatasourcedata = new HashMap<>();
+            JsonElement payloadJson = parsePayload(payload.toString());
             if (!payloadJson.isJsonArray()) {
                 payloadJson = payloadParser.parse("[" + payload.toString() + "]");
             }
-            JsonArray events = payloadJson.getAsJsonArray();
+            JsonArray events = getEvents(payloadJson);
+            setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_DATASET_VALUE,
+                    ReportConstants.DATASET);
             for (JsonElement eventElement : events) {
                 JsonObject jsonObject = eventElement.getAsJsonObject();
                 Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
-                this.data.add(eventMap);
-            }
-            setDynamicReportName(events.get(0).getAsJsonObject());
-            return this.data;
-        } catch (JsonSyntaxException e) {
-            throw new SiddhiAppCreationException("Invalid mapper type. Set the map to json");
-        }
-    }
-
-    public Map<String, List<Map<String, Object>>> getDataWithMultipleDatasources(Object payload) {
-        try {
-            JsonParser payloadParser = new JsonParser();
-            JsonElement payloadJson = payloadParser.parse(payload.toString());
-            if (!payloadJson.isJsonArray()) {
-                payloadJson = payloadParser.parse("[" + payload.toString() + "]");
-            }
-            JsonArray events = payloadJson.getAsJsonArray();
-            for (JsonElement eventElement : events) {
-                JsonObject jsonObject = eventElement.getAsJsonObject();
-                Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
-                String datasourceName = eventMap.get("datasource").toString();
+                String datasetAttribute = "";
+                if (reportProperties.containsKey(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE)) {
+                    String datasetAttributeTemp = reportProperties.get(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE);
+                    datasetAttribute = datasetAttributeTemp.substring(1, datasetAttributeTemp.length() - 1);
+                } else if (reportProperties.containsKey(ReportConstants.DATASET)) {
+                    //same as {} definition for parameter value
+                    datasetAttribute = reportProperties.get(ReportConstants.DATASET);
+                }
+                if (datasetAttribute.isEmpty()) {
+                    datasetAttribute = eventMap.entrySet().iterator().next().getKey();
+                }
+                logger.info("dataset attribure : " + datasetAttribute);
+                String datasourceName = eventMap.get(datasetAttribute).toString();
                 if (multipleDatasourcedata.containsKey(datasourceName)) {
                     List<Map<String, Object>> datasource = multipleDatasourcedata.get(datasourceName);
                     eventMap.remove(datasourceName);
@@ -246,10 +254,19 @@ public class DynamicDataProvider {
                     multipleDatasourcedata.put(datasourceName, datasource);
                 }
             }
-            setDynamicReportName(events.get(0).getAsJsonObject());
-            return this.multipleDatasourcedata;
+            setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
+                    ReportConstants.OUTPUT_PATH);
+            return multipleDatasourcedata;
         } catch (JsonSyntaxException e) {
             throw new SiddhiAppCreationException("Invalid mapper type. Set the map to json");
         }
+    }
+
+    public AbstractColumn getCategoryColumn() {
+        return abstractColumns.get(0);
+    }
+
+    public AbstractColumn getSeriesColumn() {
+        return abstractColumns.get(1);
     }
 }

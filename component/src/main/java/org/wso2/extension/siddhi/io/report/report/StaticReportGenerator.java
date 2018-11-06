@@ -48,22 +48,13 @@ import java.util.Map;
 
 public class StaticReportGenerator {
     private static final Logger LOGGER = Logger.getLogger(StaticReportGenerator.class);
-    private DynamicDataProvider dataProvider;
-    private Map<String, String> reportProperties;
-    private Map<String, Object> parameters;
 
     public StaticReportGenerator() {
-        dataProvider = new DynamicDataProvider();
-        reportProperties = new HashMap<>();
-        parameters = new HashMap<>();
     }
 
-    public void setReportProperties(Map<String, String> reportProperties) {
-        this.reportProperties = reportProperties;
-        this.dataProvider.setReportProperties(reportProperties);
-    }
-
-    public void generateReport(Object payload) {
+    public void generateReport(Object payload, Map<String, String> reportProperties) {
+        DynamicDataProvider dataProvider = new DynamicDataProvider(reportProperties);
+        Map<String, Object> parameters = new HashMap<>();
         List<Map<String, Object>> data;
         JasperDesign jasperDesign;
         try {
@@ -83,11 +74,10 @@ public class StaticReportGenerator {
         Object[] datasourceParameters = Arrays.stream(reportParameters).filter(parameter -> (parameter
                 .getValueClass().equals(JRDataSource.class)) && (!parameter.getName().equals
                 ("REPORT_DATA_SOURCE"))).toArray();
-
         if (datasourceParameters.length > 1) {
             LOGGER.warn("Too many parameters for datasource.");
             Map<String, List<Map<String, Object>>> dataWithMultipleDatasources = dataProvider
-                    .getDataWithMultipleDatasources(payload);
+                    .getDataWithMultipleDatasets(payload);
             for (Map.Entry<String, List<Map<String, Object>>> entry : dataWithMultipleDatasources.entrySet()) {
                 data = entry.getValue();
                 JRMapArrayDataSource mapArrayDataSource = new JRMapArrayDataSource(data.toArray());
@@ -106,14 +96,13 @@ public class StaticReportGenerator {
             throw new SiddhiAppRuntimeException("Failed to fill data into report template. ", e);
         }
         try {
-            JasperExportManager.exportReportToPdfFile(jasperPrint, reportProperties.get(ReportConstants.URI)
-                    + reportProperties.get(ReportConstants.REPORT_NAME) + ".pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
         } catch (JRException e) {
             throw new SiddhiAppRuntimeException("Failed to generate the PDF. ", e);
         }
-        File f = new File(reportProperties.get(ReportConstants.URI)
-                + reportProperties.get(ReportConstants.REPORT_NAME) + ".pdf");
+        LOGGER.info("output path : " + reportProperties.get(ReportConstants.OUTPUT_PATH));
+        File f = new File(reportProperties.get(ReportConstants.OUTPUT_PATH));
         LOGGER.info("File exists : " + f.exists());
-        LOGGER.info("Generated report " + reportProperties.get(ReportConstants.REPORT_NAME));
+        LOGGER.info("Generated report " + reportProperties.get(ReportConstants.OUTPUT_PATH));
     }
 }
