@@ -1,6 +1,6 @@
 target/
 .idea
 siddhi-io-report.iml
-/testDir
+TestReportURI/
 *.iml
 *.pdf
