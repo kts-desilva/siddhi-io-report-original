@@ -198,8 +198,6 @@ import java.util.stream.Stream;
                 )
         }
 )
-// TODO: 11/9/18 write more examples for various senarios.
-// for more information refer https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sinks
 
 public class ReportSink extends Sink {
     private static final Logger log = Logger.getLogger(ReportSink.class);

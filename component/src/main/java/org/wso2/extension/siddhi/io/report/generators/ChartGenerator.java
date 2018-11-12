@@ -43,7 +43,7 @@ class ChartGenerator {
     private static final Logger log = Logger.getLogger(ChartGenerator.class);
 
     DJChart createPieChart(DynamicDataProvider dataProvider, String chartTitle) {
-        DJChart pieChart = new DJPieChartBuilder()
+        return new DJPieChartBuilder()
                 .setX(10)
                 .setY(10)
                 .setWidth(550)
@@ -53,7 +53,7 @@ class ChartGenerator {
                 .setShowLegend(true)
                 .setTitle(chartTitle)
                 .setTitleColor(Color.DARK_GRAY)
-                .setTitleFont(ar.com.fdvs.dj.domain.constants.Font.ARIAL_BIG_BOLD)
+                .setTitleFont(Font.ARIAL_BIG_BOLD)
                 .setTitlePosition(DJChartOptions.EDGE_TOP)
                 .setLineStyle(DJChartOptions.LINE_STYLE_DOTTED)
                 .setLineWidth(1)
@@ -64,12 +64,11 @@ class ChartGenerator {
                 .setCircular(true)
                 .setLabelFormat("{0}{2}")
                 .build();
-        return pieChart;
     }
 
     DJChart createPieChart(DynamicDataProvider dataProvider, String chartTitle, String category, String
             series) {
-        DJChart pieChart = new DJPieChartBuilder()
+        return new DJPieChartBuilder()
                 .setX(10)
                 .setY(10)
                 .setWidth(550)
@@ -79,7 +78,7 @@ class ChartGenerator {
                 .setShowLegend(true)
                 .setTitle(chartTitle)
                 .setTitleColor(Color.DARK_GRAY)
-                .setTitleFont(ar.com.fdvs.dj.domain.constants.Font.ARIAL_BIG_BOLD)
+                .setTitleFont(Font.ARIAL_BIG_BOLD)
                 .setTitlePosition(DJChartOptions.EDGE_TOP)
                 .setLineStyle(DJChartOptions.LINE_STYLE_DOTTED)
                 .setLineWidth(1)
@@ -90,14 +89,13 @@ class ChartGenerator {
                 .setCircular(true)
                 .setLabelFormat("{0}{2}")
                 .build();
-        return pieChart;
     }
 
     DJChart createBarChart(DynamicDataProvider dataProvider, String chartTitle) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(dataProvider.getCategoryColumn().getTitle());
         DJAxisFormat valueAxisFormat = new DJAxisFormat(dataProvider.getSeriesColumn().getTitle());
 
-        DJChart barChart = new DJBarChartBuilder()
+        return new DJBarChartBuilder()
                 .setX(10)
                 .setY(10)
                 .setWidth(550)
@@ -119,14 +117,13 @@ class ChartGenerator {
                 .setCategoryAxisFormat(categoryAxisFormat)
                 .setValueAxisFormat(valueAxisFormat)
                 .build();
-        return barChart;
     }
 
     DJChart createBarChart(DynamicDataProvider dataProvider, String chartTitle, String category, String series) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(dataProvider.getCategoryColumn().getTitle());
         DJAxisFormat valueAxisFormat = new DJAxisFormat(dataProvider.getSeriesColumn().getTitle());
 
-        DJChart barChart = new DJBarChartBuilder()
+        return new DJBarChartBuilder()
                 .setX(10)
                 .setY(10)
                 .setWidth(550)
@@ -148,14 +145,13 @@ class ChartGenerator {
                 .setCategoryAxisFormat(categoryAxisFormat)
                 .setValueAxisFormat(valueAxisFormat)
                 .build();
-        return barChart;
     }
 
     DJChart createLineChart(DynamicDataProvider dataProvider, String chartTitle) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(dataProvider.getCategoryColumn().getTitle());
         DJAxisFormat valueAxisFormat = new DJAxisFormat(dataProvider.getSeriesColumn().getTitle());
 
-        DJChart lineChart = new DJLineChartBuilder()
+        return new DJLineChartBuilder()
                 .setX(10)
                 .setY(10)
                 .setWidth(550)
@@ -178,7 +174,6 @@ class ChartGenerator {
                 .setCategoryAxisFormat(categoryAxisFormat)
                 .setValueAxisFormat(valueAxisFormat)
                 .build();
-        return lineChart;
     }
 
     DJChart createLineChart(DynamicDataProvider dataProvider, String chartTitle, String category, String
@@ -186,7 +181,7 @@ class ChartGenerator {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(category);
         DJAxisFormat valueAxisFormat = new DJAxisFormat(series);
 
-        DJChart lineChart = new DJLineChartBuilder()
+        return new DJLineChartBuilder()
                 .setX(10)
                 .setY(10)
                 .setWidth(550)
@@ -209,7 +204,6 @@ class ChartGenerator {
                 .setCategoryAxisFormat(categoryAxisFormat)
                 .setValueAxisFormat(valueAxisFormat)
                 .build();
-        return lineChart;
     }
 
     DynamicReportBuilder createTable(DynamicDataProvider dataProvider, DynamicReportBuilder reportBuilder) {

@@ -18,7 +18,7 @@
   -->
 
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4fd2f78e-344d-4371-ba1e-f86c2a81ef75">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
     <property name="ireport.zoom" value="1.0"/>
     <property name="ireport.x" value="0"/>
     <property name="ireport.y" value="0"/>
@@ -34,12 +34,12 @@
     <columnHeader>
         <band height="61" splitType="Stretch">
             <staticText>
-                <reportElement x="296" y="41" width="228" height="20" uuid="19aa39a0-45cf-4b36-b327-25b640f81d8a"/>
+                <reportElement x="296" y="41" width="228" height="20" />
                 <textElement textAlignment="Center"/>
                 <text><![CDATA[Address]]></text>
             </staticText>
             <staticText>
-                <reportElement x="36" y="41" width="215" height="20" uuid="baba8372-2215-439d-8b20-fd4ab054bbe5"/>
+                <reportElement x="36" y="41" width="215" height="20" />
                 <textElement textAlignment="Center"/>
                 <text><![CDATA[Name]]></text>
             </staticText>
@@ -48,11 +48,11 @@
     <detail>
         <band height="125" splitType="Stretch">
             <textField>
-                <reportElement x="296" y="0" width="228" height="20" uuid="c4de17e6-e5bc-4454-b38e-cc50acf18f0b"/>
+                <reportElement x="296" y="0" width="228" height="20" />
                 <textFieldExpression><![CDATA[$F{addr}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="36" y="0" width="215" height="20" uuid="8283d8b6-a288-48ec-bd4a-36c2875f5cff"/>
+                <reportElement x="36" y="0" width="215" height="20" />
                 <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
             </textField>
         </band>

@@ -50,7 +50,6 @@ public class DynamicReportGenerator extends ReportGenerator {
         layoutManager = new LayoutManager();
     }
 
-    // TODO: 11/6/18 write unit test
     @Override
     public void generateReport(Object payload, Map<String, String> reportProperties) {
         LOGGER.info(reportProperties);

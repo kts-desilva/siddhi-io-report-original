@@ -28,12 +28,6 @@ import java.util.Map;
 public class DynamicReportGeneratorTestCase {
 
     private static final Logger LOGGER = Logger.getLogger(DynamicReportGeneratorTestCase.class);
-    private ClassLoader classLoader;
-
-    @BeforeClass
-    public void init() {
-        classLoader = DynamicReportGeneratorTestCase.class.getClassLoader();
-    }
 
     @Test(expectedExceptions = SiddhiAppRuntimeException.class, expectedExceptionsMessageRegExp = "Failed to generate" +
             " the report. Provide a numeric series column. ")

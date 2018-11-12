@@ -76,7 +76,7 @@ public class DynamicDataProvider {
         return this.data;
     }
 
-    public void addDataTo(String payloadStirng, List<Map<String, Object>> dataList, boolean dynamic) {
+    private void addDataTo(String payloadStirng, List<Map<String, Object>> dataList, boolean dynamic) {
         JsonElement payloadJson = parsePayload(payloadStirng);
         JsonArray events = getEvents(payloadJson);
         for (JsonElement eventElement : events) {
@@ -91,11 +91,11 @@ public class DynamicDataProvider {
         }
     }
 
-    public void generateMetaData(JsonElement element) {
+    private void generateMetaData(JsonElement element) {
         columnMetadata = getColumnMetaData(element.getAsJsonObject());
     }
 
-    public JsonElement parsePayload(String payload) {
+    private JsonElement parsePayload(String payload) {
         JsonElement payloadJson = payloadParser.parse(payload);
         if (!payloadJson.isJsonArray()) {
             payloadJson = payloadParser.parse("[" + payload + "]");
@@ -103,7 +103,7 @@ public class DynamicDataProvider {
         return payloadJson;
     }
 
-    public JsonArray getEvents(JsonElement parsedPayload) {
+    private JsonArray getEvents(JsonElement parsedPayload) {
         return parsedPayload.getAsJsonArray();
     }
 
@@ -112,8 +112,7 @@ public class DynamicDataProvider {
         return new Gson().fromJson(jsonObject.get("event").toString(), LinkedHashMap.class);
     }
 
-
-    private Map<String, String> getColumnMetaData(JsonObject jsonObject) {
+    private Map getColumnMetaData(JsonObject jsonObject) {
         //used linked hashmap inorder to keep the insertion order of the json elements.
         //Map<String, String> columnMetadata = new LinkedHashMap<>();
         Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);

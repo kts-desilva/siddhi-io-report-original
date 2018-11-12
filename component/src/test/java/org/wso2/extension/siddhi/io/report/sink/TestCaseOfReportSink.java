@@ -963,14 +963,13 @@ public class TestCaseOfReportSink {
         AtomicInteger count = new AtomicInteger();
 
         Arrays.stream(testChartTypes).forEach(chartType -> {
-            String testChartType = chartType;
             String testReportName = "Test" + chartType + "ChartReport";
 
             String streams = "" +
                     "@App:name('TestSiddhiApp')" +
                     "define stream FooStream(symbol string, price float, volume long); " +
                     "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
-                    "chart='" + testChartType + "',@map(type='json')) " +
+                    "chart='" + chartType + "',@map(type='json')) " +
                     "define stream BarStream (symbol string,price float, volume long); ";
 
             String query = "" +
@@ -1020,7 +1019,6 @@ public class TestCaseOfReportSink {
         AtomicInteger count = new AtomicInteger();
 
         Arrays.stream(testChartTypes).forEach(chartType -> {
-            String testChartType = chartType;
             String testReportName = "Test" + chartType + "ChartReport";
             String testSeries = "volume";
             String testCategory = "symbol";
@@ -1029,7 +1027,7 @@ public class TestCaseOfReportSink {
                     "@App:name('TestSiddhiApp')" +
                     "define stream FooStream(symbol string, price float, volume long); " +
                     "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
-                    "chart='" + testChartType + "',series='" + testSeries + "',category='" + testCategory + "'," +
+                    "chart='" + chartType + "',series='" + testSeries + "',category='" + testCategory + "'," +
                     "@map(type='json')) " +
                     "define stream BarStream (symbol string,price float, volume long); ";
 
