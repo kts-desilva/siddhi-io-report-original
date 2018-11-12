@@ -23,9 +23,6 @@ package org.wso2.extension.siddhi.io.report.util;
  */
 
 public class ReportConstants {
-    private ReportConstants() {
-    }
-
     /* configuration parameters*/
     public static final String TEMPLATE = "template";
     public static final String HEADER = "header";
