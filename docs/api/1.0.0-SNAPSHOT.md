@@ -4,11 +4,11 @@
 
 ### report *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a>*
 
-<p style="word-wrap: break-word"> </p>
+<p style="word-wrap: break-word">Report sink can be used to publish (write) event data which is processes within siddhiinto files.<br>Siddhi-io-report provides support to generate reports in PDF format.<br></p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-@sink(type="report", chart="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", category="<STRING>", series="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", chart.title="<STRING>", outputpath="<STRING>", dataset.name="<STRING>", @map(...)))
+@sink(type="report", outputpath="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", @map(...)))
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -22,56 +22,16 @@
         <th>Dynamic</th>
     </tr>
     <tr>
-        <td style="vertical-align: top">chart</td>
-        <td style="vertical-align: top; word-wrap: break-word">Chart to be added into the report</td>
-        <td style="vertical-align: top">table</td>
+        <td style="vertical-align: top">outputpath</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the file for  report to be generated.</td>
+        <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: top">template</td>
-        <td style="vertical-align: top; word-wrap: break-word">JRXML template path</td>
-        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/dynamicTemplate.jrxml</td>
-        <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
-        <td style="vertical-align: top">No</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: top">header</td>
-        <td style="vertical-align: top; word-wrap: break-word">Header image for the report</td>
-        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/stream-processor.png</td>
-        <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
-        <td style="vertical-align: top">No</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: top">footer</td>
-        <td style="vertical-align: top; word-wrap: break-word">Footer image for the report</td>
-        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/stream-processor.png</td>
-        <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
-        <td style="vertical-align: top">No</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: top">category</td>
-        <td style="vertical-align: top; word-wrap: break-word">Category variable for the chart</td>
-        <td style="vertical-align: top">none</td>
-        <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
-        <td style="vertical-align: top">No</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: top">series</td>
-        <td style="vertical-align: top; word-wrap: break-word">Series variable for the chart</td>
-        <td style="vertical-align: top">none</td>
-        <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
         <td style="vertical-align: top">description</td>
-        <td style="vertical-align: top; word-wrap: break-word">Description for the report</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the description of the report.</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -79,7 +39,7 @@
     </tr>
     <tr>
         <td style="vertical-align: top">title</td>
-        <td style="vertical-align: top; word-wrap: break-word">Title of the report</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the title of the report</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -87,31 +47,63 @@
     </tr>
     <tr>
         <td style="vertical-align: top">subtitle</td>
-        <td style="vertical-align: top; word-wrap: break-word">Subtitle of the report</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the subtitle of the report</td>
         <td style="vertical-align: top">none</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">template</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify an external JRXML template path to generate the report. The given template will be filled and generate the report accordingly.</td>
+        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/dynamicTemplate.jrxml</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">header</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the header image for the report.</td>
+        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/stream-processor.png</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">footer</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the footer image for the report</td>
+        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/stream-processor.png</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">chart</td>
+        <td style="vertical-align: top; word-wrap: break-word">Used to specify the chart type in the report. The value can be 'line', 'bar', 'pie', 'table'. The chart is added into the report according to the parameter value.</td>
+        <td style="vertical-align: top">table</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
         <td style="vertical-align: top">chart.title</td>
-        <td style="vertical-align: top; word-wrap: break-word">Title of the chart</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the title of the chart. The title is added along with the chart.</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">outputpath</td>
-        <td style="vertical-align: top; word-wrap: break-word">The folder where report is saved</td>
+        <td style="vertical-align: top">category</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the category variable for the chart defined. The value of this parameter will be taken as the X axis of the chart.</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">dataset.name</td>
-        <td style="vertical-align: top; word-wrap: break-word">The name of the parameter of the dataset</td>
+        <td style="vertical-align: top">series</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the series variable for the chart. The value of this parameter will be taken as the Y axis of the chart and it is necessary to provide  numerical value for this parameter.</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -122,9 +114,21 @@
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
- @sink(type='report',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
+ @sink(type='report',outputpath='/abc/{symbol}.pdf',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
 ```
 <p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.</p>
+
+<span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
+```
+ @sink(type='report',outputpath='/abc/example.pdf',description='This is a sample report for the report sink.',title='Sample Report',subtitle='Report sink sample',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
+```
+<p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.The report title, description and subtitle will include the values specified as the parameters. The report will be generated in the given output path.</p>
+
+<span id="example-3" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 3</span>
+```
+ @sink(type='report',outputpath='/abc/example.pdf',chart='Line',chart.title='Line chart for the sample report.',category='symbol',series='price',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
+```
+<p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.The report report will include a line chart with the specified chart title. The chart will be generated with the sepcified category and series.The report will be generated in the given output path.</p>
 
 ## Source
 
