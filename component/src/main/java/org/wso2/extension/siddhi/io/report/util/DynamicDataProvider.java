@@ -90,6 +90,7 @@ public class DynamicDataProvider {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void generateMetaData(JsonElement element) {
         columnMetadata = getColumnMetaData(element.getAsJsonObject());
     }
