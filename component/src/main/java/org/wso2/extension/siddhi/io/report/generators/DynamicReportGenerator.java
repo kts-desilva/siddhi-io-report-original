@@ -68,7 +68,6 @@ public class DynamicReportGenerator extends ReportGenerator {
         JasperPrint jasperPrint = generateReportPrint(report, reportLayout, dataSource, parameters);
         exportAsPdf(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
 
-        //LOGGER.info("replacing string : " + matcher.replaceAll(dataProvider.getDynamicReportNameValue()));
         File f = new File(reportProperties.get(ReportConstants.OUTPUT_PATH));
         LOGGER.info("File exists : " + f.exists());
         LOGGER.info("Generated report " + reportProperties.get(ReportConstants.OUTPUT_PATH));
