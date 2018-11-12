@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
 /**
  * This class provides the implementation of the data provider for the dynamic reports.
  */
-
 public class DynamicDataProvider {
     private static final Logger logger = Logger.getLogger(DynamicDataProvider.class);
     private List<AbstractColumn> abstractColumns;

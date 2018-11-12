@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * StaticReportGenerator test case.
+ */
 public class StaticReportGeneratorTestCase {
 
     private static final Logger LOGGER = Logger.getLogger(StaticReportGeneratorTestCase.class);

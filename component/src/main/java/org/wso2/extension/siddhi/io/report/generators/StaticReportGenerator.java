@@ -38,9 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class provides implementation for the report generation for a given JRXML template file.
+ * This class provides implementation for the report generation for an external JRXML template file.
  */
-
 public class StaticReportGenerator extends ReportGenerator {
     private static final Logger LOGGER = Logger.getLogger(StaticReportGenerator.class);
 

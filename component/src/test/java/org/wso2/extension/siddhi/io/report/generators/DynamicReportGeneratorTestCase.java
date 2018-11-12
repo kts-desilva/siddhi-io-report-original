@@ -19,12 +19,14 @@
 package org.wso2.extension.siddhi.io.report.generators;
 
 import org.apache.log4j.Logger;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 
 import java.util.Map;
 
+/**
+ * DynamicReportGenerator class test case.
+ */
 public class DynamicReportGeneratorTestCase {
 
     private static final Logger LOGGER = Logger.getLogger(DynamicReportGeneratorTestCase.class);
@@ -40,5 +42,4 @@ public class DynamicReportGeneratorTestCase {
         DynamicReportGenerator dynamicReportGenerator = new DynamicReportGenerator();
         dynamicReportGenerator.generateReport(DummyData.STRING_DUMMY_DATA, reportProperties);
     }
-
 }

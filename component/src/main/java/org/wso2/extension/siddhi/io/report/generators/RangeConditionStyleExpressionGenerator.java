@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 /**
  * This class provides implementation of the identifying ranges in data.
  */
-
 public class RangeConditionStyleExpressionGenerator extends ConditionStyleExpression {
     private static final long serialVersionUID = 6106269076155338045L;
 

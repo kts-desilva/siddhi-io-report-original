@@ -36,9 +36,8 @@ import java.awt.Color;
 import java.util.List;
 
 /**
- * This is a sample class-level comment, explaining what the extension class does.
+ * This is the implementation of the chart generation for the report chart types.
  */
-
 class ChartGenerator {
     private static final Logger log = Logger.getLogger(ChartGenerator.class);
 

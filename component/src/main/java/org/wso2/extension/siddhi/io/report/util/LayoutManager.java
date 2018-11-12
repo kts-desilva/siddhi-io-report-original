@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * This class provides implementation of the report layout manager.
  */
-
 public class LayoutManager {
     public LayoutManager() {
     }

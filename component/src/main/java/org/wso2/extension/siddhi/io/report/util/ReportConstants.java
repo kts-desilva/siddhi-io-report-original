@@ -21,7 +21,6 @@ package org.wso2.extension.siddhi.io.report.util;
 /**
  * Constants used in siddhi-io-report extension.
  */
-
 public class ReportConstants {
     /* configuration parameters*/
     public static final String TEMPLATE = "template";

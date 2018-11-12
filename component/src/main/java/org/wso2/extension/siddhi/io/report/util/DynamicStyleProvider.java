@@ -30,7 +30,6 @@ import java.awt.Color;
 /**
  * This class provides implementation of the table styles for the reports generated.
  */
-
 public class DynamicStyleProvider {
     public static void addStyles(DynamicReportBuilder reportBuilder) {
         Style st = new Style();

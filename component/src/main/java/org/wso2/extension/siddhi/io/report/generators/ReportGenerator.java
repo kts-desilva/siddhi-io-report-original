@@ -36,9 +36,8 @@ import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import java.util.Map;
 
 /**
- * This abstract class provides implementation of the common methods for the report generation.
+ * This abstract class provides implementation of methods for the report generation.
  */
-
 public abstract class ReportGenerator {
 
     public void exportAsPdf(JasperPrint jasperPrint, String outputPath) {
