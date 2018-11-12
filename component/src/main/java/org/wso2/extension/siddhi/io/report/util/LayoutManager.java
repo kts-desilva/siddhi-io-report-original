@@ -16,9 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.wso2.extension.siddhi.io.report.report;
-
-import org.wso2.extension.siddhi.io.report.util.ReportConstants;
+package org.wso2.extension.siddhi.io.report.util;
 
 import java.util.Map;
 

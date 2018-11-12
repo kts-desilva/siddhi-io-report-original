@@ -19,8 +19,8 @@
 package org.wso2.extension.siddhi.io.report.sink;
 
 import org.apache.log4j.Logger;
-import org.wso2.extension.siddhi.io.report.report.DynamicReportGenerator;
-import org.wso2.extension.siddhi.io.report.report.StaticReportGenerator;
+import org.wso2.extension.siddhi.io.report.generators.DynamicReportGenerator;
+import org.wso2.extension.siddhi.io.report.generators.StaticReportGenerator;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -54,13 +54,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//import org.wso2.extension.siddhi.io.report.report.DynamicReportGenerator;
-
-/**
- * This class contains the implementation of siddhi-io-report sink which provides the functionality of publishing
- * data to reports as PDF files through siddhi.
- */
-
 /**
  * Annotation of Siddhi Extension.
  * <pre><code>
@@ -87,79 +80,80 @@ import java.util.stream.Stream;
 @Extension(
         name = "report",
         namespace = "sink",
-        description = " ",
+        description = "Report sink can be used to publish (write) event data which is processes within siddhi" +
+                "into files.\nSiddhi-io-report provides support to generate reports in PDF format.\n",
         parameters = {
-                @Parameter(name = "chart",
-                        description = "Chart to be added into the report",
-                        optional = true,
-                        defaultValue = "table",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "template",
-                        description = "JRXML template path",
-                        optional = true,
-                        defaultValue = "/home/senuri/Projects/Jasper/template/dynamicTemplate.jrxml",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "header",
-                        description = "Header image for the report",
-                        optional = true,
-                        defaultValue = "/home/senuri/Projects/Jasper/template/stream-processor.png",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "footer",
-                        description = "Footer image for the report",
-                        optional = true,
-                        defaultValue = "/home/senuri/Projects/Jasper/template/stream-processor.png",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "category",
-                        description = "Category variable for the chart",
-                        optional = true,
-                        defaultValue = "none",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "series",
-                        description = "Series variable for the chart",
-                        optional = true,
-                        defaultValue = "none",
+                @Parameter(name = "outputpath",
+                        description = "This parameter is used to specify the file for  report to be generated.",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "description",
-                        description = "Description for the report",
+                        description = "This parameter is used to specify the description of the report.",
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "title",
-                        description = "Title of the report",
+                        description = "This parameter is used to specify the title of the report",
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "subtitle",
-                        description = "Subtitle of the report",
+                        description = "This parameter is used to specify the subtitle of the report",
                         optional = true,
                         defaultValue = "none",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "template",
+                        description = "This parameter is used to specify an external JRXML template path to generate " +
+                                "the report. The " +
+                                "given template will be filled and generate the report accordingly.",
+                        optional = true,
+                        defaultValue = "/home/senuri/Projects/Jasper/template/dynamicTemplate.jrxml",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "header",
+                        description = "This parameter is used to specify the header image for the report.",
+                        optional = true,
+                        defaultValue = "/home/senuri/Projects/Jasper/template/stream-processor.png",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "footer",
+                        description = "This parameter is used to specify the footer image for the report",
+                        optional = true,
+                        defaultValue = "/home/senuri/Projects/Jasper/template/stream-processor.png",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "chart",
+                        description = "Used to specify the chart type in the report. The value can be 'line', 'bar', " +
+                                "'pie', 'table'. The chart is added into the report according to the parameter value.",
+                        optional = true,
+                        defaultValue = "table",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "chart.title",
-                        description = "Title of the chart",
+                        description = "This parameter is used to specify the title of the chart. The title is added " +
+                                "along with the chart.",
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
-                @Parameter(name = "outputpath",
-                        description = "The folder where report is saved",
-                        defaultValue = "none",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "dataset.name",
-                        description = "The name of the parameter of the dataset",
+                @Parameter(name = "category",
+                        description = "This parameter is used to specify the category variable for the chart defined." +
+                                " The value of this parameter will be taken as the X axis of the chart.",
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
+                @Parameter(name = "series",
+                        description = "This parameter is used to specify the series variable for the chart. The value" +
+                                " of this parameter will be taken as the Y axis of the chart and it is necessary to " +
+                                "provide  numerical value for this parameter.",
+                        optional = true,
+                        defaultValue = "none",
+                        type = {DataType.STRING}
+                )
 
                 /*@Parameter(name = " ",
                         description = " " ,
@@ -171,15 +165,40 @@ import java.util.stream.Stream;
         examples = {
                 @Example(
                         syntax = " " +
-                                "@sink(type='report',@map(type='json'))" +
+                                "@sink(type='report',outputpath='/abc/{symbol}.pdf',@map(type='json'))" +
                                 "define stream BarStream(symbol string, price float, volume long);",
                         description = " " +
                                 "Under above configuration, for an event chunck," +
                                 "a report of type PDF will be generated. There will be a table in the report."
+                ),
+                @Example(
+                        syntax = " " +
+                                "@sink(type='report',outputpath='/abc/example.pdf',description='This is a sample " +
+                                "report for the report sink.',title='Sample Report',subtitle='Report sink sample'," +
+                                "@map(type='json'))" +
+                                "define stream BarStream(symbol string, price float, volume long);",
+                        description = " " +
+                                "Under above configuration, for an event chunck," +
+                                "a report of type PDF will be generated. There will be a table in the report." +
+                                "The report title, description and subtitle will include the values specified as the " +
+                                "parameters. The report will be generated in the given output path."
+                ),
+                @Example(
+                        syntax = " " +
+                                "@sink(type='report',outputpath='/abc/example.pdf',chart='Line'," +
+                                "chart.title='Line chart for the sample report.',category='symbol',series='price'," +
+                                "@map(type='json'))" +
+                                "define stream BarStream(symbol string, price float, volume long);",
+                        description = " " +
+                                "Under above configuration, for an event chunck," +
+                                "a report of type PDF will be generated. There will be a table in the report." +
+                                "The report report will include a line chart with the specified chart title. The " +
+                                "chart will be generated with the sepcified category and series." +
+                                "The report will be generated in the given output path."
                 )
         }
 )
-
+// TODO: 11/9/18 write more examples for various senarios.
 // for more information refer https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sinks
 
 public class ReportSink extends Sink {
@@ -250,7 +269,7 @@ public class ReportSink extends Sink {
             staticReportGenerator.generateReport(payload, reportProperties);
         } else {
             DynamicReportGenerator dynamicReportGenerator = new DynamicReportGenerator();
-            dynamicReportGenerator.generateReportFromData(payload, reportProperties);
+            dynamicReportGenerator.generateReport(payload, reportProperties);
         }
     }
 
@@ -318,7 +337,7 @@ public class ReportSink extends Sink {
         String mapType = streamDefinition.getAnnotations().get(0).getAnnotations().get(0).getElements().get(0)
                 .getValue();
         if (!mapType.equals("json")) {
-            throw new SiddhiAppCreationException("Invalid map type " + mapType + "Only JSON map type is allowed.");
+            throw new SiddhiAppCreationException("Invalid map type " + mapType + " Only JSON map type is allowed.");
         }
     }
 
@@ -403,8 +422,6 @@ public class ReportSink extends Sink {
             if (!path.equals(ReportConstants.DEFAULT_TEMPLATE)) {
                 throw new SiddhiAppCreationException(path + " does not exists. " + parameter + " should be a valid " +
                         "path");
-            } else if (!parameter.equals(ReportConstants.OUTPUT_PATH)) {
-                reportProperties.put(parameter, path);
             }
         }
 
@@ -412,8 +429,8 @@ public class ReportSink extends Sink {
             PathMatcher matcher = fileSystem.getPathMatcher("glob:**.jrxml");
             if (!path.isEmpty()) {
                 if (!matcher.matches(file)) {
-                    throw new SiddhiAppCreationException(parameter + " is invalid." + ReportConstants.TEMPLATE + " " +
-                            "should have a JRXML template");
+                    throw new SiddhiAppCreationException(path + " is invalid." + ReportConstants
+                            .TEMPLATE + " should have a JRXML template");
                 } else {
                     reportProperties.put(parameter, path);
                 }
@@ -497,3 +514,10 @@ public class ReportSink extends Sink {
         // no state
     }
 }
+
+//import org.wso2.extension.siddhi.io.report.generators.DynamicReportGenerator;
+
+/**
+ * This class contains the implementation of siddhi-io-report sink which provides the functionality of publishing
+ * data to reports as PDF files through siddhi.
+ */

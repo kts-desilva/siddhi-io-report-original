@@ -13,12 +13,15 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestCaseOfReportSink {
     // If you will know about this related testcase,
     //refer https://github.com/wso2-extensions/siddhi-io-file/blob/master/component/src/test
     private static final Logger LOGGER = Logger.getLogger(TestCaseOfReportSink.class);
     private ClassLoader classLoader;
+//    private AtomicInteger count = new AtomicInteger();
 
     @BeforeClass
     public void init() {
@@ -33,9 +36,9 @@ public class TestCaseOfReportSink {
 
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
-                "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',outputpath='testOut',@map(type='json')) " +
-                "define stream BarStream (symbol string,price float, volume long); ";
+                "define stream FooStream(symbol string, price int, volume long, testval bool); " +
+                "@sink(type='report',outputpath='testOut1',@map(type='json')) " +
+                "define stream BarStream (symbol string,price int, volume long, testval bool); ";
 
         String query = "" +
                 "from FooStream " +
@@ -49,21 +52,25 @@ public class TestCaseOfReportSink {
         siddhiAppRuntime.start();
 
         Event testEvent1 = new Event();
-        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L, true});
 
         Event testEvent2 = new Event();
-        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+        testEvent2.setData(new Object[]{"IBM", 57.8f, 100L, false});
 
         Event testEvent3 = new Event();
-        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L, true});
 
         Event testEvent4 = new Event();
-        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L, true});
 
         stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
 
         File sink = new File(ReportConstants.DEFAULT_REPORT_NAME + ".pdf");
         AssertJUnit.assertTrue(sink.exists());
+
+        String file = classLoader.getResource("testOut.pdf").getFile();
+        File testFile = new File(file);
+        Assert.assertEquals(testFile.length() / 1024, sink.length() / 1024);
         siddhiAppRuntime.shutdown();
     }
 
@@ -263,7 +270,7 @@ public class TestCaseOfReportSink {
 
         String testReportName = "TestTemplateReport";
         String testReportURI = "TestReportURI/";
-        String invalidTemplatePath = "invalidTemplate.jrxml";
+        String invalidTemplatePath = "testInvalidTemplate.jrxml";
 
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -895,5 +902,545 @@ public class TestCaseOfReportSink {
         AssertJUnit.assertTrue(sink.exists());
         siddhiAppRuntime.shutdown();
 
+    }
+
+    @Test
+    public void reportSinkTest19() throws InterruptedException {
+        LOGGER.info("----------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 19 - Generate reports without series and category types.");
+        LOGGER.info("----------------------------------------------------------------------------");
+
+        String testReportName = "TestEmptrySeriesCatChartReport";
+        String testReportURI = "TestReportURI/";
+        String testChartType = "line";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "chart='" + testChartType + "',@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+
+        File sink = new File(testReportURI + testReportName + ".pdf");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void reportSinkTest20() {
+        LOGGER.info("------------------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 20 - Generate reports for all chart types without series and category.");
+        LOGGER.info("------------------------------------------------------------------------------------------");
+
+        String testReportURI = "TestReportURI/";
+        String[] testChartTypes = new String[]{"Pie", "Bar", "Line"};
+        AtomicInteger count = new AtomicInteger();
+
+        Arrays.stream(testChartTypes).forEach(chartType -> {
+            String testChartType = chartType;
+            String testReportName = "Test" + chartType + "ChartReport";
+
+            String streams = "" +
+                    "@App:name('TestSiddhiApp')" +
+                    "define stream FooStream(symbol string, price float, volume long); " +
+                    "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                    "chart='" + testChartType + "',@map(type='json')) " +
+                    "define stream BarStream (symbol string,price float, volume long); ";
+
+            String query = "" +
+                    "from FooStream " +
+                    "select * " +
+                    "insert into BarStream; ";
+
+            SiddhiManager siddhiManager = new SiddhiManager();
+
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+            siddhiAppRuntime.start();
+
+            Event testEvent1 = new Event();
+            testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+            Event testEvent2 = new Event();
+            testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+            Event testEvent3 = new Event();
+            testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+            try {
+                stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3});
+            } catch (InterruptedException e) {
+                LOGGER.error(e);
+            }
+
+            File sink = new File(testReportURI + testReportName + ".pdf");
+            if (sink.exists()) {
+                count.incrementAndGet();
+            }
+            siddhiAppRuntime.shutdown();
+        });
+        AssertJUnit.assertEquals(3, count.intValue());
+    }
+
+    @Test
+    public void reportSinkTest21() {
+        LOGGER.info("---------------------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 21 - Generate reports for all chart types with series and category given.");
+        LOGGER.info("---------------------------------------------------------------------------------------------");
+
+        String testReportURI = "TestReportURI/";
+        String[] testChartTypes = new String[]{"Pie", "Bar", "Line"};
+        AtomicInteger count = new AtomicInteger();
+
+        Arrays.stream(testChartTypes).forEach(chartType -> {
+            String testChartType = chartType;
+            String testReportName = "Test" + chartType + "ChartReport";
+            String testSeries = "volume";
+            String testCategory = "symbol";
+
+            String streams = "" +
+                    "@App:name('TestSiddhiApp')" +
+                    "define stream FooStream(symbol string, price float, volume long); " +
+                    "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                    "chart='" + testChartType + "',series='" + testSeries + "',category='" + testCategory + "'," +
+                    "@map(type='json')) " +
+                    "define stream BarStream (symbol string,price float, volume long); ";
+
+            String query = "" +
+                    "from FooStream " +
+                    "select * " +
+                    "insert into BarStream; ";
+
+            SiddhiManager siddhiManager = new SiddhiManager();
+
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+            siddhiAppRuntime.start();
+
+            Event testEvent1 = new Event();
+            testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+            Event testEvent2 = new Event();
+            testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+            Event testEvent3 = new Event();
+            testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+            try {
+                stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3});
+            } catch (InterruptedException e) {
+                LOGGER.error(e);
+            }
+
+            File sink = new File(testReportURI + testReportName + ".pdf");
+            if (sink.exists()) {
+                count.incrementAndGet();
+            }
+            siddhiAppRuntime.shutdown();
+        });
+        AssertJUnit.assertEquals(3, count.intValue());
+    }
+
+    @Test
+    public void reportSinkTest22() throws InterruptedException {
+        LOGGER.info("------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 22 - Generate reports with header and footer images given.");
+        LOGGER.info("------------------------------------------------------------------------------");
+
+        String testReportName = "TestHeaderFooterReport";
+        String testReportURI = "TestReportURI/";
+        String imagePath = classLoader.getResource("stream-processor.png").getPath();
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "header='" + imagePath + "',footer='" + imagePath + "',@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+
+        File sink = new File(testReportURI + testReportName + ".pdf");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void reportSinkTest23() throws InterruptedException {
+        LOGGER.info("------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 23 - Generate reports with empty header given.");
+        LOGGER.info("------------------------------------------------------------------");
+
+        String testReportName = "TestEmptyHeaderReport";
+        String testReportURI = "TestReportURI/";
+        String imagePath = "";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "header='" + imagePath + "',@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+
+        File sink = new File(testReportURI + testReportName + ".pdf");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void reportSinkTest24() throws InterruptedException {
+        LOGGER.info("----------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 24 - Generate reports with invalid map type given.");
+        LOGGER.info("----------------------------------------------------------------------");
+
+        String testReportName = "TestInvalidMapTypeReport";
+        String testReportURI = "TestReportURI/";
+        String imagePath = "";
+        String testMapType = "xml";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "header='" + imagePath + "',@map(type='" + testMapType + "')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals("Invalid map type " + testMapType + " Only JSON map" +
+                    " type is allowed.", e.getMessageWithOutContext());
+        }
+    }
+
+    @Test
+    public void reportSinkTest25() throws InterruptedException {
+        LOGGER.info("-----------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 25 - Generate reports with invalid parameter given.");
+        LOGGER.info("-----------------------------------------------------------------------");
+
+        String testReportName = "invalidParameter";
+        String testReportURI = "TestReportURI/";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + "{" + testReportName + "}" + "'," +
+                "@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals("Invalid Property '" + testReportName + "'. No such parameter in the stream " +
+                    "definition", e.getMessageWithOutContext());
+        }
+    }
+
+    @Test
+    public void reportSinkTest26() throws InterruptedException {
+        LOGGER.info("-----------------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 26 - Generate reports with parameter given for chart series/category.");
+        LOGGER.info("-----------------------------------------------------------------------------------------");
+
+        String testReportName = "TestInvalidSeriesReport";
+        String testReportURI = "TestReportURI/";
+        String testSeriesName = "invalidSeriesPara";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "chart='line', series='" + testSeriesName + "',@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals("Invalid property " + testSeriesName + " for series", e.getMessageWithOutContext
+                    ());
+        }
+    }
+
+    @Test
+    public void reportSinkTest27() throws InterruptedException {
+        LOGGER.info("-----------------------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 27 - Generate reports with invalid dynamic parameter for report name.");
+        LOGGER.info("-----------------------------------------------------------------------------------------");
+
+        String testReportName = "invalidParameter";
+        String testReportURI = "TestReportURI/";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + "{" + testReportName + "}'," +
+                "@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals("Invalid Property '" + testReportName + "'. No such parameter in the stream " +
+                    "definition", e.getMessageWithOutContext());
+        }
+    }
+
+    @Test
+    public void reportSinkTest28() throws InterruptedException {
+        LOGGER.info("------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 28 - Generate reports with invalid jrxml file given.");
+        LOGGER.info("------------------------------------------------------------------------");
+
+        String testReportName = "TestReport";
+        String testReportURI = "TestReportURI/";
+        String testTemplateURI = classLoader.getResource("invalidTemplate.jrxm").getFile();
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "template='" + testTemplateURI + "',@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals(testTemplateURI + " is invalid." + ReportConstants.TEMPLATE + " should have a " +
+                    "JRXML template", e.getMessageWithOutContext());
+        }
+    }
+
+    @Test
+    public void reportSinkTest29() throws InterruptedException {
+        LOGGER.info("-------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 29 - Generate reports with invalid header image given.");
+        LOGGER.info("-------------------------------------------------------------------------");
+
+        String testReportName = "TestReport";
+        String testReportURI = "TestReportURI/";
+        String testImageURI = classLoader.getResource("stream-processor.pn").getFile();
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price float, volume long); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "header='" + testImageURI + "',@map(type='json')) " +
+                "define stream BarStream (symbol string,price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.678f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals("Invalid path " + testImageURI + ". " + ReportConstants.HEADER + " should be an " +
+                    "image", e.getMessageWithOutContext());
+        }
     }
 }
