@@ -44,7 +44,7 @@ public class ReportConstants {
     public static final String DEFAULT_CHART = "table";
     public static final String DEFAULT_TITLE = "Siddhi Report";
     public static final String DEFAULT_REPORT_NAME = "SiddhiReport";
-    public static final String DEFAULT_DATASOURCE = "tableData";
+    public static final String DEFAULT_DATASET = "tableData";
 
     public static final int COLUMN_WIDTH = 400;
 

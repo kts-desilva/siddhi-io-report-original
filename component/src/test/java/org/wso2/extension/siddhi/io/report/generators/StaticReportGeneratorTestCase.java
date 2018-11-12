@@ -100,29 +100,4 @@ public class StaticReportGeneratorTestCase {
         parameters.put("TableDataSource", new JRMapArrayDataSource(dataFromPayload.toArray()));
         staticReportGenerator.fillReportData(jasperReport, parameters, new JREmptyDataSource());
     }
-
-//    @Test(expectedExceptions = SiddhiAppRuntimeException.class)
-//    public void staticReportGeneratorTest5() {
-//        //test with invalid report element size in the external JRXML template.
-//        LOGGER.info("-----------------------------------------------------------------------------------");
-//        LOGGER.info("StaticReportGenerator TestCase 5 - Generate reports with invalid export properties.");
-//        LOGGER.info("-----------------------------------------------------------------------------------");
-//
-//        String template = DummyData.class.getClassLoader().getResource("fromResultsetData.jrxml").getFile();
-//        StaticReportGenerator staticReportGenerator = new StaticReportGenerator();
-//        JasperDesign jasperDesign = staticReportGenerator.loadTemplate(template);
-//        JasperReport jasperReport = staticReportGenerator.compileTemplate(jasperDesign);
-//
-//        Map<String, String> reportProperties = DummyData.getWithoutParametersReportProperties();
-//
-//        DynamicDataProvider dynamicDataProvider = new DynamicDataProvider(reportProperties);
-//        List<Map<String, Object>> dataFromPayload = staticReportGenerator.getDataFromPayload(dynamicDataProvider,
-//                DummyData.DUMMY_PAYLOAD);
-//        Map<String, Object> parameters = new HashMap<>();
-//        parameters.put("TableDataSource", new JRMapArrayDataSource(dataFromPayload.toArray()));
-//        JasperPrint jasperPrint = staticReportGenerator.fillReportData(jasperReport, parameters, new
-//                JREmptyDataSource());
-//        jasperPrint.setPageHeight(800);
-//        staticReportGenerator.exportAsPdf(jasperPrint, "test.pdf");
-//    }
 }

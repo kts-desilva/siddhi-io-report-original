@@ -52,14 +52,14 @@ public class StaticReportGenerator extends ReportGenerator {
         JasperDesign jasperDesign = loadTemplate(reportProperties.get(ReportConstants.TEMPLATE));
         JasperReport jasperReport = compileTemplate(jasperDesign);
         JRParameter[] reportParameters = jasperReport.getParameters();
-        Object[] datasourceParameters = Arrays.stream(reportParameters).filter(parameter -> (parameter
+        Object[] datasetParameters = Arrays.stream(reportParameters).filter(parameter -> (parameter
                 .getValueClass().equals(JRDataSource.class)) && (!parameter.getName().equals
                 ("REPORT_DATA_SOURCE"))).toArray();
-        if (datasourceParameters.length > 1) {
-            LOGGER.warn("Too many parameters for datasource.");
-            Map<String, List<Map<String, Object>>> dataWithMultipleDatasources = dataProvider
+        if (datasetParameters.length > 1) {
+            LOGGER.warn("Too many parameters for dataset.");
+            Map<String, List<Map<String, Object>>> dataWithMultipleDatasets = dataProvider
                     .getDataWithMultipleDatasets(payload);
-            for (Map.Entry<String, List<Map<String, Object>>> entry : dataWithMultipleDatasources.entrySet()) {
+            for (Map.Entry<String, List<Map<String, Object>>> entry : dataWithMultipleDatasets.entrySet()) {
                 data = entry.getValue();
                 JRMapArrayDataSource mapArrayDataSource = new JRMapArrayDataSource(data.toArray());
                 parameters.put(entry.getKey(), mapArrayDataSource);
@@ -68,7 +68,7 @@ public class StaticReportGenerator extends ReportGenerator {
             data = getDataFromPayload(dataProvider, payload);
             JRMapArrayDataSource mapArrayDataSource = new JRMapArrayDataSource(data.toArray());
             try {
-                parameters.put(((JRParameter) datasourceParameters[0]).getName(), mapArrayDataSource);
+                parameters.put(((JRParameter) datasetParameters[0]).getName(), mapArrayDataSource);
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new SiddhiAppRuntimeException("Datasets are missing in the template provided " +
                         reportProperties.get(ReportConstants.TEMPLATE), e);

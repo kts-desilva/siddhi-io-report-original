@@ -145,7 +145,7 @@ public class DynamicReportGenerator extends ReportGenerator {
 
         DynamicReport nextReport = nextReportBuilder.build();
         reportBuilder.addConcatenatedReport(nextReport, new ClassicLayoutManager(), ReportConstants
-                .DEFAULT_DATASOURCE, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, DJConstants.DATA_SOURCE_TYPE_COLLECTION);
-        parameters.put(ReportConstants.DEFAULT_DATASOURCE, dataProvider.getData());
+                .DEFAULT_DATASET, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, DJConstants.DATA_SOURCE_TYPE_COLLECTION);
+        parameters.put(ReportConstants.DEFAULT_DATASET, dataProvider.getData());
     }
 }
