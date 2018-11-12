@@ -95,5 +95,4 @@ public abstract class ReportGenerator {
     }
 
     public abstract void generateReport(Object payload, Map<String, String> reportProperties);
-
 }

@@ -1444,4 +1444,50 @@ public class TestCaseOfReportSink {
                     "image", e.getMessageWithOutContext());
         }
     }
+
+    @Test
+    public void reportSinkTest30() throws InterruptedException {
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 30 - No numeric stream attribute for line chart series.");
+        LOGGER.info("---------------------------------------------------------------------------");
+
+        String testReportName = "TestReport";
+        String testReportURI = "TestReportURI/";
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price string, volume string); " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "'," +
+                "chart='line',@map(type='json')) " +
+                "define stream BarStream (symbol string,price string, volume string); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", "55.6f", "100L"});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", "57.678f", "100L"});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", "50f", "100L"});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", "55.6f", "100L"});
+
+        try {
+            SiddhiManager siddhiManager = new SiddhiManager();
+            SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+            InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+            siddhiAppRuntime.start();
+            stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+            siddhiAppRuntime.shutdown();
+        } catch (SiddhiAppCreationException e) {
+            AssertJUnit.assertEquals("line chart definition is invalid. There is no numeric stream attribute for the " +
+                    "series in. Provide a numeric series column.", e.getMessageWithOutContext());
+        }
+    }
 }

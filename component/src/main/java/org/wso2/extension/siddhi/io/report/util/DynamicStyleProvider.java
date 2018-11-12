@@ -41,7 +41,6 @@ public class DynamicStyleProvider {
 
         Style tableHeaderStyle = new Style();
         tableHeaderStyle.setTransparent(false);
-//        tableHeaderStyle.setBackgroundColor(new Color(97, 97, 96));
         tableHeaderStyle.setBackgroundColor(Color.decode("#616161"));
         tableHeaderStyle.setTextColor(new Color(255, 255, 255));
         tableHeaderStyle.setVerticalAlign(VerticalAlign.MIDDLE);

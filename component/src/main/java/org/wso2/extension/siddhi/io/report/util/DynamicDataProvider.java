@@ -113,7 +113,6 @@ public class DynamicDataProvider {
 
     private Map getColumnMetaData(JsonObject jsonObject) {
         //used linked hashmap inorder to keep the insertion order of the json elements.
-        //Map<String, String> columnMetadata = new LinkedHashMap<>();
         Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
         Map columnMetadata = eventMap.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getClass().getName(),
@@ -209,24 +208,24 @@ public class DynamicDataProvider {
                 datasetAttribute = datasetAttributeTemp.substring(1, datasetAttributeTemp.length() - 1);
             } else if (reportProperties.containsKey(ReportConstants.DATASET)) {
                 //same as {} definition for parameter value
+                // this is for the given dataset name directly
                 datasetAttribute = reportProperties.get(ReportConstants.DATASET);
             }
             if (datasetAttribute.isEmpty()) {
+                // the default valaue for dataset is taken as the value of the first parameter.
                 datasetAttribute = eventMap.entrySet().iterator().next().getKey();
             }
             logger.info("dataset attribure : " + datasetAttribute);
-            String datasourceName = eventMap.get(datasetAttribute).toString();
-            if (multipleDatasourcedata.containsKey(datasourceName)) {
-                List<Map<String, Object>> datasource = multipleDatasourcedata.get(datasourceName);
-                eventMap.remove(datasourceName);
-                datasource.add(eventMap);
-                multipleDatasourcedata.put(datasourceName, datasource);
+            String datasetName = eventMap.get(datasetAttribute).toString();
+            List<Map<String, Object>> dataset;
+            if (multipleDatasourcedata.containsKey(datasetName)) {
+                dataset = multipleDatasourcedata.get(datasetName);
             } else {
-                eventMap.remove(datasourceName);
-                List<Map<String, Object>> datasource = new ArrayList<>();
-                datasource.add(eventMap);
-                multipleDatasourcedata.put(datasourceName, datasource);
+                dataset = new ArrayList<>();
             }
+            eventMap.remove(datasetName);
+            dataset.add(eventMap);
+            multipleDatasourcedata.put(datasetName, dataset);
         }
         setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
                 ReportConstants.OUTPUT_PATH);

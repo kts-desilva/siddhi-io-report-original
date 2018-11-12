@@ -32,10 +32,10 @@ public class DynamicLayoutManager extends ClassicLayoutManager {
     private String footerImagePath = "";
     private static final Logger LOGGER = Logger.getLogger(DynamicLayoutManager.class);
 
-    DynamicLayoutManager() {
+    public DynamicLayoutManager() {
     }
 
-    DynamicLayoutManager(String footerImagePath) {
+    public DynamicLayoutManager(String footerImagePath) {
         this.footerImagePath = footerImagePath;
     }
 

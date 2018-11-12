@@ -153,6 +153,15 @@ import java.util.stream.Stream;
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
+                ),
+                @Parameter(name = "dataset",
+                        description = "This parameter is used to specify the dataset for the external template. This " +
+                                "value can have a static stream attribute name or a dynamic value specified by '{}'" +
+                                "eg:sink(type='report',dataset='{symbol}', @map(type='json'));" +
+                                "define stream (symbol string, price float, volume long);",
+                        optional = true,
+                        defaultValue = "none",
+                        type = {DataType.STRING}
                 )
 
                 /*@Parameter(name = " ",
@@ -454,6 +463,24 @@ public class ReportSink extends Sink {
         if (!validChartTypes.contains(chart.toUpperCase(Locale.ENGLISH))) {
             throw new SiddhiAppCreationException(chart + " is not a valid chart type. " +
                     "Only table,line,bar,pie charts are supported.");
+        }
+        if (!chart.equals("table")) {
+            if (!reportProperties.containsKey(ReportConstants.SERIES)) {
+                List<Attribute> attributeList = streamDefinition.getAttributeList();
+                for (Attribute attribute : attributeList) {
+                    Attribute.Type attributeType = attribute.getType();
+                    if (!isNumeric(attributeType)) {
+                        throw new SiddhiAppCreationException(chart + " chart definition is invalid. There is no " +
+                                "numeric stream attribute for the series in. Provide a numeric series column.");
+                    }
+                }
+            }
+        } else {
+            //warn for unnecessary parameter definition for table chart.
+            if (reportProperties.containsKey(ReportConstants.SERIES) || reportProperties.containsKey(ReportConstants
+                    .CATEGORY)) {
+                log.warn("Invalid " + chart + " definition. Series or category parameters is ignored for table chart.");
+            }
         }
         reportProperties.put(ReportConstants.CHART, chart);
     }
