@@ -396,36 +396,7 @@ public class ReportSink extends Sink {
             } else {
                 throw new SiddhiAppCreationException("Invalid property " + chartVariable + " for " + property);
             }
-
             reportProperties.put(property, chartVariable);
-
-//            if (property.equals(ReportConstants.SERIES)) {
-//                validAttributeFound = streamDefinition.getAttributeList().stream()
-//                        .anyMatch(attribute -> attribute.getName().equals(chartVariable) &&
-//                                isNumeric(attribute.getType()));
-//                if (!validAttributeFound) {
-//                    throw new SiddhiAppCreationException(chartVariable + "is invalid. Provide a numeric " +
-//                            "series column.");
-//                }
-//            }
-//            for (Attribute attribute : attributeList) {
-//                if (attribute.getName().equals(chartVariable)) {
-//                    if (property.equals(ReportConstants.SERIES)) {
-//                        Attribute.Type attributeType = attribute.getType();
-//                        if (!isNumeric(attributeType)) {
-//                            throw new SiddhiAppCreationException(chartVariable + "is invalid. Provide a numeric " +
-//                                    "series column.");
-//                        }
-//                    }
-//                    validAttributeFound = true;
-//                }
-//            }
-
-//            if (validAttributeFound) {
-//                reportProperties.put(property, chartVariable);
-//            } else {
-//                throw new SiddhiAppCreationException("Invalid property " + chartVariable + " for " + property);
-//            }
         }
     }
 
