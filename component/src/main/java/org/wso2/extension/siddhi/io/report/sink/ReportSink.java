@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -383,25 +384,48 @@ public class ReportSink extends Sink {
 
     private void validateVariable(String property, String chartVariable) {
         if (!chartVariable.isEmpty()) {
-            List<Attribute> attributeList = streamDefinition.getAttributeList();
-            boolean validAttributeFound = false;
-            for (Attribute attribute : attributeList) {
-                if (attribute.getName().equals(chartVariable)) {
-                    if (property.equals(ReportConstants.SERIES)) {
-                        Attribute.Type attributeType = attribute.getType();
-                        if (!isNumeric(attributeType)) {
-                            throw new SiddhiAppCreationException(chartVariable + "is invalid. Provide a numeric " +
-                                    "series column.");
-                        }
+            Optional<Attribute> any = streamDefinition.getAttributeList().stream()
+                    .filter(attribute -> attribute.getName().equals(chartVariable)).findAny();
+            if (any.isPresent()) {
+                if (property.equals(ReportConstants.SERIES)) {
+                    if (!isNumeric(any.get().getType())) {
+                        throw new SiddhiAppCreationException(chartVariable + "is invalid. " +
+                                "Provide a numeric series column.");
                     }
-                    validAttributeFound = true;
                 }
-            }
-            if (validAttributeFound) {
-                reportProperties.put(property, chartVariable);
             } else {
                 throw new SiddhiAppCreationException("Invalid property " + chartVariable + " for " + property);
             }
+
+            reportProperties.put(property, chartVariable);
+
+//            if (property.equals(ReportConstants.SERIES)) {
+//                validAttributeFound = streamDefinition.getAttributeList().stream()
+//                        .anyMatch(attribute -> attribute.getName().equals(chartVariable) &&
+//                                isNumeric(attribute.getType()));
+//                if (!validAttributeFound) {
+//                    throw new SiddhiAppCreationException(chartVariable + "is invalid. Provide a numeric " +
+//                            "series column.");
+//                }
+//            }
+//            for (Attribute attribute : attributeList) {
+//                if (attribute.getName().equals(chartVariable)) {
+//                    if (property.equals(ReportConstants.SERIES)) {
+//                        Attribute.Type attributeType = attribute.getType();
+//                        if (!isNumeric(attributeType)) {
+//                            throw new SiddhiAppCreationException(chartVariable + "is invalid. Provide a numeric " +
+//                                    "series column.");
+//                        }
+//                    }
+//                    validAttributeFound = true;
+//                }
+//            }
+
+//            if (validAttributeFound) {
+//                reportProperties.put(property, chartVariable);
+//            } else {
+//                throw new SiddhiAppCreationException("Invalid property " + chartVariable + " for " + property);
+//            }
         }
     }
 
@@ -464,15 +488,13 @@ public class ReportSink extends Sink {
             throw new SiddhiAppCreationException(chart + " is not a valid chart type. " +
                     "Only table,line,bar,pie charts are supported.");
         }
-        if (!chart.equals("table")) {
+        if (!chart.equals(ReportConstants.DEFAULT_CHART)) {
             if (!reportProperties.containsKey(ReportConstants.SERIES)) {
-                List<Attribute> attributeList = streamDefinition.getAttributeList();
-                for (Attribute attribute : attributeList) {
-                    Attribute.Type attributeType = attribute.getType();
-                    if (!isNumeric(attributeType)) {
-                        throw new SiddhiAppCreationException(chart + " chart definition is invalid. There is no " +
-                                "numeric stream attribute for the series in. Provide a numeric series column.");
-                    }
+                boolean numericAttributeFound = streamDefinition.getAttributeList().stream()
+                        .anyMatch(attribute -> isNumeric(attribute.getType()));
+                if (!numericAttributeFound) {
+                    throw new SiddhiAppCreationException(chart + " chart definition is invalid. There is no " +
+                            "numeric stream attribute for the series in. Provide a numeric series column.");
                 }
             }
         } else {

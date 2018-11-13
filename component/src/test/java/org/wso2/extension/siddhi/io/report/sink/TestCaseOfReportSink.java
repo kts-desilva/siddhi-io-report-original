@@ -133,8 +133,7 @@ public class TestCaseOfReportSink {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream(symbol string, price float, volume long); " +
-                "@sink(type='report',outputpath='" + testReportURI + testReportName + "',@map" +
-                "(type='json')) " +
+                "@sink(type='report',outputpath='" + testReportURI + testReportName + "',@map(type='json')) " +
                 "define stream BarStream (symbol string,price float, volume long); ";
 
         String query = "" +
@@ -1300,6 +1299,7 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
+            LOGGER.info(e.getMessage());
             AssertJUnit.assertEquals("Invalid property " + testSeriesName + " for series", e.getMessageWithOutContext
                     ());
         }

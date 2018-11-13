@@ -208,15 +208,13 @@ public class DynamicDataProvider {
                 String datasetAttributeTemp = reportProperties.get(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE);
                 datasetAttribute = datasetAttributeTemp.substring(1, datasetAttributeTemp.length() - 1);
             } else if (reportProperties.containsKey(ReportConstants.DATASET)) {
-                //same as {} definition for parameter value
-                // this is for the given dataset name directly
-                datasetAttribute = reportProperties.get(ReportConstants.DATASET);
+                datasetAttribute = reportProperties.get(ReportConstants.DATASET); // this is for the given dataset
+                // name directly
             }
             if (datasetAttribute.isEmpty()) {
-                // the default valaue for dataset is taken as the value of the first parameter.
-                datasetAttribute = eventMap.entrySet().iterator().next().getKey();
+                datasetAttribute = eventMap.entrySet().iterator().next().getKey(); // the default value for dataset
+                // is taken as the value of the first parameter.
             }
-            logger.info("dataset attribure : " + datasetAttribute);
             String datasetName = eventMap.get(datasetAttribute).toString();
             List<Map<String, Object>> dataset;
             if (multipleDatasourcedata.containsKey(datasetName)) {

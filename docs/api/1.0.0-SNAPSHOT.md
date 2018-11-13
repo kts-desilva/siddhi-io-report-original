@@ -8,7 +8,7 @@
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-@sink(type="report", outputpath="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", @map(...)))
+@sink(type="report", outputpath="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", dataset="<STRING>", @map(...)))
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -104,6 +104,14 @@
     <tr>
         <td style="vertical-align: top">series</td>
         <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the series variable for the chart. The value of this parameter will be taken as the Y axis of the chart and it is necessary to provide  numerical value for this parameter.</td>
+        <td style="vertical-align: top">none</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">dataset</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the dataset for the external template. This value can have a static stream attribute name or a dynamic value specified by '{}'eg:sink(type='report',dataset='{symbol}', @map(type='json'));define stream (symbol string, price float, volume long);</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>

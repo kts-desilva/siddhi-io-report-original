@@ -28,7 +28,6 @@ import ar.com.fdvs.dj.domain.chart.plot.DJAxisFormat;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
-import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.report.util.DynamicDataProvider;
 import org.wso2.extension.siddhi.io.report.util.DynamicStyleProvider;
 
@@ -38,9 +37,7 @@ import java.util.List;
 /**
  * This is the implementation of the chart generation for the report chart types.
  */
-class ChartGenerator {
-    private static final Logger log = Logger.getLogger(ChartGenerator.class);
-
+public class ChartGenerator {
     DJChart createPieChart(DynamicDataProvider dataProvider, String chartTitle) {
         return new DJPieChartBuilder()
                 .setX(10)
