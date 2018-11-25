@@ -31,7 +31,6 @@ import org.wso2.extension.siddhi.io.report.util.DynamicLayoutManager;
 import org.wso2.extension.siddhi.io.report.util.LayoutManager;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -52,45 +51,37 @@ public class DynamicReportGenerator extends ReportGenerator {
 
     @Override
     public void generateReport(Object payload, Map<String, String> reportProperties) {
-        LOGGER.info(reportProperties);
         DynamicDataProvider dataProvider = new DynamicDataProvider(reportProperties);
         List<Map<String, Object>> data = dataProvider.getData(payload, reportBuilder);
-        LOGGER.info(data);
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data);
         Map<String, Object> parameters = setParameters(reportProperties);
         DynamicLayoutManager reportLayout = layoutManager.getLayout(reportProperties);
-//        reportBuilder.setTemplateFile("//home/senuri/Projects/Jasper/JasperTestPOC/siddhi-io-report/component/src" +
-//                "/main/java/org/wso2/extension/siddhi/io/report/report/template/dynamicTemplate.jrxml");
+
         reportBuilder.setTemplateFile(reportProperties.get(ReportConstants.TEMPLATE));
         addChartTo(reportProperties, reportBuilder, dataProvider, parameters);
         DynamicReport report = reportBuilder.build();
         JasperPrint jasperPrint = generateReportPrint(report, reportLayout, dataSource, parameters);
         exportAsPdf(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
-
-        File f = new File(reportProperties.get(ReportConstants.OUTPUT_PATH));
-        LOGGER.info("File exists : " + f.exists());
-        LOGGER.info("Generated report " + reportProperties.get(ReportConstants.OUTPUT_PATH));
-        LOGGER.info("File exists : " + f.exists());
     }
 
     private void addChartTo(Map<String, String> reportProperties, DynamicReportBuilder reportBuilder,
                             DynamicDataProvider dataProvider, Map<String, Object> parameters) {
         ChartGenerator chartGenerator = new ChartGenerator();
-        String chartTitle = reportProperties.getOrDefault(ReportConstants.CHART_TITLE, "");
-        String categoryName = reportProperties.getOrDefault(ReportConstants.CATEGORY, "");
-        String seriesName = reportProperties.getOrDefault(ReportConstants.SERIES, "");
+        String chartTitle = reportProperties.getOrDefault(ReportConstants.CHART_TITLE, ReportConstants.EMPTY_STRING);
+        String categoryName = reportProperties.getOrDefault(ReportConstants.CATEGORY, ReportConstants.EMPTY_STRING);
+        String seriesName = reportProperties.getOrDefault(ReportConstants.SERIES, ReportConstants.EMPTY_STRING);
         DJChart chart = null;
 
         //no need of the default case since the chart types are validated in Siddhi app creation level.
         switch (reportProperties.get(ReportConstants.CHART).toLowerCase(Locale.ENGLISH)) {
-            case "pie":
+            case ReportConstants.PIE_CHART:
                 if (!categoryName.isEmpty() && !seriesName.isEmpty()) {
                     chart = chartGenerator.createPieChart(dataProvider, chartTitle, categoryName, seriesName);
                 } else {
                     chart = chartGenerator.createPieChart(dataProvider, chartTitle);
                 }
                 break;
-            case "bar":
+            case ReportConstants.BAR_CHART:
                 if (!categoryName.isEmpty() && !seriesName.isEmpty()) {
                     chart = chartGenerator.createBarChart(dataProvider, chartTitle, categoryName,
                             seriesName);
@@ -98,7 +89,7 @@ public class DynamicReportGenerator extends ReportGenerator {
                     chart = chartGenerator.createBarChart(dataProvider, chartTitle);
                 }
                 break;
-            case "line":
+            case ReportConstants.LINE_CHART:
                 if (!categoryName.isEmpty() && !seriesName.isEmpty()) {
                     chart = chartGenerator.createLineChart(dataProvider, chartTitle, categoryName,
                             seriesName);
@@ -111,8 +102,7 @@ public class DynamicReportGenerator extends ReportGenerator {
                 break;
         }
 
-        if(!reportProperties.get(ReportConstants.CHART).toLowerCase(Locale.ENGLISH).equals(ReportConstants
-                .DEFAULT_CHART)){
+        if (!reportProperties.get(ReportConstants.CHART).equalsIgnoreCase(ReportConstants.DEFAULT_CHART)) {
             reportBuilder.addChart(chart);
             addTable(reportBuilder, dataProvider, chartGenerator, parameters);
         }
@@ -124,7 +114,7 @@ public class DynamicReportGenerator extends ReportGenerator {
         parameters.put(ReportConstants.SUBTITLE, reportProperties.get(ReportConstants.SUBTITLE));
         parameters.put(ReportConstants.DESCRIPTION, reportProperties.get(ReportConstants.DESCRIPTION));
         if ((reportProperties.get(ReportConstants.HEADER) != null)) {
-            parameters.put("headerImage", reportProperties.get(ReportConstants.HEADER));
+            parameters.put(ReportConstants.HEADER_IMAGE, reportProperties.get(ReportConstants.HEADER));
         }
         return parameters;
     }

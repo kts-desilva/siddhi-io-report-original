@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+  ~
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 2.1 of the License, or (at your option) any later version.
+
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library; if not, write to the Free Software
+  ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -55,11 +72,6 @@
             <groupId>ar.com.fdvs</groupId>
             <artifactId>DynamicJasper</artifactId>
         </dependency>
-        <!--to be removed-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
         <!--OSGi-->
         <dependency>
             <groupId>org.osgi</groupId>
@@ -84,7 +96,7 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    <argLine>${surefireArgLine} -ea -Xmx512m</argLine>t
+                    <argLine>${surefireArgLine} -ea -Xmx512m</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -116,6 +128,10 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
@@ -124,12 +140,14 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.extension.siddhi.io.report,
                             org.wso2.extension.siddhi.io.report.*
                         </Export-Package>
                         <Import-Package>
                             *;resolution:=optional
                         </Import-Package>
+                        <Private-Package>
+                            org.apache.commons.lang3.*
+                        </Private-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Include-Resource>
                             META-INF=target/classes/META-INF
@@ -138,8 +156,17 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-doc-gen</artifactId>
+                <version>${siddhi.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate-md-docs</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
@@ -148,16 +175,16 @@
             </resource>
         </resources>
     </build>
-    <properties>
-        <export.package>
-            !org.wso2.extension.siddhi.io.report.internal*,
-            org.wso2.extension.siddhi.io.report.*; version="${project.version}"
-        </export.package>
-        <private.package>org.wso2.extension.siddhi.io.report.internal*</private.package>
-        <import.package>
-            org.osgi.framework; version="${org.osgi.framework.version.range}",
-            org.osgi.framework.wiring; version="${org.osgi.framework.wiring.version.range}",
-            org.osgi.service.component.annotations.*; version="${org.osgi.service.component.annotations.version.range}",
-        </import.package>
-    </properties>
+    <!--<properties>-->
+        <!--<export.package>-->
+            <!--!org.wso2.extension.siddhi.io.report.internal*,-->
+            <!--org.wso2.extension.siddhi.io.report.*; version="${project.version}"-->
+        <!--</export.package>-->
+        <!--<private.package>org.wso2.extension.siddhi.io.report.internal*</private.package>-->
+        <!--<import.package>-->
+            <!--org.osgi.framework; version="${org.osgi.framework.version.range}",-->
+            <!--org.osgi.framework.wiring; version="${org.osgi.framework.wiring.version.range}",-->
+            <!--org.osgi.service.component.annotations.*; version="${org.osgi.service.component.annotations.version.range}",-->
+        <!--</import.package>-->
+    <!--</properties>-->
 </project>

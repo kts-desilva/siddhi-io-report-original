@@ -118,7 +118,6 @@ public class DynamicDataProvider {
         Map columnMetadata = eventMap.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getClass().getName(),
                         (oldValue, newValue) -> newValue, LinkedHashMap::new));
-        logger.info("new : " + columnMetadata);
         return columnMetadata;
     }
 
@@ -129,11 +128,9 @@ public class DynamicDataProvider {
                     (dynamicReportNameParameter.substring(1, dynamicReportNameParameter.length() - 1));
             if (dynamicReportElement != null) {
                 String dynamicReportNameValue = dynamicReportElement.getAsString();
-                logger.info("dynamic report name value : " + dynamicReportNameValue);
                 String dynamicOptionPattern = "(\\{\\w*\\})";
                 Pattern pattern = Pattern.compile(dynamicOptionPattern);
                 Matcher matcher = pattern.matcher(reportProperties.get(propertyValueName));
-                logger.info("matching value : " + reportProperties.get(propertyValueName));
                 String newReportName = matcher.replaceAll(dynamicReportNameValue);
                 reportProperties.put(propertyValueName, newReportName);
             }
@@ -148,7 +145,6 @@ public class DynamicDataProvider {
         int columnSize = ReportConstants.COLUMN_WIDTH / metaData.size();
         for (Map.Entry<String, String> entry : metaData.entrySet()) {
             ColumnBuilder columnBuilder = ColumnBuilder.getNew();
-            logger.info("map value : " + entry.getValue());
             if (entry.getValue().equals(Integer.class.getName()) || entry.getValue().equals(Float.class.getName()
             ) || entry.getValue().equals(Double.class.getName())) {
                 columnBuilder.addConditionalStyle(getNumericalConditionalStyle());
@@ -203,7 +199,7 @@ public class DynamicDataProvider {
         for (JsonElement eventElement : events) {
             JsonObject jsonObject = eventElement.getAsJsonObject();
             Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
-            String datasetAttribute = "";
+            String datasetAttribute = ReportConstants.EMPTY_STRING;
             if (reportProperties.containsKey(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE)) {
                 String datasetAttributeTemp = reportProperties.get(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE);
                 datasetAttribute = datasetAttributeTemp.substring(1, datasetAttributeTemp.length() - 1);
@@ -215,6 +211,7 @@ public class DynamicDataProvider {
                 datasetAttribute = eventMap.entrySet().iterator().next().getKey(); // the default value for dataset
                 // is taken as the value of the first parameter.
             }
+
             String datasetName = eventMap.get(datasetAttribute).toString();
             List<Map<String, Object>> dataset;
             if (multipleDatasourcedata.containsKey(datasetName)) {

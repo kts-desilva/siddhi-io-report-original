@@ -29,8 +29,8 @@ import java.util.Vector;
  * This is a class to provide customized header and footer to the report.
  */
 public class DynamicLayoutManager extends ClassicLayoutManager {
-    private String footerImagePath = "";
     private static final Logger LOGGER = Logger.getLogger(DynamicLayoutManager.class);
+    private String footerImagePath = "";
 
     public DynamicLayoutManager() {
     }
@@ -57,7 +57,6 @@ public class DynamicLayoutManager extends ClassicLayoutManager {
 
         Vector<ImageBanner> bannerVector = new Vector<>();
         if (!footerImagePath.isEmpty()) {
-            LOGGER.info("footer image is not empty : " + footerImagePath);
             bannerVector.add(new ImageBanner(footerImagePath, 120, 50,
                     ImageBanner.Alignment.Left));
             applyImageBannersToBand(pageFooter, bannerVector, null, false);

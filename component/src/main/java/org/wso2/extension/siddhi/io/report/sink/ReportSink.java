@@ -56,46 +56,28 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Annotation of Siddhi Extension.
- * <pre><code>
- * eg:-
- * {@literal @}Extension(
- * name = "The name of the extension",
- * namespace = "The namespace of the extension",
- * description = "The description of the extension (optional).",
- * //Sink configurations
- * parameters = {
- * {@literal @}Parameter(name = "The name of the first parameter", type = "Supprted parameter types.
- *                              eg:{DataType.STRING,DataType.INT, DataType.LONG etc},dynamic=false ,optinal=true/false ,
- *                              if optional =true then assign default value according the type")
- *   System parameter is used to define common extension wide
- *              },
- * examples = {
- * {@literal @}Example({"Example of the first CustomExtension contain syntax and description.Here,
- *                      Syntax describe default mapping for SourceMapper and description describes
- *                      the output of according this syntax},
- *                      }
- * </code></pre>
+ * This class contains the implementation of siddhi-io-file sink which provides the functionality of publishing data
+ * to reports as pdf files through siddhi.
  */
 
 @Extension(
         name = "report",
         namespace = "sink",
-        description = "Report sink can be used to publish (write) event data which is processes within siddhi" +
-                "into files.\nSiddhi-io-report provides support to generate reports in PDF format.\n",
+        description = "Report sink can be used to publish (write) event data which is processed within siddhi" +
+                "into reports.\nSiddhi-io-report provides support to generate reports in PDF format.\n",
         parameters = {
                 @Parameter(name = "outputpath",
-                        description = "This parameter is used to specify the file for  report to be generated.",
-                        type = {DataType.STRING}
-                ),
-                @Parameter(name = "description",
-                        description = "This parameter is used to specify the description of the report.",
-                        optional = true,
-                        defaultValue = "none",
+                        description = "This parameter is used to specify the report path for data to be written.",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "title",
                         description = "This parameter is used to specify the title of the report",
+                        optional = true,
+                        defaultValue = "none",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "description",
+                        description = "This parameter is used to specify the description of the report.",
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
@@ -108,22 +90,30 @@ import java.util.stream.Stream;
                 ),
                 @Parameter(name = "template",
                         description = "This parameter is used to specify an external JRXML template path to generate " +
-                                "the report. The " +
-                                "given template will be filled and generate the report accordingly.",
+                                "the report. The given template will be filled and generate the report accordingly.",
                         optional = true,
-                        defaultValue = "/home/senuri/Projects/Jasper/template/dynamicTemplate.jrxml",
+                        defaultValue = "none",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "dataset",
+                        description = "This parameter is used to specify the dataset for the external template. This " +
+                                "value can have a static stream attribute name or a dynamic value specified by '{}'" +
+                                "eg:sink(type='report',dataset='{symbol}', @map(type='json'));" +
+                                "define stream (symbol string, price float, volume long);",
+                        optional = true,
+                        defaultValue = "none",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "header",
                         description = "This parameter is used to specify the header image for the report.",
                         optional = true,
-                        defaultValue = "/home/senuri/Projects/Jasper/template/stream-processor.png",
+                        defaultValue = "none",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "footer",
                         description = "This parameter is used to specify the footer image for the report",
                         optional = true,
-                        defaultValue = "/home/senuri/Projects/Jasper/template/stream-processor.png",
+                        defaultValue = "none",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "chart",
@@ -154,15 +144,6 @@ import java.util.stream.Stream;
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
-                ),
-                @Parameter(name = "dataset",
-                        description = "This parameter is used to specify the dataset for the external template. This " +
-                                "value can have a static stream attribute name or a dynamic value specified by '{}'" +
-                                "eg:sink(type='report',dataset='{symbol}', @map(type='json'));" +
-                                "define stream (symbol string, price float, volume long);",
-                        optional = true,
-                        defaultValue = "none",
-                        type = {DataType.STRING}
                 )
 
                 /*@Parameter(name = " ",
@@ -175,11 +156,21 @@ import java.util.stream.Stream;
         examples = {
                 @Example(
                         syntax = " " +
-                                "@sink(type='report',outputpath='/abc/{symbol}.pdf',@map(type='json'))" +
+                                "@sink(type='report',outputpath='/abc/example.pdf',@map(type='json'))" +
                                 "define stream BarStream(symbol string, price float, volume long);",
                         description = " " +
                                 "Under above configuration, for an event chunck," +
                                 "a report of type PDF will be generated. There will be a table in the report."
+                ),
+                @Example(
+                        syntax = " " +
+                                "@sink(type='report',outputpath='/abc/{symbol}.pdf',@map(type='json'))" +
+                                "define stream BarStream(symbol string, price float, volume long);",
+                        description = " " +
+                                "Under above configuration, for an event chunck," +
+                                "a report of type PDF will be generated. The name of the report will be the first " +
+                                "event value of the symbol parameter in the stream. There will be a table in the " +
+                                "report."
                 ),
                 @Example(
                         syntax = " " +
@@ -201,10 +192,9 @@ import java.util.stream.Stream;
                                 "define stream BarStream(symbol string, price float, volume long);",
                         description = " " +
                                 "Under above configuration, for an event chunck," +
-                                "a report of type PDF will be generated. There will be a table in the report." +
-                                "The report report will include a line chart with the specified chart title. The " +
-                                "chart will be generated with the sepcified category and series." +
-                                "The report will be generated in the given output path."
+                                "a report of type PDF will be generated.The report report will include a line chart with" +
+                                " the specified chart title. The chart will be generated with the specified " +
+                                "category and series. The report will be generated in the given output path."
                 )
         }
 )
@@ -269,7 +259,6 @@ public class ReportSink extends Sink {
      */
     @Override
     public void publish(Object payload, DynamicOptions dynamicOptions) throws ConnectionUnavailableException {
-        log.info("payload : " + payload);
         if (!reportProperties.get(ReportConstants.TEMPLATE).equals(ReportConstants.DEFAULT_TEMPLATE)) {
             //if the dataset is  not defined, the first variable of the stream definition is used.
             ignoreOtherParameters(reportProperties);
@@ -282,11 +271,14 @@ public class ReportSink extends Sink {
     }
 
     private void ignoreOtherParameters(Map<String, String> reportProperties) {
-        String[] ignoringParmeters = {ReportConstants.HEADER, ReportConstants.FOOTER, ReportConstants.SERIES,
+        String[] ignoringParameters = {ReportConstants.HEADER, ReportConstants.FOOTER, ReportConstants.SERIES,
                 ReportConstants.CATEGORY, ReportConstants.CHART, ReportConstants.DESCRIPTION, ReportConstants.SUBTITLE,
                 ReportConstants.TITLE, ReportConstants.CHART_TITLE};
-        Arrays.stream(ignoringParmeters).forEach(parameter -> {
-            log.debug("Ignoring " + reportProperties.get(parameter) + " for " + parameter + " as JRXML is provided.");
+        Arrays.stream(ignoringParameters).forEach(parameter -> {
+            if (reportProperties.containsKey(parameter)) {
+                log.debug("Ignoring " + reportProperties.get(parameter) + " for " + parameter + " as JRXML is " +
+                        "provided.");
+            }
         });
     }
 
@@ -328,12 +320,12 @@ public class ReportSink extends Sink {
                 .EMPTY_STRING);
         validateStringParameters(ReportConstants.CHART_TITLE, chartTitle);
 
-        String outPath = optionHolder.validateAndGetStaticValue(ReportConstants.OUTPUT_PATH, ReportConstants
+        String outputPath = optionHolder.validateAndGetStaticValue(ReportConstants.OUTPUT_PATH, ReportConstants
                 .EMPTY_STRING);
-        if (!outPath.isEmpty() && outPath.contains("/")) {
-            validatePath(outPath.substring(0, outPath.lastIndexOf("/")), ReportConstants.OUTPUT_PATH);
+        if (!outputPath.isEmpty() && outputPath.contains(File.separator)) {
+            validatePath(outputPath.substring(0, outputPath.lastIndexOf(File.separator)), ReportConstants.OUTPUT_PATH);
         }
-        validateStringParameters(ReportConstants.OUTPUT_PATH, outPath);
+        validateStringParameters(ReportConstants.OUTPUT_PATH, outputPath);
 
         String datasetName = optionHolder.validateAndGetStaticValue(ReportConstants.DATASET, ReportConstants
                 .EMPTY_STRING);
@@ -342,8 +334,8 @@ public class ReportSink extends Sink {
     }
 
     private void validateMapType() {
-        String mapType = streamDefinition.getAnnotations().get(0).getAnnotations().get(0).getElements().get(0)
-                .getValue();
+        String mapType = streamDefinition.getAnnotations().get(0).getAnnotations().get(0)
+                .getElements().get(0).getValue();
         if (!mapType.equals("json")) {
             throw new SiddhiAppCreationException("Invalid map type " + mapType + " Only JSON map type is allowed.");
         }
@@ -373,8 +365,8 @@ public class ReportSink extends Sink {
                 }
             }
             if (property.equals(ReportConstants.OUTPUT_PATH)) {
-                if (!value.endsWith(".pdf")) {
-                    value += ".pdf";
+                if (!value.endsWith(ReportConstants.PDF_EXTENSION)) {
+                    value += ReportConstants.PDF_EXTENSION;
                 }
             }
         }
@@ -384,11 +376,12 @@ public class ReportSink extends Sink {
 
     private void validateVariable(String property, String chartVariable) {
         if (!chartVariable.isEmpty()) {
-            Optional<Attribute> any = streamDefinition.getAttributeList().stream()
-                    .filter(attribute -> attribute.getName().equals(chartVariable)).findAny();
-            if (any.isPresent()) {
+            Optional<Attribute> validAttribute = streamDefinition.getAttributeList().stream()
+                    .filter(attribute -> attribute.getName().equals(chartVariable))
+                    .findAny();
+            if (validAttribute.isPresent()) {
                 if (property.equals(ReportConstants.SERIES)) {
-                    if (!isNumeric(any.get().getType())) {
+                    if (!isNumeric(validAttribute.get().getType())) {
                         throw new SiddhiAppCreationException(chartVariable + "is invalid. " +
                                 "Provide a numeric series column.");
                     }
@@ -464,8 +457,8 @@ public class ReportSink extends Sink {
                 boolean numericAttributeFound = streamDefinition.getAttributeList().stream()
                         .anyMatch(attribute -> isNumeric(attribute.getType()));
                 if (!numericAttributeFound) {
-                    throw new SiddhiAppCreationException(chart + " chart definition is invalid. There is no " +
-                            "numeric stream attribute for the series in. Provide a numeric series column.");
+                    throw new SiddhiAppCreationException(chart + " chart definition is invalid. " +
+                            "There is no numeric stream attribute for the series in. Provide a numeric series column.");
                 }
             }
         } else {
@@ -532,10 +525,3 @@ public class ReportSink extends Sink {
         // no state
     }
 }
-
-//import org.wso2.extension.siddhi.io.report.generators.DynamicReportGenerator;
-
-/**
- * This class contains the implementation of siddhi-io-report sink which provides the functionality of publishing
- * data to reports as PDF files through siddhi.
- */

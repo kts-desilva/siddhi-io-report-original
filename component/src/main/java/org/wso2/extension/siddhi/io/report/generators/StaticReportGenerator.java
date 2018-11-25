@@ -31,7 +31,6 @@ import org.wso2.extension.siddhi.io.report.util.DynamicDataProvider;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +44,6 @@ public class StaticReportGenerator extends ReportGenerator {
 
     @Override
     public void generateReport(Object payload, Map<String, String> reportProperties) {
-        LOGGER.info(reportProperties);
         DynamicDataProvider dataProvider = new DynamicDataProvider(reportProperties);
         Map<String, Object> parameters = new HashMap<>();
         List<Map<String, Object>> data;
@@ -55,6 +53,7 @@ public class StaticReportGenerator extends ReportGenerator {
         Object[] datasetParameters = Arrays.stream(reportParameters).filter(parameter -> (parameter
                 .getValueClass().equals(JRDataSource.class)) && (!parameter.getName().equals
                 ("REPORT_DATA_SOURCE"))).toArray();
+
         if (datasetParameters.length > 1) {
             LOGGER.warn("Too many parameters for dataset.");
             Map<String, List<Map<String, Object>>> dataWithMultipleDatasets = dataProvider
@@ -76,10 +75,6 @@ public class StaticReportGenerator extends ReportGenerator {
         }
         JasperPrint jasperPrint = fillReportData(jasperReport, parameters, new JREmptyDataSource());
         exportAsPdf(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
-        LOGGER.info("output path : " + reportProperties.get(ReportConstants.OUTPUT_PATH));
-        File f = new File(reportProperties.get(ReportConstants.OUTPUT_PATH));
-        LOGGER.info("File exists : " + f.exists());
-        LOGGER.info("Generated report " + reportProperties.get(ReportConstants.OUTPUT_PATH));
     }
 
     public List<Map<String, Object>> getDataFromPayload(DynamicDataProvider dataProvider, Object payload) {

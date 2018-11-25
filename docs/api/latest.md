@@ -56,7 +56,7 @@
     <tr>
         <td style="vertical-align: top">template</td>
         <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify an external JRXML template path to generate the report. The given template will be filled and generate the report accordingly.</td>
-        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/dynamicTemplate.jrxml</td>
+        <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
@@ -64,7 +64,7 @@
     <tr>
         <td style="vertical-align: top">header</td>
         <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the header image for the report.</td>
-        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/stream-processor.png</td>
+        <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
@@ -72,7 +72,7 @@
     <tr>
         <td style="vertical-align: top">footer</td>
         <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the footer image for the report</td>
-        <td style="vertical-align: top">/home/senuri/Projects/Jasper/template/stream-processor.png</td>
+        <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>

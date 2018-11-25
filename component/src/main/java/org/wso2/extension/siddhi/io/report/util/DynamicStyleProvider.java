@@ -36,26 +36,27 @@ public class DynamicStyleProvider {
         st.setHorizontalAlign(HorizontalAlign.RIGHT);
         st.setVerticalAlign(VerticalAlign.TOP);
         st.setFont(Font.ARIAL_BIG_BOLD);
-        Border border = new Border(2, Border.BORDER_STYLE_SOLID, new Color(196, 186, 186));
+        Border border = new Border(ReportConstants.BORDER_WIDTH, Border.BORDER_STYLE_SOLID, ReportConstants
+                .GREY_BORDER);
         st.setBorderBottom(border);
 
         Style tableHeaderStyle = new Style();
         tableHeaderStyle.setTransparent(false);
-        tableHeaderStyle.setBackgroundColor(Color.decode("#616161"));
-        tableHeaderStyle.setTextColor(new Color(255, 255, 255));
+        tableHeaderStyle.setBackgroundColor(Color.decode(ReportConstants.GREY_BACKGROUND));
+        tableHeaderStyle.setTextColor(ReportConstants.WHITE_BACKGROUND);
         tableHeaderStyle.setVerticalAlign(VerticalAlign.MIDDLE);
         tableHeaderStyle.setBorder(Border.THIN());
         tableHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);
         reportBuilder.setPrintBackgroundOnOddRows(true);
 
         Style tableStyle = new Style();
-        tableStyle.setPaddingLeft(20);
-        tableStyle.setPaddingRight(20);
-        tableStyle.setPaddingTop(5);
-        tableStyle.setPaddingBottom(5);
+        tableStyle.setPaddingLeft(ReportConstants.HORIZONTAL_PADDING);
+        tableStyle.setPaddingRight(ReportConstants.HORIZONTAL_PADDING);
+        tableStyle.setPaddingTop(ReportConstants.VERTICAL_PADDING);
+        tableStyle.setPaddingBottom(ReportConstants.VERTICAL_PADDING);
 
         Style oddRowStyle = new Style();
-        oddRowStyle.setBackgroundColor(new Color(243, 242, 242));
+        oddRowStyle.setBackgroundColor(ReportConstants.TABLE_ODD_BACKGROUND);
         reportBuilder.setOddRowBackgroundStyle(oddRowStyle);
         reportBuilder.setDefaultStyles(null, null, null, tableStyle);
         reportBuilder.setUseFullPageWidth(true);
@@ -64,21 +65,21 @@ public class DynamicStyleProvider {
     public static Style getColumnHeaderStyle(String className) {
         Style columnHeaderStyle = new Style();
         columnHeaderStyle.setTransparent(false);
-        columnHeaderStyle.setBackgroundColor(Color.decode("#616161"));
+        columnHeaderStyle.setBackgroundColor(Color.decode(ReportConstants.GREY_BACKGROUND));
         columnHeaderStyle.setTextColor(Color.white);
         columnHeaderStyle.setVerticalAlign(VerticalAlign.MIDDLE);
 
         if (className.equals(Integer.class.getName())) {
             columnHeaderStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-            columnHeaderStyle.setPaddingRight(20);
+            columnHeaderStyle.setPaddingRight(ReportConstants.HORIZONTAL_PADDING);
         } else if (className.equals(String.class.getName())) {
             columnHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-            columnHeaderStyle.setPaddingLeft(20);
-            columnHeaderStyle.setPaddingRight(20);
+            columnHeaderStyle.setPaddingLeft(ReportConstants.HORIZONTAL_PADDING);
+            columnHeaderStyle.setPaddingRight(ReportConstants.HORIZONTAL_PADDING);
         } else if (className.equals(Double.class.getName()) || className.equals(Long.class.getName()) || className
                 .equals(Float.class.getName())) {
             columnHeaderStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-            columnHeaderStyle.setPaddingRight(20);
+            columnHeaderStyle.setPaddingRight(ReportConstants.HORIZONTAL_PADDING);
         } else {
             columnHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);
         }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+  ~
   ~ This library is free software; you can redistribute it and/or
   ~ modify it under the terms of the GNU Lesser General Public
   ~ License as published by the Free Software Foundation; either
@@ -19,20 +20,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
         <version>5</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+
     <packaging>pom</packaging>
+
     <modules>
         <module>component</module>
     </modules>
     <groupId>org.wso2.extension.siddhi.io.report</groupId>
     <artifactId>siddhi-io-report-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Siddhi I/O report</name>
+    <name>Siddhi io report extension</name>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -54,6 +59,16 @@
                 <groupId>org.wso2.siddhi</groupId>
                 <artifactId>siddhi-query-compiler</artifactId>
                 <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.log4j.wso2</groupId>
@@ -93,7 +108,7 @@
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
-                <version>6.11</version>
+                <version>${testng.version}</version>
                 <scope>test</scope>
             </dependency>
             <!--Jasper-->
@@ -107,12 +122,6 @@
                 <artifactId>DynamicJasper</artifactId>
                 <version>${DynamicJasper.version}</version>
             </dependency>
-            <!--to be removed-->
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.6</version>
-            </dependency>
             <!--OSGi-->
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -124,14 +133,9 @@
                 <artifactId>org.eclipse.osgi.services</artifactId>
                 <version>${org.wso2.eclipse.osgi.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -185,5 +189,7 @@
             [1.2.0, 2.0.0)
         </org.osgi.service.component.annotations.version.range>
         <commons-lang3.version>3.8.1</commons-lang3.version>
+        <testng.version>6.11</testng.version>
+        <commons-collections4.version>4.1</commons-collections4.version>
     </properties>
 </project>
