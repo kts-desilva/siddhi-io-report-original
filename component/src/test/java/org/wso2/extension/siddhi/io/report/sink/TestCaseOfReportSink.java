@@ -212,8 +212,9 @@ public class TestCaseOfReportSink {
             AssertJUnit.assertTrue(sink.exists());
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), testReportURI.substring(0, testReportURI.lastIndexOf
-                    ("/")) + " does not exists. outputpath should be a valid path");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp " +
+                    testReportURI.substring(0, testReportURI.lastIndexOf("/")) + " does not exists. " +
+                    "outputpath should be a valid path");
         }
     }
 
@@ -311,8 +312,8 @@ public class TestCaseOfReportSink {
             AssertJUnit.assertTrue(sink.exists());
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), invalidTemplatePath + " does not exists. template " +
-                    "should be a valid path");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp " +
+                    invalidTemplatePath + " does not exists. template should be a valid path");
         }
     }
 
@@ -363,8 +364,8 @@ public class TestCaseOfReportSink {
             AssertJUnit.assertTrue(sink.exists());
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), invalidHeaderPath + " does not exists. header should be" +
-                    " a valid path");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp " +
+                    invalidHeaderPath + " does not exists. header should be a valid path");
         }
     }
 
@@ -415,8 +416,8 @@ public class TestCaseOfReportSink {
             AssertJUnit.assertTrue(sink.exists());
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), invalidChartType + " is not a valid chart type. " +
-                    "Only table,line,bar,pie charts are supported.");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp "
+                    + invalidChartType + " is not a valid chart type. Only table,line,bar,pie charts are supported.");
         }
     }
 
@@ -468,8 +469,8 @@ public class TestCaseOfReportSink {
             AssertJUnit.assertTrue(sink.exists());
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), invalidSeries + "is invalid. Provide a numeric " +
-                    "series column.");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp "
+                    + invalidSeries + "is invalid. Provide a numeric series column.");
         }
     }
 
@@ -662,8 +663,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid Property '" + testDynamicReportName + "'. " +
-                    "No such parameter in the stream definition");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp Invalid " +
+                    "Property '" + testDynamicReportName + "'. No such parameter in the stream definition");
         }
     }
 
@@ -709,8 +710,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            Assert.assertEquals(e.getMessageWithOutContext(), "Invalid Property '" + testDynamicReportName + "'. " +
-                    "No such parameter in the stream definition");
+            Assert.assertEquals(e.getMessageWithOutContext(), "In 'report' sink of siddhi app TestSiddhiApp Invalid " +
+                    "Property '" + testDynamicReportName + "'. No such parameter in the stream definition");
         }
     }
 
@@ -1206,8 +1207,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            AssertJUnit.assertEquals("Invalid map type " + testMapType + " Only JSON map" +
-                    " type is allowed.", e.getMessageWithOutContext());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp Invalid map type " + testMapType +
+                    " Only JSON map type is allowed.", e.getMessageWithOutContext());
         }
     }
 
@@ -1252,8 +1253,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            AssertJUnit.assertEquals("Invalid Property '" + testReportName + "'. No such parameter in the stream " +
-                    "definition", e.getMessageWithOutContext());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp Invalid Property '" +
+                    testReportName + "'. No such parameter in the stream definition", e.getMessageWithOutContext());
         }
     }
 
@@ -1300,8 +1301,8 @@ public class TestCaseOfReportSink {
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
             LOGGER.info(e.getMessage());
-            AssertJUnit.assertEquals("Invalid property " + testSeriesName + " for series", e.getMessageWithOutContext
-                    ());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp Invalid property " +
+                    testSeriesName + " for series", e.getMessageWithOutContext());
         }
     }
 
@@ -1346,8 +1347,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            AssertJUnit.assertEquals("Invalid Property '" + testReportName + "'. No such parameter in the stream " +
-                    "definition", e.getMessageWithOutContext());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp Invalid Property '" +
+                    testReportName + "'. No such parameter in the stream definition", e.getMessageWithOutContext());
         }
     }
 
@@ -1393,8 +1394,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            AssertJUnit.assertEquals(testTemplateURI + " is invalid." + ReportConstants.TEMPLATE + " should have a " +
-                    "JRXML template", e.getMessageWithOutContext());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp " + testTemplateURI + " is invalid" +
+                    "." + ReportConstants.TEMPLATE + " should have a JRXML template", e.getMessageWithOutContext());
         }
     }
 
@@ -1440,8 +1441,8 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            AssertJUnit.assertEquals("Invalid path " + testImageURI + ". " + ReportConstants.HEADER + " should be an " +
-                    "image", e.getMessageWithOutContext());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp Invalid path " + testImageURI + "." +
+                    " " + ReportConstants.HEADER + " should be an image", e.getMessageWithOutContext());
         }
     }
 
@@ -1486,8 +1487,9 @@ public class TestCaseOfReportSink {
             stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
             siddhiAppRuntime.shutdown();
         } catch (SiddhiAppCreationException e) {
-            AssertJUnit.assertEquals("line chart definition is invalid. There is no numeric stream attribute for the " +
-                    "series in. Provide a numeric series column.", e.getMessageWithOutContext());
+            AssertJUnit.assertEquals("In 'report' sink of siddhi app TestSiddhiApp line chart definition is invalid. " +
+                            "There is no numeric stream attribute for the series in. Provide a numeric series column.",
+                    e.getMessageWithOutContext());
         }
     }
 }

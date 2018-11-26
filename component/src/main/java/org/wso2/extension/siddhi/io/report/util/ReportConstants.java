@@ -63,7 +63,7 @@ public class ReportConstants {
 
 
     public static final String EMPTY_STRING = "";
-    public static final String PDF_EXTENSION=".pdf";
+    public static final String PDF_EXTENSION = ".pdf";
 
     /**
      * Valid chart types

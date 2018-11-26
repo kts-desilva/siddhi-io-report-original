@@ -192,8 +192,8 @@ import java.util.stream.Stream;
                                 "define stream BarStream(symbol string, price float, volume long);",
                         description = " " +
                                 "Under above configuration, for an event chunck," +
-                                "a report of type PDF will be generated.The report report will include a line chart with" +
-                                " the specified chart title. The chart will be generated with the specified " +
+                                "a report of type PDF will be generated.The report report will include a line chart" +
+                                " with the specified chart title. The chart will be generated with the specified " +
                                 "category and series. The report will be generated in the given output path."
                 )
         }
@@ -203,6 +203,7 @@ public class ReportSink extends Sink {
     private static final Logger log = Logger.getLogger(ReportSink.class);
     private OptionHolder optionHolder;
     private StreamDefinition streamDefinition;
+    private SiddhiAppContext siddhiAppContext;
     private Map<String, String> reportProperties = new HashMap<>();
 
     /**
@@ -221,6 +222,7 @@ public class ReportSink extends Sink {
                         SiddhiAppContext siddhiAppContext) {
         this.optionHolder = optionHolder;
         this.streamDefinition = streamDefinition;
+        this.siddhiAppContext = siddhiAppContext;
         validateAndGetParameters();
     }
 
@@ -276,8 +278,8 @@ public class ReportSink extends Sink {
                 ReportConstants.TITLE, ReportConstants.CHART_TITLE};
         Arrays.stream(ignoringParameters).forEach(parameter -> {
             if (reportProperties.containsKey(parameter)) {
-                log.debug("Ignoring " + reportProperties.get(parameter) + " for " + parameter + " as JRXML is " +
-                        "provided.");
+                log.debug("In 'report' sink of siddhi app " + siddhiAppContext.getName() + " Ignoring " +
+                        reportProperties.get(parameter) + " for " + parameter + " as JRXML is provided.");
             }
         });
     }
@@ -337,7 +339,8 @@ public class ReportSink extends Sink {
         String mapType = streamDefinition.getAnnotations().get(0).getAnnotations().get(0)
                 .getElements().get(0).getValue();
         if (!mapType.equals("json")) {
-            throw new SiddhiAppCreationException("Invalid map type " + mapType + " Only JSON map type is allowed.");
+            throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
+                    " Invalid map type " + mapType + " Only JSON map type is allowed.");
         }
     }
 
@@ -360,8 +363,8 @@ public class ReportSink extends Sink {
                         reportProperties.put(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE, matcher.group());
                     }
                 } else {
-                    throw new SiddhiAppCreationException("Invalid Property '" + matchingPart + "'. No such " +
-                            "parameter in the stream definition");
+                    throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName()
+                            + " Invalid Property '" + matchingPart + "'. No such parameter in the stream definition");
                 }
             }
             if (property.equals(ReportConstants.OUTPUT_PATH)) {
@@ -382,12 +385,13 @@ public class ReportSink extends Sink {
             if (validAttribute.isPresent()) {
                 if (property.equals(ReportConstants.SERIES)) {
                     if (!isNumeric(validAttribute.get().getType())) {
-                        throw new SiddhiAppCreationException(chartVariable + "is invalid. " +
-                                "Provide a numeric series column.");
+                        throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext
+                                .getName() + " " + chartVariable + "is invalid. Provide a numeric series column.");
                     }
                 }
             } else {
-                throw new SiddhiAppCreationException("Invalid property " + chartVariable + " for " + property);
+                throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName()
+                        + " Invalid property " + chartVariable + " for " + property);
             }
             reportProperties.put(property, chartVariable);
         }
@@ -415,8 +419,8 @@ public class ReportSink extends Sink {
         FileSystem fileSystem = FileSystems.getDefault();
         if (!Files.exists(file)) {
             if (!path.equals(ReportConstants.DEFAULT_TEMPLATE)) {
-                throw new SiddhiAppCreationException(path + " does not exists. " + parameter + " should be a valid " +
-                        "path");
+                throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
+                        " " + path + " does not exists. " + parameter + " should be a valid path");
             }
         }
 
@@ -424,7 +428,8 @@ public class ReportSink extends Sink {
             PathMatcher matcher = fileSystem.getPathMatcher("glob:**.jrxml");
             if (!path.isEmpty()) {
                 if (!matcher.matches(file)) {
-                    throw new SiddhiAppCreationException(path + " is invalid." + ReportConstants
+                    throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName()
+                            + " " + path + " is invalid." + ReportConstants
                             .TEMPLATE + " should have a JRXML template");
                 } else {
                     reportProperties.put(parameter, path);
@@ -436,8 +441,8 @@ public class ReportSink extends Sink {
             PathMatcher matcher = fileSystem.getPathMatcher("glob:**.{png,jpeg,JPEG}");
             if (!path.isEmpty()) {
                 if (!matcher.matches(file)) {
-                    throw new SiddhiAppCreationException("Invalid path " + path + ". " + parameter + " should be an " +
-                            "image");
+                    throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName()
+                            + " Invalid path " + path + ". " + parameter + " should be an image");
                 } else {
                     reportProperties.put(parameter, path);
                 }
@@ -449,15 +454,16 @@ public class ReportSink extends Sink {
         List<String> validChartTypes = Stream.of(ReportConstants.ChartTypes.values()).map(ReportConstants
                 .ChartTypes::name).collect(Collectors.toList());
         if (!validChartTypes.contains(chart.toUpperCase(Locale.ENGLISH))) {
-            throw new SiddhiAppCreationException(chart + " is not a valid chart type. " +
-                    "Only table,line,bar,pie charts are supported.");
+            throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() + " " +
+                    chart + " is not a valid chart type. Only table,line,bar,pie charts are supported.");
         }
         if (!chart.equals(ReportConstants.DEFAULT_CHART)) {
             if (!reportProperties.containsKey(ReportConstants.SERIES)) {
                 boolean numericAttributeFound = streamDefinition.getAttributeList().stream()
                         .anyMatch(attribute -> isNumeric(attribute.getType()));
                 if (!numericAttributeFound) {
-                    throw new SiddhiAppCreationException(chart + " chart definition is invalid. " +
+                    throw new SiddhiAppCreationException("In 'report' sink of siddhi app " +
+                            siddhiAppContext.getName() + " " + chart + " chart definition is invalid. " +
                             "There is no numeric stream attribute for the series in. Provide a numeric series column.");
                 }
             }
@@ -465,7 +471,8 @@ public class ReportSink extends Sink {
             //warn for unnecessary parameter definition for table chart.
             if (reportProperties.containsKey(ReportConstants.SERIES) || reportProperties.containsKey(ReportConstants
                     .CATEGORY)) {
-                log.warn("Invalid " + chart + " definition. Series or category parameters is ignored for table chart.");
+                log.warn("In 'report' sink of siddhi app " + siddhiAppContext.getName() + " Invalid " + chart + " " +
+                        "definition. Series or category parameters is ignored for table chart.");
             }
         }
         reportProperties.put(ReportConstants.CHART, chart);

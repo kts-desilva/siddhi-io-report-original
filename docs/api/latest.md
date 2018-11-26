@@ -4,11 +4,11 @@
 
 ### report *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink">(Sink)</a>*
 
-<p style="word-wrap: break-word">Report sink can be used to publish (write) event data which is processes within siddhiinto files.<br>Siddhi-io-report provides support to generate reports in PDF format.<br></p>
+<p style="word-wrap: break-word">Report sink can be used to publish (write) event data which is processed within siddhiinto reports.<br>Siddhi-io-report provides support to generate reports in PDF format.<br></p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-@sink(type="report", outputpath="<STRING>", description="<STRING>", title="<STRING>", subtitle="<STRING>", template="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", dataset="<STRING>", @map(...)))
+@sink(type="report", outputpath="<STRING>", title="<STRING>", description="<STRING>", subtitle="<STRING>", template="<STRING>", dataset="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", @map(...)))
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -23,23 +23,23 @@
     </tr>
     <tr>
         <td style="vertical-align: top">outputpath</td>
-        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the file for  report to be generated.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the report path for data to be written.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">description</td>
-        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the description of the report.</td>
+        <td style="vertical-align: top">title</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the title of the report</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>
-        <td style="vertical-align: top">title</td>
-        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the title of the report</td>
+        <td style="vertical-align: top">description</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the description of the report.</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -56,6 +56,14 @@
     <tr>
         <td style="vertical-align: top">template</td>
         <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify an external JRXML template path to generate the report. The given template will be filled and generate the report accordingly.</td>
+        <td style="vertical-align: top">none</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">dataset</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the dataset for the external template. This value can have a static stream attribute name or a dynamic value specified by '{}'eg:sink(type='report',dataset='{symbol}', @map(type='json'));define stream (symbol string, price float, volume long);</td>
         <td style="vertical-align: top">none</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -109,50 +117,30 @@
         <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
-    <tr>
-        <td style="vertical-align: top">dataset</td>
-        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the dataset for the external template. This value can have a static stream attribute name or a dynamic value specified by '{}'eg:sink(type='report',dataset='{symbol}', @map(type='json'));define stream (symbol string, price float, volume long);</td>
-        <td style="vertical-align: top">none</td>
-        <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">Yes</td>
-        <td style="vertical-align: top">No</td>
-    </tr>
 </table>
 
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
- @sink(type='report',outputpath='/abc/{symbol}.pdf',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
+ @sink(type='report',outputpath='/abc/example.pdf',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
 ```
 <p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.</p>
 
 <span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
 ```
+ @sink(type='report',outputpath='/abc/{symbol}.pdf',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
+```
+<p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. The name of the report will be the first event value of the symbol parameter in the stream. There will be a table in the report.</p>
+
+<span id="example-3" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 3</span>
+```
  @sink(type='report',outputpath='/abc/example.pdf',description='This is a sample report for the report sink.',title='Sample Report',subtitle='Report sink sample',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
 ```
 <p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.The report title, description and subtitle will include the values specified as the parameters. The report will be generated in the given output path.</p>
 
-<span id="example-3" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 3</span>
+<span id="example-4" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 4</span>
 ```
  @sink(type='report',outputpath='/abc/example.pdf',chart='Line',chart.title='Line chart for the sample report.',category='symbol',series='price',@map(type='json'))define stream BarStream(symbol string, price float, volume long);
 ```
-<p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated. There will be a table in the report.The report report will include a line chart with the specified chart title. The chart will be generated with the sepcified category and series.The report will be generated in the given output path.</p>
-
-## Source
-
-### report *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source">(Source)</a>*
-
-<p style="word-wrap: break-word"> </p>
-
-<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
-```
-@source(type="report", @map(...)))
-```
-
-<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
-<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
-```
- 
-```
-<p style="word-wrap: break-word"> </p>
+<p style="word-wrap: break-word"> Under above configuration, for an event chunck,a report of type PDF will be generated.The report report will include a line chart with the specified chart title. The chart will be generated with the specified category and series. The report will be generated in the given output path.</p>
 
