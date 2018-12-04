@@ -48,7 +48,7 @@ public class QueryModeReportGenerator extends ReportGenerator {
     private LayoutManager layoutManager;
     private DynamicReportBuilder mainReportBuilder;
     private List<Map<String, Object>> allData;
-    
+
     public QueryModeReportGenerator() {
         layoutManager = new LayoutManager();
         mainReportBuilder = new DynamicReportBuilder();
