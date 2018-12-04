@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 /**
  * This class provides the implementation of the data provider for the dynamic reports.
  */
-public class DynamicDataProvider {
+public class DynamicDataProvider implements DataProvider {
     private static final Logger logger = Logger.getLogger(DynamicDataProvider.class);
     private List<AbstractColumn> abstractColumns;
     private Map<String, AbstractColumn> abstractColumnMap;
@@ -162,7 +162,7 @@ public class DynamicDataProvider {
         }
     }
 
-    private ConditionalStyle getNumericalConditionalStyle() {
+    public ConditionalStyle getNumericalConditionalStyle() {
         Style numericalStyle = new Style();
         numericalStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
         StatusLightCondition numericalLightCondition = new StatusLightCondition((double) 0, (double) Integer
@@ -170,7 +170,7 @@ public class DynamicDataProvider {
         return new ConditionalStyle(numericalLightCondition, numericalStyle);
     }
 
-    private ConditionalStyle getStringConditionalStyle() {
+    public ConditionalStyle getStringConditionalStyle() {
         Style rangeStyle = new Style();
         rangeStyle.setHorizontalAlign(HorizontalAlign.CENTER);
         RangeConditionStyleExpressionGenerator rangeConditionStyleExpressionGenerator = new

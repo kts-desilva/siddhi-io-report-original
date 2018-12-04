@@ -20,6 +20,7 @@ package org.wso2.extension.siddhi.io.report.sink;
 
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.report.generators.DynamicReportGenerator;
+import org.wso2.extension.siddhi.io.report.generators.QueryModeReportGenerator;
 import org.wso2.extension.siddhi.io.report.generators.StaticReportGenerator;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 import org.wso2.siddhi.annotation.Example;
@@ -144,14 +145,23 @@ import java.util.stream.Stream;
                         optional = true,
                         defaultValue = "none",
                         type = {DataType.STRING}
-                )
-
-                /*@Parameter(name = " ",
-                        description = " " ,
-                        dynamic = false/true,
-                        optional = true/false, defaultValue = " ",
-                        type = {DataType.INT, DataType.BOOL, DataType.STRING, DataType.DOUBLE,etc }),
-                        type = {DataType.INT, DataType.BOOL, DataType.STRING, DataType.DOUBLE, }),*/
+                ),
+                @Parameter(name = "query.mode",
+                        description = "This parameter is used to specify the series variable for the chart. The value" +
+                                " of this parameter will be taken as the Y axis of the chart and it is necessary to " +
+                                "provide  numerical value for this parameter.",
+                        optional = true,
+                        defaultValue = "false",
+                        type = {DataType.BOOL}
+                ),
+                @Parameter(name = "queries",
+                        description = "This parameter is used to specify the series variable for the chart. The value" +
+                                " of this parameter will be taken as the Y axis of the chart and it is necessary to " +
+                                "provide  numerical value for this parameter.",
+                        optional = true,
+                        defaultValue = "none",
+                        type = {DataType.STRING}
+                ),
         },
         examples = {
                 @Example(
@@ -195,6 +205,37 @@ import java.util.stream.Stream;
                                 "a report of type PDF will be generated.The report report will include a line chart" +
                                 " with the specified chart title. The chart will be generated with the specified " +
                                 "category and series. The report will be generated in the given output path."
+                ),
+                @Example(
+                        syntax = " " +
+                                "@sink(type='report', outputpath='/abc/example.pdf'," +
+                                "query.mode='true',datasource.name='SAMPLE_DATASOURCE'," +
+                                "queries=\"\"\"[{\"query\":\"SELECT * FROM SampleTable;\",\"chart\":\"table\"}," +
+                                "@map(type='json'))",
+                        description = " " +
+                                "Under above configuration, for an event trigger," +
+                                "a report of type PDF will be generated.The report report will include a table with " +
+                                "the data from the RDBMS datasource specifies as 'datasource.name' and the data from " +
+                                "the query as specified in 'queries'. The report will be saved in the given output " +
+                                "path."
+                ),
+                @Example(
+                        syntax = " " +
+                                "@sink(type='report', outputpath='/abc/example.pdf'," +
+                                "query.mode='true',datasource.name='SAMPLE_DATASOURCE'," +
+                                "queries=\"\"\"[{\"query\":\"SELECT * FROM SampleTable;\",\"chart\":\"table\"}," +
+                                "{\"query\":\"SELECT Value, Age FROM SampleTable;\"," +
+                                "\"chart\":\"line\",\"series\":\"Value\",\"category\":\"Age\",\"chart.title\":\"Test " +
+                                "chart\"}]\"\"\",\n" +
+                                "@map(type='json'))",
+                        description = " " +
+                                "Under above configuration, for an event trigger," +
+                                "a report of type PDF will be generated. The will be two charts as per each RDBMS " +
+                                "query. The datasource for both queries will be the value specified as 'datasource" +
+                                ".name'. The first query will generate a table with the data from the query as " +
+                                "specified in 'queries'. The second query will generate a line chart where the data " +
+                                "will be taken from the second query as defined in the 'queries' parameter. The " +
+                                "report will be saved in the given output path."
                 )
         }
 )
@@ -261,14 +302,18 @@ public class ReportSink extends Sink {
      */
     @Override
     public void publish(Object payload, DynamicOptions dynamicOptions) throws ConnectionUnavailableException {
-        if (!reportProperties.get(ReportConstants.TEMPLATE).equals(ReportConstants.DEFAULT_TEMPLATE)) {
-            //if the dataset is  not defined, the first variable of the stream definition is used.
-            ignoreOtherParameters(reportProperties);
-            StaticReportGenerator staticReportGenerator = new StaticReportGenerator();
-            staticReportGenerator.generateReport(payload, reportProperties);
+        if (!Boolean.parseBoolean(reportProperties.get(ReportConstants.QUERY_MODE))) {
+            if (!reportProperties.get(ReportConstants.TEMPLATE).equals(ReportConstants.DEFAULT_TEMPLATE)) {
+                ignoreOtherParameters(reportProperties);
+                StaticReportGenerator staticReportGenerator = new StaticReportGenerator();
+                staticReportGenerator.generateReport(payload, reportProperties);
+            } else {
+                DynamicReportGenerator dynamicReportGenerator = new DynamicReportGenerator();
+                dynamicReportGenerator.generateReport(payload, reportProperties);
+            }
         } else {
-            DynamicReportGenerator dynamicReportGenerator = new DynamicReportGenerator();
-            dynamicReportGenerator.generateReport(payload, reportProperties);
+            QueryModeReportGenerator queryModeReportGenerator = new QueryModeReportGenerator();
+            queryModeReportGenerator.generateReport(payload, reportProperties);
         }
     }
 
@@ -333,6 +378,27 @@ public class ReportSink extends Sink {
                 .EMPTY_STRING);
         validateStringParameters(ReportConstants.DATASET, datasetName);
         validateMapType();
+
+        String queryMode = optionHolder.validateAndGetStaticValue(ReportConstants.QUERY_MODE, "false");
+        reportProperties.put(ReportConstants.QUERY_MODE, queryMode);
+
+        String datasourceName = optionHolder.validateAndGetStaticValue(ReportConstants.DATASOURCE_NAME,
+                ReportConstants.EMPTY_STRING);
+        validateQueryParameter(queryMode, datasourceName, ReportConstants.DATASOURCE_NAME);
+
+        String queries = optionHolder.validateAndGetStaticValue(ReportConstants.QUERIES,
+                ReportConstants.EMPTY_STRING);
+        validateQueryParameter(queryMode, queries, ReportConstants.QUERIES);
+    }
+
+    private void validateQueryParameter(String queryMode, String queryValue, String parameterName) {
+        if (Boolean.parseBoolean(queryMode)) {
+            if (queryValue.isEmpty()) {
+                throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
+                        " '" + parameterName + "' Should be defined when 'queryMode' is true.");
+            }
+        }
+        reportProperties.put(parameterName, queryValue);
     }
 
     private void validateMapType() {

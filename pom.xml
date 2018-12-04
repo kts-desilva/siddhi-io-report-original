@@ -133,6 +133,40 @@
                 <artifactId>org.eclipse.osgi.services</artifactId>
                 <version>${org.wso2.eclipse.osgi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>2.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.datasources</groupId>
+                <artifactId>org.wso2.carbon.datasource.core</artifactId>
+                <version>${carbon.datasources.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.datasources</groupId>
+                <artifactId>org.wso2.carbon.datasource.core.feature</artifactId>
+                <version>${carbon.datasources.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.connector.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.connector.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -191,5 +225,9 @@
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <testng.version>6.11</testng.version>
         <commons-collections4.version>4.1</commons-collections4.version>
+        <carbon.datasources.version>1.1.4</carbon.datasources.version>
+        <mysql.connector.version>5.1.38</mysql.connector.version>
+        <h2.connector.version>1.4.187</h2.connector.version>
+        <postgresql.version>RELEASE</postgresql.version>
     </properties>
 </project>

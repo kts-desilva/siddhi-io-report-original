@@ -20,11 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * ReportSink test case.
  */
 public class TestCaseOfReportSink {
-    // If you will know about this related testcase,
-    //refer https://github.com/wso2-extensions/siddhi-io-file/blob/master/component/src/test
     private static final Logger LOGGER = Logger.getLogger(TestCaseOfReportSink.class);
     private ClassLoader classLoader;
-//    private AtomicInteger count = new AtomicInteger();
 
     @BeforeClass
     public void init() {

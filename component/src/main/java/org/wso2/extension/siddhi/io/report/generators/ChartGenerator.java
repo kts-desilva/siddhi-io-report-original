@@ -28,7 +28,7 @@ import ar.com.fdvs.dj.domain.chart.plot.DJAxisFormat;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
-import org.wso2.extension.siddhi.io.report.util.DynamicDataProvider;
+import org.wso2.extension.siddhi.io.report.util.DataProvider;
 import org.wso2.extension.siddhi.io.report.util.DynamicStyleProvider;
 
 import java.awt.Color;
@@ -38,7 +38,7 @@ import java.util.List;
  * This is the implementation of the chart generation for the report chart types.
  */
 public class ChartGenerator {
-    DJChart createPieChart(DynamicDataProvider dataProvider, String chartTitle) {
+    DJChart createPieChart(DataProvider dataProvider, String chartTitle) {
         return new DJPieChartBuilder()
                 .setX(10)
                 .setY(10)
@@ -62,7 +62,7 @@ public class ChartGenerator {
                 .build();
     }
 
-    DJChart createPieChart(DynamicDataProvider dataProvider, String chartTitle, String category, String
+    DJChart createPieChart(DataProvider dataProvider, String chartTitle, String category, String
             series) {
         return new DJPieChartBuilder()
                 .setX(10)
@@ -87,7 +87,7 @@ public class ChartGenerator {
                 .build();
     }
 
-    DJChart createBarChart(DynamicDataProvider dataProvider, String chartTitle) {
+    DJChart createBarChart(DataProvider dataProvider, String chartTitle) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(dataProvider.getCategoryColumn().getTitle());
         DJAxisFormat valueAxisFormat = new DJAxisFormat(dataProvider.getSeriesColumn().getTitle());
 
@@ -115,7 +115,7 @@ public class ChartGenerator {
                 .build();
     }
 
-    DJChart createBarChart(DynamicDataProvider dataProvider, String chartTitle, String category, String series) {
+    DJChart createBarChart(DataProvider dataProvider, String chartTitle, String category, String series) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(dataProvider.getCategoryColumn().getTitle());
         DJAxisFormat valueAxisFormat = new DJAxisFormat(dataProvider.getSeriesColumn().getTitle());
 
@@ -143,7 +143,7 @@ public class ChartGenerator {
                 .build();
     }
 
-    DJChart createLineChart(DynamicDataProvider dataProvider, String chartTitle) {
+    DJChart createLineChart(DataProvider dataProvider, String chartTitle) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(dataProvider.getCategoryColumn().getTitle());
         DJAxisFormat valueAxisFormat = new DJAxisFormat(dataProvider.getSeriesColumn().getTitle());
 
@@ -172,7 +172,7 @@ public class ChartGenerator {
                 .build();
     }
 
-    DJChart createLineChart(DynamicDataProvider dataProvider, String chartTitle, String category, String
+    DJChart createLineChart(DataProvider dataProvider, String chartTitle, String category, String
             series) {
         DJAxisFormat categoryAxisFormat = new DJAxisFormat(category);
         DJAxisFormat valueAxisFormat = new DJAxisFormat(series);
@@ -202,7 +202,7 @@ public class ChartGenerator {
                 .build();
     }
 
-    DynamicReportBuilder createTable(DynamicDataProvider dataProvider, DynamicReportBuilder reportBuilder) {
+    DynamicReportBuilder createTable(DataProvider dataProvider, DynamicReportBuilder reportBuilder) {
         List<AbstractColumn> tableColumns = dataProvider.getColumns();
         for (AbstractColumn column : tableColumns) {
             reportBuilder.addColumn(column);
