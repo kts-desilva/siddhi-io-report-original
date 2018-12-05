@@ -247,17 +247,6 @@ public class ReportSink extends Sink {
     private SiddhiAppContext siddhiAppContext;
     private Map<String, String> reportProperties = new HashMap<>();
 
-    /**
-     * The initialization method for {@link Sink}, will be called before other methods. It used to validate
-     * all configurations and to get initial values.
-     *
-     * @param streamDefinition containing stream definition bind to the {@link Sink}
-     * @param optionHolder     Option holder containing static and dynamic configuration related
-     *                         to the {@link Sink}
-     * @param configReader     to read the sink related system configuration.
-     * @param siddhiAppContext the context of the {@link org.wso2.siddhi.query.api.SiddhiApp} used to
-     *                         get siddhi related utility functions.
-     */
     @Override
     protected void init(StreamDefinition streamDefinition, OptionHolder optionHolder, ConfigReader configReader,
                         SiddhiAppContext siddhiAppContext) {
@@ -267,39 +256,16 @@ public class ReportSink extends Sink {
         validateAndGetParameters();
     }
 
-    /**
-     * Returns the list of classes which this sink can consume.
-     * Based on the type of the sink, it may be limited to being able to publish specific type of classes.
-     * For example, a sink of type file can only write objects of type String .
-     *
-     * @return array of supported classes , if extension can support of any types of classes
-     * then return empty array .
-     */
     @Override
     public Class[] getSupportedInputEventClasses() {
         return new Class[]{String.class, Event.class};
     }
 
-    /**
-     * Returns a list of supported dynamic options (that means for each event value of the option can change) by
-     * the transport
-     *
-     * @return the list of supported dynamic option keys
-     */
     @Override
     public String[] getSupportedDynamicOptions() {
         return new String[]{};
     }
 
-
-    /**
-     * This method will be called when events need to be published via this sink
-     *
-     * @param payload        payload of the event based on the supported event class exported by the extensions
-     * @param dynamicOptions holds the dynamic options of this sink and Use this object to obtain dynamic options.
-     * @throws ConnectionUnavailableException if end point is unavailable the ConnectionUnavailableException thrown
-     *                                        such that the  system will take care retrying for connection
-     */
     @Override
     public void publish(Object payload, DynamicOptions dynamicOptions) throws ConnectionUnavailableException {
         if (reportProperties.get(ReportConstants.MODE).equalsIgnoreCase(ReportConstants.DEFAULT_MODE)) {
@@ -554,55 +520,26 @@ public class ReportSink extends Sink {
         reportProperties.put(ReportConstants.CHART, chart);
     }
 
-    /**
-     * This method will be called before the processing method.
-     * Intention to establish connection to publish event.
-     *
-     * @throws ConnectionUnavailableException if end point is unavailable the ConnectionUnavailableException thrown
-     *                                        such that the  system will take care retrying for connection
-     */
     @Override
     public void connect() throws ConnectionUnavailableException {
         // do nothing
     }
 
-    /**
-     * Called after all publishing is done, or when {@link ConnectionUnavailableException} is thrown
-     * Implementation of this method should contain the steps needed to disconnect from the sink.
-     */
     @Override
     public void disconnect() {
         // do nothing
     }
 
-    /**
-     * The method can be called when removing an event receiver.
-     * The cleanups that have to be done after removing the receiver could be done here.
-     */
     @Override
     public void destroy() {
         // do nothing
     }
 
-    /**
-     * Used to collect the serializable state of the processing element, that need to be
-     * persisted for reconstructing the element to the same state on a different point of time
-     * This is also used to identify the internal states and debugging
-     *
-     * @return all internal states should be return as an map with meaning full keys
-     */
     @Override
     public Map<String, Object> currentState() {
         return null;
     }
 
-    /**
-     * Used to restore serialized state of the processing element, for reconstructing
-     * the element to the same state as if was on a previous point of time.
-     *
-     * @param map the stateful objects of the processing element as a map.
-     *            This map will have the  same keys that is created upon calling currentState() method.
-     */
     @Override
     public void restoreState(Map<String, Object> map) {
         // no state
