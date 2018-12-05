@@ -18,13 +18,9 @@
 
 package org.wso2.extension.siddhi.io.report.util;
 
-import ar.com.fdvs.dj.domain.Style;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
 import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
-import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
-import ar.com.fdvs.dj.domain.entities.conditionalStyle.ConditionalStyle;
-import ar.com.fdvs.dj.domain.entities.conditionalStyle.StatusLightCondition;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -32,7 +28,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.wso2.extension.siddhi.io.report.generators.RangeConditionStyleExpressionGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
