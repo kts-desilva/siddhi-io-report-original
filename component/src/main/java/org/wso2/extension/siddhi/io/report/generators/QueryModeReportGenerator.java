@@ -60,7 +60,7 @@ public class QueryModeReportGenerator extends ReportGenerator {
         JsonArray parsedQueries = getParsedQueries(reportProperties.get(ReportConstants.QUERIES));
         QueryModeDataProvider dataProvider = new QueryModeDataProvider(reportProperties.get(ReportConstants
                 .DATASOURCE_NAME));
-        Map parameters = new HashMap();
+        Map<String, Object> parameters = new HashMap<>();
 
         mainReportBuilder.setTemplateFile(reportProperties.get(ReportConstants.TEMPLATE));
         fillReport(parsedQueries, dataProvider, parameters);

@@ -24,6 +24,9 @@ import ar.com.fdvs.dj.domain.constants.Border;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.constants.VerticalAlign;
+import ar.com.fdvs.dj.domain.entities.conditionalStyle.ConditionalStyle;
+import ar.com.fdvs.dj.domain.entities.conditionalStyle.StatusLightCondition;
+import org.wso2.extension.siddhi.io.report.generators.RangeConditionStyleExpressionGenerator;
 
 import java.awt.Color;
 
@@ -84,5 +87,21 @@ public class DynamicStyleProvider {
             columnHeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);
         }
         return columnHeaderStyle;
+    }
+
+    public static ConditionalStyle getNumericalConditionalStyle() {
+        Style numericalStyle = new Style();
+        numericalStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
+        StatusLightCondition numericalLightCondition = new StatusLightCondition((double) 0, (double) Integer
+                .MAX_VALUE);
+        return new ConditionalStyle(numericalLightCondition, numericalStyle);
+    }
+
+    public static ConditionalStyle getStringConditionalStyle() {
+        Style rangeStyle = new Style();
+        rangeStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+        RangeConditionStyleExpressionGenerator rangeConditionStyleExpressionGenerator = new
+                RangeConditionStyleExpressionGenerator();
+        return new ConditionalStyle(rangeConditionStyleExpressionGenerator, rangeStyle);
     }
 }

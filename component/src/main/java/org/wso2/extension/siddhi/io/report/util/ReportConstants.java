@@ -41,8 +41,7 @@ public class ReportConstants {
     public static final String DESCRIPTION = "description";
     public static final String OUTPUT_PATH = "outputpath";
     public static final String HEADER_IMAGE = "headerImage";
-    public static final String REPORT_NAME = "report.name";
-    public static final String QUERY_MODE = "query.mode";
+    public static final String MODE = "mode";
     public static final String DATASOURCE_NAME = "datasource.name";
     public static final String QUERIES = "queries";
     public static final String QUERY = "query";
@@ -56,6 +55,7 @@ public class ReportConstants {
     public static final String DEFAULT_TITLE = "Siddhi Report";
     public static final String DEFAULT_REPORT_NAME = "SiddhiReport";
     public static final String DEFAULT_DATASET = "tableData";
+    public static final String DEFAULT_MODE = "stream";
 
     public static final int COLUMN_WIDTH = 400;
     public static final String GREY_BACKGROUND = "#616161";

@@ -147,9 +147,9 @@ public class DynamicDataProvider implements DataProvider {
             ColumnBuilder columnBuilder = ColumnBuilder.getNew();
             if (entry.getValue().equals(Integer.class.getName()) || entry.getValue().equals(Float.class.getName()
             ) || entry.getValue().equals(Double.class.getName())) {
-                columnBuilder.addConditionalStyle(getNumericalConditionalStyle());
+                columnBuilder.addConditionalStyle(DynamicStyleProvider.getNumericalConditionalStyle());
             } else if (entry.getValue().equals(String.class.getName())) {
-                columnBuilder.addConditionalStyle(getStringConditionalStyle());
+                columnBuilder.addConditionalStyle(DynamicStyleProvider.getStringConditionalStyle());
             }
 
             AbstractColumn abColumn = columnBuilder.setColumnProperty(entry.getKey(), entry.getValue())
@@ -160,22 +160,6 @@ public class DynamicDataProvider implements DataProvider {
             abstractColumnMap.put(entry.getKey(), abColumn);
             reportBuilder.addField(entry.getKey(), entry.getValue());
         }
-    }
-
-    public ConditionalStyle getNumericalConditionalStyle() {
-        Style numericalStyle = new Style();
-        numericalStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-        StatusLightCondition numericalLightCondition = new StatusLightCondition((double) 0, (double) Integer
-                .MAX_VALUE);
-        return new ConditionalStyle(numericalLightCondition, numericalStyle);
-    }
-
-    public ConditionalStyle getStringConditionalStyle() {
-        Style rangeStyle = new Style();
-        rangeStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-        RangeConditionStyleExpressionGenerator rangeConditionStyleExpressionGenerator = new
-                RangeConditionStyleExpressionGenerator();
-        return new ConditionalStyle(rangeConditionStyleExpressionGenerator, rangeStyle);
     }
 
     public List<AbstractColumn> getColumns() {

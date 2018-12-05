@@ -49,9 +49,10 @@ public class StaticReportGenerator extends ReportGenerator {
         JasperDesign jasperDesign = loadTemplate(reportProperties.get(ReportConstants.TEMPLATE));
         JasperReport jasperReport = compileTemplate(jasperDesign);
         JRParameter[] reportParameters = jasperReport.getParameters();
-        Object[] datasetParameters = Arrays.stream(reportParameters).filter(parameter -> (parameter
-                .getValueClass().equals(JRDataSource.class)) && (!parameter.getName().equals
-                ("REPORT_DATA_SOURCE"))).toArray();
+        Object[] datasetParameters = Arrays.stream(reportParameters)
+                .filter(parameter ->
+                        (parameter.getValueClass().equals(JRDataSource.class)) &&
+                                (!parameter.getName().equals("REPORT_DATA_SOURCE"))).toArray();
 
         if (datasetParameters.length > 1) {
             LOGGER.warn("Too many parameters for dataset.");

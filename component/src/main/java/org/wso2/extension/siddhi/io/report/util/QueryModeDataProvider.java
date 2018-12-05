@@ -112,9 +112,9 @@ public class QueryModeDataProvider implements DataProvider {
                 String columnName = metaData.getColumnName(i + 1);
                 if (columnClassName.equals(Integer.class.getName()) || columnClassName.equals(Float.class.getName()
                 ) || columnClassName.equals(Double.class.getName())) {
-                    columnBuilder.addConditionalStyle(getNumericalConditionalStyle());
+                    columnBuilder.addConditionalStyle(DynamicStyleProvider.getNumericalConditionalStyle());
                 } else if (columnClassName.equals(String.class.getName())) {
-                    columnBuilder.addConditionalStyle(getStringConditionalStyle());
+                    columnBuilder.addConditionalStyle(DynamicStyleProvider.getStringConditionalStyle());
                 }
 
                 AbstractColumn abColumn = columnBuilder.setColumnProperty(columnName, columnClassName)
@@ -128,22 +128,6 @@ public class QueryModeDataProvider implements DataProvider {
         } catch (SQLException e) {
             throw new SiddhiAppRuntimeException("Could not load metadata from '" + this.dataSourceName, e);
         }
-    }
-
-    public ConditionalStyle getNumericalConditionalStyle() {
-        Style numericalStyle = new Style();
-        numericalStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-        StatusLightCondition numericalLightCondition = new StatusLightCondition((double) 0, (double) Integer
-                .MAX_VALUE);
-        return new ConditionalStyle(numericalLightCondition, numericalStyle);
-    }
-
-    public ConditionalStyle getStringConditionalStyle() {
-        Style rangeStyle = new Style();
-        rangeStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-        RangeConditionStyleExpressionGenerator rangeConditionStyleExpressionGenerator = new
-                RangeConditionStyleExpressionGenerator();
-        return new ConditionalStyle(rangeConditionStyleExpressionGenerator, rangeStyle);
     }
 
     public List<AbstractColumn> getColumns() {

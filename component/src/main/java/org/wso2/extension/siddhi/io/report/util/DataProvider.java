@@ -19,7 +19,6 @@
 package org.wso2.extension.siddhi.io.report.util;
 
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
-import ar.com.fdvs.dj.domain.entities.conditionalStyle.ConditionalStyle;
 
 import java.util.List;
 
@@ -27,9 +26,6 @@ import java.util.List;
  * This interface provides the basic methods of a data provider..
  */
 public interface DataProvider {
-    public ConditionalStyle getNumericalConditionalStyle();
-
-    public ConditionalStyle getStringConditionalStyle();
 
     public List<AbstractColumn> getColumns();
 

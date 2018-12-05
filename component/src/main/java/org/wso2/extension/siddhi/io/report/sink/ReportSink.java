@@ -146,13 +146,13 @@ import java.util.stream.Stream;
                         defaultValue = "none",
                         type = {DataType.STRING}
                 ),
-                @Parameter(name = "query.mode",
+                @Parameter(name = "mode",
                         description = "This parameter is used to specify the series variable for the chart. The value" +
                                 " of this parameter will be taken as the Y axis of the chart and it is necessary to " +
                                 "provide  numerical value for this parameter.",
                         optional = true,
-                        defaultValue = "false",
-                        type = {DataType.BOOL}
+                        defaultValue = "stream",
+                        type = {DataType.STRING}
                 ),
                 @Parameter(name = "queries",
                         description = "This parameter is used to specify the series variable for the chart. The value" +
@@ -209,7 +209,7 @@ import java.util.stream.Stream;
                 @Example(
                         syntax = " " +
                                 "@sink(type='report', outputpath='/abc/example.pdf'," +
-                                "query.mode='true',datasource.name='SAMPLE_DATASOURCE'," +
+                                "mode='query',datasource.name='SAMPLE_DATASOURCE'," +
                                 "queries=\"\"\"[{\"query\":\"SELECT * FROM SampleTable;\",\"chart\":\"table\"}," +
                                 "@map(type='json'))",
                         description = " " +
@@ -222,7 +222,7 @@ import java.util.stream.Stream;
                 @Example(
                         syntax = " " +
                                 "@sink(type='report', outputpath='/abc/example.pdf'," +
-                                "query.mode='true',datasource.name='SAMPLE_DATASOURCE'," +
+                                "mode='query',datasource.name='SAMPLE_DATASOURCE'," +
                                 "queries=\"\"\"[{\"query\":\"SELECT * FROM SampleTable;\",\"chart\":\"table\"}," +
                                 "{\"query\":\"SELECT Value, Age FROM SampleTable;\"," +
                                 "\"chart\":\"line\",\"series\":\"Value\",\"category\":\"Age\",\"chart.title\":\"Test " +
@@ -302,7 +302,7 @@ public class ReportSink extends Sink {
      */
     @Override
     public void publish(Object payload, DynamicOptions dynamicOptions) throws ConnectionUnavailableException {
-        if (!Boolean.parseBoolean(reportProperties.get(ReportConstants.QUERY_MODE))) {
+        if (reportProperties.get(ReportConstants.MODE).equalsIgnoreCase(ReportConstants.DEFAULT_MODE)) {
             if (!reportProperties.get(ReportConstants.TEMPLATE).equals(ReportConstants.DEFAULT_TEMPLATE)) {
                 ignoreOtherParameters(reportProperties);
                 StaticReportGenerator staticReportGenerator = new StaticReportGenerator();
@@ -379,8 +379,8 @@ public class ReportSink extends Sink {
         validateStringParameters(ReportConstants.DATASET, datasetName);
         validateMapType();
 
-        String queryMode = optionHolder.validateAndGetStaticValue(ReportConstants.QUERY_MODE, "false");
-        reportProperties.put(ReportConstants.QUERY_MODE, queryMode);
+        String queryMode = optionHolder.validateAndGetStaticValue(ReportConstants.MODE, ReportConstants.DEFAULT_MODE);
+        validateMode(queryMode);
 
         String datasourceName = optionHolder.validateAndGetStaticValue(ReportConstants.DATASOURCE_NAME,
                 ReportConstants.EMPTY_STRING);
@@ -391,11 +391,21 @@ public class ReportSink extends Sink {
         validateQueryParameter(queryMode, queries, ReportConstants.QUERIES);
     }
 
+    private void validateMode(String queryMode) {
+        if (queryMode.equalsIgnoreCase(ReportConstants.DEFAULT_MODE) || queryMode.equalsIgnoreCase(ReportConstants
+                .QUERY)) {
+            reportProperties.put(ReportConstants.MODE, queryMode);
+        } else {
+            throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
+                    " '" + queryMode + "' is invalid. Should be either query or stream.");
+        }
+    }
+
     private void validateQueryParameter(String queryMode, String queryValue, String parameterName) {
         if (Boolean.parseBoolean(queryMode)) {
             if (queryValue.isEmpty()) {
                 throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
-                        " '" + parameterName + "' Should be defined when 'queryMode' is true.");
+                        " '" + parameterName + "' Should be defined when 'mode' is query.");
             }
         }
         reportProperties.put(parameterName, queryValue);
