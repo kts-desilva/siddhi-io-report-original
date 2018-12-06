@@ -1,19 +1,19 @@
 /*
- * Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
-
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
-
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
-
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.extension.siddhi.io.report.util;
@@ -40,12 +40,12 @@ public class ReportConstants {
     public static final String SUBTITLE = "subtitle";
     public static final String DESCRIPTION = "description";
     public static final String OUTPUT_PATH = "outputpath";
+    public static final String OUTPUT_FORMAT = "output.format";
     public static final String HEADER_IMAGE = "headerImage";
     public static final String MODE = "mode";
     public static final String DATASOURCE_NAME = "datasource.name";
     public static final String QUERIES = "queries";
     public static final String QUERY = "query";
-    public static final String SUB_REPORT_PREFIX = "subReport";
     public static final String REPORT_DYNAMIC_NAME_VALUE = "report.dynamic.name.value";
     public static final String REPORT_DYNAMIC_DATASET_VALUE = "report.dynamic.dataset.value";
 
@@ -54,8 +54,8 @@ public class ReportConstants {
     public static final String DEFAULT_CHART = "table";
     public static final String DEFAULT_TITLE = "Siddhi Report";
     public static final String DEFAULT_REPORT_NAME = "SiddhiReport";
-    public static final String DEFAULT_DATASET = "tableData";
     public static final String DEFAULT_MODE = "stream";
+    public static final String PDF = "pdf";
 
     public static final int COLUMN_WIDTH = 400;
     public static final String GREY_BACKGROUND = "#616161";
@@ -66,9 +66,7 @@ public class ReportConstants {
     public static final int HORIZONTAL_PADDING = 20;
     public static final int VERTICAL_PADDING = 5;
 
-
     public static final String EMPTY_STRING = "";
-    public static final String PDF_EXTENSION = ".pdf";
 
     /**
      * Valid chart types
@@ -78,5 +76,15 @@ public class ReportConstants {
         LINE,
         BAR,
         PIE,
+    }
+
+    /**
+     * Valid output formats
+     */
+    public enum OutputFormatTypes {
+        PDF,
+        XLS,
+        XLSX,
+        CSV,
     }
 }

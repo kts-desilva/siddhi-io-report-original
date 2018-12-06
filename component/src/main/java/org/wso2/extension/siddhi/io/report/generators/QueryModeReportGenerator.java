@@ -1,19 +1,19 @@
 /*
- *  Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.extension.siddhi.io.report.generators;
@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.wso2.extension.siddhi.io.report.util.DataProvider;
 import org.wso2.extension.siddhi.io.report.util.DynamicLayoutManager;
-import org.wso2.extension.siddhi.io.report.util.LayoutManager;
 import org.wso2.extension.siddhi.io.report.util.QueryModeDataProvider;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 
@@ -45,18 +44,24 @@ import java.util.Map;
  * This class provides the implementation of the query mode report generation logic.
  */
 public class QueryModeReportGenerator extends ReportGenerator {
-    private LayoutManager layoutManager;
     private DynamicReportBuilder mainReportBuilder;
     private List<Map<String, Object>> allData;
+    private Map<String, String> reportProperties;
 
-    public QueryModeReportGenerator() {
-        layoutManager = new LayoutManager();
+    public QueryModeReportGenerator(Map<String, String> reportProperties) {
+        super(reportProperties);
         mainReportBuilder = new DynamicReportBuilder();
         allData = new ArrayList<>();
+        this.reportProperties = reportProperties;
     }
 
     @Override
-    public void generateReport(Object payload, Map<String, String> reportProperties) {
+    public void generateReport(Object payload) {
+        // do nothing
+    }
+
+    @Override
+    public void generateReport() {
         JsonArray parsedQueries = getParsedQueries(reportProperties.get(ReportConstants.QUERIES));
         QueryModeDataProvider dataProvider = new QueryModeDataProvider(reportProperties.get(ReportConstants
                 .DATASOURCE_NAME));
@@ -66,11 +71,11 @@ public class QueryModeReportGenerator extends ReportGenerator {
         fillReport(parsedQueries, dataProvider, parameters);
         setParameters(reportProperties, parameters);
 
-        DynamicLayoutManager reportLayout = layoutManager.getLayout(reportProperties);
+        DynamicLayoutManager reportLayout = getLayout(reportProperties);
         DynamicReport report = mainReportBuilder.build();
         JasperPrint jasperPrint = generateReportPrint(report, reportLayout, new
                 JRBeanCollectionDataSource(allData), parameters);
-        exportAsPdf(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
+        saveReport(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
     }
 
     private void fillReport(JsonArray parsedQueries, QueryModeDataProvider dataProvider, Map parameters) {
@@ -93,7 +98,7 @@ public class QueryModeReportGenerator extends ReportGenerator {
             addChartTo(chartType, chartTitle, category, series, reportBuilder, dataProvider);
             DynamicReport subreportBuild = reportBuilder.build();
 
-            String subreportName = ReportConstants.SUB_REPORT_PREFIX + queryObject.hashCode();
+            String subreportName = Integer.toString(queryObject.hashCode());
             mainReportBuilder.addConcatenatedReport(subreportBuild, new ClassicLayoutManager(), subreportName,
                     DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, DJConstants.DATA_SOURCE_TYPE_COLLECTION);
             parameters.put(subreportName, data);

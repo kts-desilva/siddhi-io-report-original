@@ -1,19 +1,19 @@
 /*
- *  Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.extension.siddhi.io.report.generators;
@@ -28,7 +28,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.apache.log4j.Logger;
 import org.wso2.extension.siddhi.io.report.util.DynamicDataProvider;
 import org.wso2.extension.siddhi.io.report.util.ReportConstants;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,22 +40,52 @@ import java.util.Map;
  */
 public class StaticReportGenerator extends ReportGenerator {
     private static final Logger LOGGER = Logger.getLogger(StaticReportGenerator.class);
+    private Map<String, String> reportProperties;
+    private Map<String, Object> parameters;
+    private List<Map<String, Object>> data;
+    private JasperReport jasperReport;
+    private Object[] datasetParameters;
 
-    @Override
-    public void generateReport(Object payload, Map<String, String> reportProperties) {
-        DynamicDataProvider dataProvider = new DynamicDataProvider(reportProperties);
-        Map<String, Object> parameters = new HashMap<>();
-        List<Map<String, Object>> data;
+    public StaticReportGenerator(Map<String, String> reportProperties) {
+        super(reportProperties);
+        this.reportProperties = reportProperties;
+        this.parameters = new HashMap<>();
+        initializeReportContent();
+    }
+
+    private void initializeReportContent() {
         JasperDesign jasperDesign = loadTemplate(reportProperties.get(ReportConstants.TEMPLATE));
-        JasperReport jasperReport = compileTemplate(jasperDesign);
+        jasperReport = compileTemplate(jasperDesign);
         JRParameter[] reportParameters = jasperReport.getParameters();
-        Object[] datasetParameters = Arrays.stream(reportParameters)
+        datasetParameters = Arrays.stream(reportParameters)
                 .filter(parameter ->
                         (parameter.getValueClass().equals(JRDataSource.class)) &&
                                 (!parameter.getName().equals("REPORT_DATA_SOURCE"))).toArray();
 
+        if (datasetParameters.length == 0) {
+            throw new SiddhiAppCreationException("Datasets are missing in the template provided " +
+                    reportProperties.get(ReportConstants.TEMPLATE));
+        }
         if (datasetParameters.length > 1) {
-            LOGGER.warn("Too many parameters for dataset.");
+            LOGGER.warn("Too many parameters for dataset. Expected 1, found " + datasetParameters.length);
+        }
+    }
+
+    @Override
+    public void generateReport(Object payload) {
+        DynamicDataProvider dataProvider = new DynamicDataProvider(reportProperties);
+        fillDataToDatasets(dataProvider, payload);
+        JasperPrint jasperPrint = fillReportData(jasperReport, parameters, new JREmptyDataSource());
+        saveReport(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
+    }
+
+    @Override
+    public void generateReport() {
+        // do nothing
+    }
+
+    private void fillDataToDatasets(DynamicDataProvider dataProvider, Object payload) {
+        if (datasetParameters.length > 1) {
             Map<String, List<Map<String, Object>>> dataWithMultipleDatasets = dataProvider
                     .getDataWithMultipleDatasets(payload);
             for (Map.Entry<String, List<Map<String, Object>>> entry : dataWithMultipleDatasets.entrySet()) {
@@ -66,15 +96,8 @@ public class StaticReportGenerator extends ReportGenerator {
         } else {
             data = getDataFromPayload(dataProvider, payload);
             JRMapArrayDataSource mapArrayDataSource = new JRMapArrayDataSource(data.toArray());
-            try {
-                parameters.put(((JRParameter) datasetParameters[0]).getName(), mapArrayDataSource);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                throw new SiddhiAppRuntimeException("Datasets are missing in the template provided " +
-                        reportProperties.get(ReportConstants.TEMPLATE), e);
-            }
+            parameters.put(((JRParameter) datasetParameters[0]).getName(), mapArrayDataSource);
         }
-        JasperPrint jasperPrint = fillReportData(jasperReport, parameters, new JREmptyDataSource());
-        exportAsPdf(jasperPrint, reportProperties.get(ReportConstants.OUTPUT_PATH));
     }
 
     public List<Map<String, Object>> getDataFromPayload(DynamicDataProvider dataProvider, Object payload) {

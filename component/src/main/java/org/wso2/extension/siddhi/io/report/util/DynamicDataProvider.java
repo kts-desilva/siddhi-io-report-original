@@ -1,19 +1,19 @@
 /*
- *  Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.extension.siddhi.io.report.util;
@@ -27,7 +27,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,52 +41,51 @@ import java.util.stream.Collectors;
  * This class provides the implementation of the data provider for the dynamic reports.
  */
 public class DynamicDataProvider implements DataProvider {
-    private static final Logger logger = Logger.getLogger(DynamicDataProvider.class);
     private List<AbstractColumn> abstractColumns;
     private Map<String, AbstractColumn> abstractColumnMap;
-    private List<Map<String, Object>> data;
     private Map<String, String> reportProperties;
     private JsonParser payloadParser;
-    private Map<String, String> columnMetadata;
 
     public DynamicDataProvider(Map<String, String> reportProperties) {
         abstractColumns = new ArrayList<>();
         abstractColumnMap = new HashMap<>();
-        data = new ArrayList<>();
-        this.reportProperties = reportProperties;
         payloadParser = new JsonParser();
-        columnMetadata = new HashMap<>();
+        this.reportProperties = reportProperties;
     }
 
     public List<Map<String, Object>> getData(Object payload, DynamicReportBuilder reportBuilder) {
-        addDataTo(payload.toString(), data, true);
-        addAbstractColumns(columnMetadata, reportBuilder);
-        return this.data;
+        JsonElement firstEvent = getFirstEvent(payload.toString());
+        List<Map<String, Object>> data = getParsedData(payload.toString());
+        setDynamicReportValue(firstEvent.getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
+                ReportConstants.OUTPUT_PATH);
+        Map columnMetadata = getColumnMetaData(firstEvent);
+        buildAbstractColumns(columnMetadata, reportBuilder);
+        return data;
     }
 
     public List<Map<String, Object>> getData(Object payload) {
-        addDataTo(payload.toString(), this.data, false);
-        return this.data;
+        JsonElement firstEvent = getFirstEvent(payload.toString());
+        List<Map<String, Object>> data = getParsedData(payload.toString());
+        setDynamicReportValue(firstEvent.getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
+                ReportConstants.OUTPUT_PATH);
+        return data;
     }
 
-    private void addDataTo(String payloadStirng, List<Map<String, Object>> dataList, boolean dynamic) {
-        JsonElement payloadJson = parsePayload(payloadStirng);
+    private List<Map<String, Object>> getParsedData(String payloadString) {
+        JsonElement payloadJson = parsePayload(payloadString);
         JsonArray events = getEvents(payloadJson);
+        List<Map<String, Object>> data = new ArrayList<>();
         for (JsonElement eventElement : events) {
             JsonObject jsonObject = eventElement.getAsJsonObject();
             Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
-            dataList.add(eventMap);
+            data.add(eventMap);
         }
-        setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
-                ReportConstants.OUTPUT_PATH);
-        if (dynamic) {
-            generateMetaData(events.get(0));
-        }
+        return data;
     }
 
-    @SuppressWarnings("unchecked")
-    private void generateMetaData(JsonElement element) {
-        columnMetadata = getColumnMetaData(element.getAsJsonObject());
+    private JsonElement getFirstEvent(String payloadString) {
+        JsonElement payloadJson = parsePayload(payloadString);
+        return getEvents(payloadJson).get(0);
     }
 
     private JsonElement parsePayload(String payload) {
@@ -107,7 +105,8 @@ public class DynamicDataProvider implements DataProvider {
         return new Gson().fromJson(jsonObject.get("event").toString(), LinkedHashMap.class);
     }
 
-    private Map getColumnMetaData(JsonObject jsonObject) {
+    private Map getColumnMetaData(JsonElement element) {
+        JsonObject jsonObject = element.getAsJsonObject();
         //used linked hashmap inorder to keep the insertion order of the json elements.
         Map<String, Object> eventMap = getMapFromJsonObject(jsonObject);
         Map columnMetadata = eventMap.entrySet().stream()
@@ -132,11 +131,7 @@ public class DynamicDataProvider implements DataProvider {
         }
     }
 
-    public List<Map<String, Object>> getData() {
-        return this.data;
-    }
-
-    private void addAbstractColumns(Map<String, String> metaData, DynamicReportBuilder reportBuilder) {
+    private void buildAbstractColumns(Map<String, String> metaData, DynamicReportBuilder reportBuilder) {
         int columnSize = ReportConstants.COLUMN_WIDTH / metaData.size();
         for (Map.Entry<String, String> entry : metaData.entrySet()) {
             ColumnBuilder columnBuilder = ColumnBuilder.getNew();
@@ -170,7 +165,7 @@ public class DynamicDataProvider implements DataProvider {
     }
 
     public Map<String, List<Map<String, Object>>> getDataWithMultipleDatasets(Object payload) {
-        Map<String, List<Map<String, Object>>> multipleDatasourcedata = new HashMap<>();
+        Map<String, List<Map<String, Object>>> multipleDatasourceData = new HashMap<>();
         JsonElement payloadJson = parsePayload(payload.toString());
         JsonArray events = getEvents(payloadJson);
         setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_DATASET_VALUE,
@@ -183,28 +178,28 @@ public class DynamicDataProvider implements DataProvider {
                 String datasetAttributeTemp = reportProperties.get(ReportConstants.REPORT_DYNAMIC_DATASET_VALUE);
                 datasetAttribute = datasetAttributeTemp.substring(1, datasetAttributeTemp.length() - 1);
             } else if (reportProperties.containsKey(ReportConstants.DATASET)) {
-                datasetAttribute = reportProperties.get(ReportConstants.DATASET); // this is for the given dataset
-                // name directly
+                //this is for the given dataset name directly
+                datasetAttribute = reportProperties.get(ReportConstants.DATASET);
             }
             if (datasetAttribute.isEmpty()) {
-                datasetAttribute = eventMap.entrySet().iterator().next().getKey(); // the default value for dataset
-                // is taken as the value of the first parameter.
+                // the default value for dataset is taken as the value of the first parameter
+                datasetAttribute = eventMap.entrySet().iterator().next().getKey();
             }
 
             String datasetName = eventMap.get(datasetAttribute).toString();
             List<Map<String, Object>> dataset;
-            if (multipleDatasourcedata.containsKey(datasetName)) {
-                dataset = multipleDatasourcedata.get(datasetName);
+            if (multipleDatasourceData.containsKey(datasetName)) {
+                dataset = multipleDatasourceData.get(datasetName);
             } else {
                 dataset = new ArrayList<>();
             }
             eventMap.remove(datasetName);
             dataset.add(eventMap);
-            multipleDatasourcedata.put(datasetName, dataset);
+            multipleDatasourceData.put(datasetName, dataset);
         }
         setDynamicReportValue(events.get(0).getAsJsonObject(), ReportConstants.REPORT_DYNAMIC_NAME_VALUE,
                 ReportConstants.OUTPUT_PATH);
-        return multipleDatasourcedata;
+        return multipleDatasourceData;
     }
 
     public AbstractColumn getCategoryColumn() {

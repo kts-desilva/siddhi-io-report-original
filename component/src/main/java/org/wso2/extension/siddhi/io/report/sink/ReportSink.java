@@ -1,19 +1,19 @@
 /*
- *  Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.extension.siddhi.io.report.sink;
@@ -39,7 +39,6 @@ import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -69,6 +68,13 @@ import java.util.stream.Stream;
         parameters = {
                 @Parameter(name = "outputpath",
                         description = "This parameter is used to specify the report path for data to be written.",
+                        type = {DataType.STRING}
+                ),
+                @Parameter(name = "output.format",
+                        description = "This parameter is used to specify the format of the report generated. Only " +
+                                "PDF, XLS, XLSX, CSV are supported.",
+                        optional = true,
+                        defaultValue = "PDF",
                         type = {DataType.STRING}
                 ),
                 @Parameter(name = "title",
@@ -246,6 +252,9 @@ public class ReportSink extends Sink {
     private StreamDefinition streamDefinition;
     private SiddhiAppContext siddhiAppContext;
     private Map<String, String> reportProperties = new HashMap<>();
+    private StaticReportGenerator staticReportGenerator;
+    private DynamicReportGenerator dynamicReportGenerator;
+    private QueryModeReportGenerator queryModeReportGenerator;
 
     @Override
     protected void init(StreamDefinition streamDefinition, OptionHolder optionHolder, ConfigReader configReader,
@@ -254,6 +263,7 @@ public class ReportSink extends Sink {
         this.streamDefinition = streamDefinition;
         this.siddhiAppContext = siddhiAppContext;
         validateAndGetParameters();
+        validateInitialReportSettings();
     }
 
     @Override
@@ -271,15 +281,12 @@ public class ReportSink extends Sink {
         if (reportProperties.get(ReportConstants.MODE).equalsIgnoreCase(ReportConstants.DEFAULT_MODE)) {
             if (!reportProperties.get(ReportConstants.TEMPLATE).equals(ReportConstants.DEFAULT_TEMPLATE)) {
                 ignoreOtherParameters(reportProperties);
-                StaticReportGenerator staticReportGenerator = new StaticReportGenerator();
-                staticReportGenerator.generateReport(payload, reportProperties);
+                staticReportGenerator.generateReport(payload);
             } else {
-                DynamicReportGenerator dynamicReportGenerator = new DynamicReportGenerator();
-                dynamicReportGenerator.generateReport(payload, reportProperties);
+                dynamicReportGenerator.generateReport(payload);
             }
         } else {
-            QueryModeReportGenerator queryModeReportGenerator = new QueryModeReportGenerator();
-            queryModeReportGenerator.generateReport(payload, reportProperties);
+            queryModeReportGenerator.generateReport();
         }
     }
 
@@ -293,6 +300,18 @@ public class ReportSink extends Sink {
                         reportProperties.get(parameter) + " for " + parameter + " as JRXML is provided.");
             }
         });
+    }
+
+    private void validateInitialReportSettings() {
+        if (reportProperties.get(ReportConstants.MODE).equalsIgnoreCase(ReportConstants.DEFAULT_MODE)) {
+            if (!reportProperties.get(ReportConstants.TEMPLATE).equalsIgnoreCase(ReportConstants.DEFAULT_TEMPLATE)) {
+                staticReportGenerator = new StaticReportGenerator(reportProperties);
+            } else {
+                dynamicReportGenerator = new DynamicReportGenerator(reportProperties);
+            }
+        } else {
+            queryModeReportGenerator = new QueryModeReportGenerator(reportProperties);
+        }
     }
 
     private void validateAndGetParameters() {
@@ -340,6 +359,10 @@ public class ReportSink extends Sink {
         }
         validateStringParameters(ReportConstants.OUTPUT_PATH, outputPath);
 
+        String outputFormat = optionHolder.validateAndGetStaticValue(ReportConstants.OUTPUT_FORMAT, ReportConstants
+                .PDF);
+        validateOutputFormat(outputFormat);
+
         String datasetName = optionHolder.validateAndGetStaticValue(ReportConstants.DATASET, ReportConstants
                 .EMPTY_STRING);
         validateStringParameters(ReportConstants.DATASET, datasetName);
@@ -357,13 +380,23 @@ public class ReportSink extends Sink {
         validateQueryParameter(queryMode, queries, ReportConstants.QUERIES);
     }
 
-    private void validateMode(String queryMode) {
-        if (queryMode.equalsIgnoreCase(ReportConstants.DEFAULT_MODE) || queryMode.equalsIgnoreCase(ReportConstants
+    private void validateOutputFormat(String outputFormat) {
+        List<String> validOutputFormatTypes = Stream.of(ReportConstants.OutputFormatTypes.values()).map(ReportConstants
+                .OutputFormatTypes::name).collect(Collectors.toList());
+        if (!validOutputFormatTypes.contains(outputFormat.toUpperCase(Locale.ENGLISH))) {
+            throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() + " " +
+                    outputFormat + " is not a valid output format. Only PDF, XLS, XLSX, CSV are supported.");
+        }
+        reportProperties.put(ReportConstants.OUTPUT_FORMAT, outputFormat);
+    }
+
+    private void validateMode(String mode) {
+        if (mode.equalsIgnoreCase(ReportConstants.DEFAULT_MODE) || mode.equalsIgnoreCase(ReportConstants
                 .QUERY)) {
-            reportProperties.put(ReportConstants.MODE, queryMode);
+            reportProperties.put(ReportConstants.MODE, mode);
         } else {
             throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
-                    " '" + queryMode + "' is invalid. Should be either query or stream.");
+                    " '" + mode + "' is invalid. Should be either query or stream.");
         }
     }
 
@@ -409,11 +442,6 @@ public class ReportSink extends Sink {
                             + " Invalid Property '" + matchingPart + "'. No such parameter in the stream definition");
                 }
             }
-            if (property.equals(ReportConstants.OUTPUT_PATH)) {
-                if (!value.endsWith(ReportConstants.PDF_EXTENSION)) {
-                    value += ReportConstants.PDF_EXTENSION;
-                }
-            }
         }
         //doesn't check for empty strings as they are ignored in report generation in default.
         reportProperties.put(property, value);
@@ -453,13 +481,8 @@ public class ReportSink extends Sink {
 
     private void validatePath(String path, String parameter) {
         Path file = new File(path).toPath();
-        ClassLoader classLoader = ReportSink.class.getClassLoader();
-        URL resourceFile = classLoader.getResource(path);
-        if (resourceFile != null) {
-            file = new File(resourceFile.getFile()).toPath();
-        }
         FileSystem fileSystem = FileSystems.getDefault();
-        if (!Files.exists(file)) {
+        if (!path.equals(ReportConstants.DEFAULT_TEMPLATE) && !Files.exists(file)) {
             if (!path.equals(ReportConstants.DEFAULT_TEMPLATE)) {
                 throw new SiddhiAppCreationException("In 'report' sink of siddhi app " + siddhiAppContext.getName() +
                         " " + path + " does not exists. " + parameter + " should be a valid path");

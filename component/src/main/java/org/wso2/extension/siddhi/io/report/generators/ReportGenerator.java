@@ -1,19 +1,19 @@
 /*
- *  Copyright (C) 2018 WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.extension.siddhi.io.report.generators;
@@ -29,22 +29,64 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import org.wso2.extension.siddhi.io.report.util.DynamicLayoutManager;
+import org.wso2.extension.siddhi.io.report.util.ReportConstants;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 
 /**
  * This abstract class provides implementation of methods for the report generation.
  */
 public abstract class ReportGenerator {
+    private Map<String, String> reportProperties = Collections.EMPTY_MAP;
 
-    public void exportAsPdf(JasperPrint jasperPrint, String outputPath) {
+    public ReportGenerator(Map<String, String> reportProperties) {
+        this.reportProperties = reportProperties;
+    }
+
+
+    public void saveReport(JasperPrint jasperPrint, String outputPath) {
+        String fileName = reportProperties.get(ReportConstants.OUTPUT_PATH);
+        File destFile = null;
         try {
-            JasperExportManager.exportReportToPdfFile(jasperPrint, outputPath);
+            switch (reportProperties.get(ReportConstants.OUTPUT_FORMAT).toLowerCase(Locale.ENGLISH)) {
+                case "csv":
+                    fileName += ".csv";
+                    destFile = new File(fileName);
+                    JRCsvExporter csvExporter = new JRCsvExporter();
+                    csvExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                    csvExporter.setExporterOutput(new SimpleWriterExporterOutput(destFile));
+                    csvExporter.exportReport();
+                    break;
+                case "excel":
+                    fileName += ".xlsx";
+                    destFile = new File(fileName);
+                    JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+                    xlsxExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                    xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(destFile));
+                    xlsxExporter.exportReport();
+                    break;
+                case "pdf":
+                    outputPath += ".pdf";
+                    JasperExportManager.exportReportToPdfFile(jasperPrint, outputPath);
+                    break;
+                default:
+                    break;
+
+            }
         } catch (JRException e) {
-            throw new SiddhiAppRuntimeException("Failed to generate the PDF. ", e);
+            throw new SiddhiAppRuntimeException("Failed to generate the " + reportProperties.get(ReportConstants
+                    .OUTPUT_FORMAT) + "file in " + outputPath, e);
         }
     }
 
@@ -56,7 +98,7 @@ public abstract class ReportGenerator {
             jasperPrint = DynamicJasperHelper.generateJasperPrint(report, reportLayout, dataSource,
                     parameters);
         } catch (JRException e) {
-            throw new SiddhiAppRuntimeException("Failed to generate the JasperPrint ", e);
+            throw new SiddhiAppRuntimeException("Failed to generate the JasperPrint " + report.getReportName(), e);
         } catch (ClassCastException e) {
             throw new SiddhiAppRuntimeException("Failed to generate the report. Provide a numeric series column. ", e);
         }
@@ -69,7 +111,8 @@ public abstract class ReportGenerator {
         try {
             jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
         } catch (JRException e) {
-            throw new SiddhiAppRuntimeException("Failed to fill data into report template. ", e);
+            throw new SiddhiAppRuntimeException("Failed to fill data into report template. " + jasperReport.getName()
+                    , e);
         }
         return jasperPrint;
     }
@@ -79,7 +122,7 @@ public abstract class ReportGenerator {
         try {
             jasperDesign = JRXmlLoader.load(template);
         } catch (JRException e) {
-            throw new SiddhiAppRuntimeException("Failed to load the report template. ", e);
+            throw new SiddhiAppRuntimeException("Failed to load the report template. " + template, e);
         }
         return jasperDesign;
     }
@@ -94,5 +137,15 @@ public abstract class ReportGenerator {
         return jasperReport;
     }
 
-    public abstract void generateReport(Object payload, Map<String, String> reportProperties);
+    public DynamicLayoutManager getLayout(Map<String, String> reportProperties) {
+        DynamicLayoutManager dynamicLayoutManager = new DynamicLayoutManager();
+        if (reportProperties.get(ReportConstants.FOOTER) != null) {
+            dynamicLayoutManager.setFooterImagePath(reportProperties.get(ReportConstants.FOOTER));
+        }
+        return dynamicLayoutManager;
+    }
+
+    public abstract void generateReport(Object payload);
+
+    public abstract void generateReport();
 }

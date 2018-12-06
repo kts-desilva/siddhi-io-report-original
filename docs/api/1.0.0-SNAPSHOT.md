@@ -8,7 +8,7 @@
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
-@sink(type="report", outputpath="<STRING>", title="<STRING>", description="<STRING>", subtitle="<STRING>", template="<STRING>", dataset="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", mode="<STRING>", queries="<STRING>", @map(...)))
+@sink(type="report", outputpath="<STRING>", output.format="<STRING>", title="<STRING>", description="<STRING>", subtitle="<STRING>", template="<STRING>", dataset="<STRING>", header="<STRING>", footer="<STRING>", chart="<STRING>", chart.title="<STRING>", category="<STRING>", series="<STRING>", mode="<STRING>", queries="<STRING>", @map(...)))
 ```
 
 <span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
@@ -27,6 +27,14 @@
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">output.format</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter is used to specify the format of the report generated. Only PDF, XLS, XLSX, CSV are supported.</td>
+        <td style="vertical-align: top">PDF</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
     <tr>

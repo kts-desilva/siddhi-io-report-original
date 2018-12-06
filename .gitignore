@@ -4,3 +4,6 @@ siddhi-io-report.iml
 TestReportURI/
 *.iml
 *.pdf
+*.csv
+*.xls
+*.xlsx

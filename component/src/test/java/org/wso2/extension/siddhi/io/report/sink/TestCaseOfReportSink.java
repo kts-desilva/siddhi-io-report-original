@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.wso2.extension.siddhi.io.report.sink;
 
 import org.apache.log4j.Logger;
@@ -1488,5 +1506,134 @@ public class TestCaseOfReportSink {
                             "There is no numeric stream attribute for the series in. Provide a numeric series column.",
                     e.getMessageWithOutContext());
         }
+    }
+
+    @Test
+    public void reportSinkTest31() throws InterruptedException {
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 31 - Configure siddhi to generate reports in csv format");
+        LOGGER.info("---------------------------------------------------------------------------");
+
+        String reportName = "testReport";
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price int, volume long, testval bool); " +
+                "@sink(type='report',outputpath='" + reportName + "',output.format='csv',@map(type='json')) " +
+                "define stream BarStream (symbol string,price int, volume long, testval bool); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L, true});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.8f, 100L, false});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L, true});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L, true});
+
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+
+        File sink = new File(reportName + ".csv");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void reportSinkTest32() throws InterruptedException {
+        LOGGER.info("----------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 32 - Configure siddhi to generate reports in xlsx format");
+        LOGGER.info("----------------------------------------------------------------------------");
+
+        String reportName = "testReport";
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price int, volume long, testval bool); " +
+                "@sink(type='report',outputpath='" + reportName + "',output.format='xlsx',@map(type='json')) " +
+                "define stream BarStream (symbol string,price int, volume long, testval bool); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L, true});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.8f, 100L, false});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L, true});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L, true});
+
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+
+        File sink = new File(reportName + ".xlsx");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void reportSinkTest33() throws InterruptedException {
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("ReportSink TestCase 33 - Configure siddhi to generate reports in xls format");
+        LOGGER.info("---------------------------------------------------------------------------");
+
+        String reportName = "testReport";
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream(symbol string, price int, volume long); " +
+                "@sink(type='report',outputpath='" + reportName + "',output.format='xls',@map(type='json')) " +
+                "define stream BarStream (symbol string,price int, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        Event testEvent1 = new Event();
+        testEvent1.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        Event testEvent2 = new Event();
+        testEvent2.setData(new Object[]{"IBM", 57.8f, 100L});
+
+        Event testEvent3 = new Event();
+        testEvent3.setData(new Object[]{"GOOGLE", 50f, 100L});
+
+        Event testEvent4 = new Event();
+        testEvent4.setData(new Object[]{"WSO2", 55.6f, 100L});
+
+        stockStream.send(new Event[]{testEvent1, testEvent2, testEvent3, testEvent4});
+
+        File sink = new File(reportName + ".xls");
+        AssertJUnit.assertTrue(sink.exists());
+        siddhiAppRuntime.shutdown();
     }
 }
