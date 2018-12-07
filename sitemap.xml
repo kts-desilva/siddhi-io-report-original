@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+     <loc>https://kts-desilva.github.io/siddhi-io-report-original/</loc>
+     <lastmod>2018-12-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://kts-desilva.github.io/siddhi-io-report-original/api/latest/</loc>
+     <lastmod>2018-12-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://kts-desilva.github.io/siddhi-io-report-original/license/</loc>
+     <lastmod>2018-12-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+</urlset>
